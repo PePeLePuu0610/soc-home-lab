@@ -1,0 +1,9 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,       // line-length — disabled, docs use long descriptive lines and wide tables
+    "MD033": false,       // allow inline HTML if ever needed
+    "MD041": false        // first line doesn't have to be a top-level heading in every file
+  },
+  "globs": ["docs/**/*.md", "README.md"]
+}
