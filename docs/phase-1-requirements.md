@@ -61,46 +61,46 @@ Disk: 440GB of VM disks will fit inside your ~517GB free, but only if you build 
 
 Download and stage these before Phase 3 begins — having everything ready up front avoids stalling mid-build waiting on downloads. All are free for lab/personal use.
 
-**Core infrastructure**
+### Core infrastructure
 
 - [ ] **pfSense CE** — ISO from the official pfSense site (netgate.com/pfsense)
 - [ ] **VMware Workstation Pro** — already installed (confirmed on your host)
 
-**Operating systems (victims / directory)**
+### Operating systems (victims / directory) 
 
 - [ ] **Windows Server** (2019/2022) ISO — Microsoft Evaluation Center (free 180-day trial ISO)
 - [ ] **Windows 10 or 11** ISO — Microsoft Evaluation Center or standard consumer ISO you're licensed for
 - [ ] **Kali Linux** ISO/VMware image — official Kali downloads page (VMware pre-built image saves setup time)
 
-**Detection & monitoring**
+### Detection & monitoring
 
 - [ ] **Wazuh** — official Wazuh OVA, or install script for Ubuntu Server ISO (Ubuntu Server 22.04 LTS recommended as the base OS)
 - [ ] **Suricata** — installed as a pfSense package (via pfSense's package manager, no separate ISO) *or* Ubuntu Server ISO if building it standalone
 - [ ] **Ubuntu Server 22.04 LTS** ISO — base OS for Wazuh/Suricata/ELK/OpenVAS/SOAR if not using vendor-provided images/OVAs
 
-**SIEMs**
+### SIEMs
 
 - [ ] **Elastic Stack (ELK)** — Elasticsearch, Logstash, Kibana installers/packages from elastic.co (or Elastic's all-in-one installer), installed on Ubuntu Server
 - [ ] **Elastic Agent / Beats** — for forwarding logs from Windows/Linux VMs to ELK
 - [ ] **Splunk Enterprise** (free Developer license) — installer from splunk.com, requires free account signup
 - [ ] **Splunk Universal Forwarder** — for forwarding logs from Windows/Linux VMs to Splunk
 
-**Vulnerability management**
+### Vulnerability management
 
 - [ ] **Greenbone Community Edition (OpenVAS)** — Docker Compose install (Docker Engine required on Ubuntu Server base) from greenbone.github.io
 
-**SOAR**
+### SOAR
 
 - [ ] **TheHive + Cortex** — installers/Docker images from thehive-project.org, installed on Ubuntu Server, *or*
 - [ ] **Shuffle** — Docker Compose install from shuffler.io (simpler drag-and-drop alternative)
 
-**Supporting tools**
+### Supporting tools
 
 - [ ] **Docker Engine** — needed for OpenVAS/Greenbone and optionally TheHive/Shuffle; install via Ubuntu's package manager
 - [ ] **Sysmon** — Microsoft Sysinternals, installed on Windows victim VMs for richer endpoint logging (feeds Wazuh/SIEM)
 - [ ] **Windows Server ISO validation** — confirm the 180-day eval ISO's expiration date so you know when you'll need to re-arm or rebuild it
 
-**Exit criteria for this checklist**
+### Exit criteria for this checklist
 
 - [ ] All ISOs/installers downloaded and saved in one folder on the host
 - [ ] Checksums verified where the vendor provides them (protects against a corrupted download causing a mysterious install failure later)
@@ -112,4 +112,3 @@ Download and stage these before Phase 3 begins — having everything ready up fr
 - [ ] Hardware budget understood and accepted
 - [ ] Pod strategy accepted
 - [ ] Success criteria written down
-
