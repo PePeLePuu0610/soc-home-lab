@@ -5,11 +5,13 @@
 Build one item at a time. Fully finish and confirm each step works before starting the next — this is the core discipline of Waterfall.
 
 ### Step 3.1 — Prep VMware Workstation
+
 1. Open VMware Workstation Pro → **Edit → Virtual Network Editor**.
 2. Create/confirm 3 Host-only networks (VMnet1, 2, 3) matching the subnets in 2.2. Untick "Use local DHCP service" for each — pfSense will hand out addresses instead, just like a real firewall.
 3. Leave VMnet8 (NAT) as-is for pfSense's WAN.
 
 ### Step 3.2 — pfSense (build this first — everything else depends on it)
+
 1. Download pfSense CE ISO (free) from the official pfSense site.
 2. Create VM: 2GB RAM, 2 vCPU, 20GB thin-provisioned disk, 4 network adapters (WAN=NAT, LAN1=Mgmt, LAN2=Corp, LAN3=Attacker).
 3. Install pfSense, assign interfaces to match Section 2.1.
@@ -24,20 +26,24 @@ Build one item at a time. Fully finish and confirm each step works before starti
    - **Confirm:** from each VM, browse a website or run a package update and verify it completes successfully before moving to the next VM build.
 
 ### Step 3.3 — Corporate LAN victims
+
 1. Build Windows Server VM (4GB/2vCPU/60GB), install, promote to a Domain Controller (this makes it the "brain" of a mini corporate network with user accounts — a standard SOC training setup).
 2. Build Windows 10/11 victim VM (4GB/2vCPU/60GB), join it to the domain.
 3. Assign static IPs per Section 2.2.
 
 ### Step 3.4 — Wazuh (HIDS/XDR)
+
 1. Build a Wazuh manager VM (4GB/2vCPU/40GB) — most people use the official Wazuh OVA or install on Ubuntu.
 2. Install the Wazuh agent on the Windows victim VM and point it at the manager.
 3. **Confirm:** Wazuh dashboard shows the Windows agent as "active."
 
 ### Step 3.5 — IDS (Suricata)
+
 1. Enable Suricata as a pfSense package (simplest route — installs directly on your firewall) *or* build a standalone Suricata VM if you want it separate.
 2. Point it at the Corp-zone interface so it inspects traffic to/from your victim machines.
 
 ### Step 3.6 — SIEM #1: ELK Stack
+
 1. Build ELK VM (8GB/2vCPU/60GB — this is the heaviest VM in the lab).
 2. Install Elasticsearch, Logstash, Kibana (or use Elastic's all-in-one installer).
 3. Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata.
@@ -51,20 +57,24 @@ Build one item at a time. Fully finish and confirm each step works before starti
 4. **Only run ELK or Splunk at a time unless you're specifically comparing them.**
 
 ### Step 3.8 — OpenVAS (Vulnerability Management)
+
 1. Build OpenVAS/Greenbone VM (4GB/2vCPU/40GB) — the official Greenbone Community Edition Docker install is the easiest path.
 2. Point a scan at the Windows victim VM's IP.
 3. **Confirm:** a vulnerability report generates.
 
 ### Step 3.9 — SOAR
+
 1. Build SOAR VM (4GB/2vCPU/40GB) — TheHive + Cortex (case management + automated analysis) is the closest to what real SOC teams use; Shuffle is a lighter, drag-and-drop alternative if you want something simpler to start.
 2. Connect it to your SIEM so alerts can trigger a case/playbook.
 3. Build one simple playbook (e.g., "on brute-force alert, disable the targeted AD account").
 
 ### Step 3.10 — Kali (Attacker)
+
 1. Build Kali VM (4GB/2vCPU/40GB) on the Attacker Zone network only.
 2. This is built **last**, deliberately — you don't want a live attack machine active while you're still wiring up detection tools.
 
 ### Exit Criteria for Phase 3
+
 - [ ] Every VM listed above is built and powered on successfully at least once
 - [ ] pfSense routes and filters traffic between all zones as designed
 - [ ] Wazuh shows an active agent

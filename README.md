@@ -5,7 +5,7 @@
 
 A Security Operations Center (SOC) home lab built end-to-end on a single Windows host with VMware Workstation Pro, using free and open-source tooling to simulate a real enterprise detection-and-response environment.
 
-**Live documentation site:** https://PePeLePuu0610.github.io/soc-home-lab/
+**Live documentation site:** <https://PePeLePuu0610.github.io/soc-home-lab/>
 
 **New to GitHub or CI/CD?** Start with [`GETTING_STARTED.md`](GETTING_STARTED.md) — a full step-by-step walkthrough assuming zero prior experience.
 
@@ -26,7 +26,8 @@ Built using **Waterfall** project management — Requirements → Design → Imp
 
 ## Repository structure
 
-```
+```markdown
+```text
 soc-home-lab/
 ├── docs/                        # Full project documentation (MkDocs site, published via GitHub Pages)
 │   └── assets/                  # Diagrams and other images referenced from docs pages
@@ -41,7 +42,8 @@ soc-home-lab/
 ├── mkdocs.yml                    # Docs site configuration
 ├── requirements.txt               # Python deps for building the docs site
 └── .github/workflows/              # CI/CD pipeline (see below)
-```
+```markdown
+```text
 
 ## CI/CD Pipeline
 
@@ -57,14 +59,16 @@ In short: **CI** gate-checks every change (docs *and* configs), **CD** ships the
 ## Local development
 
 This repo lives locally at:
-
-```
+```markdown
+```text
 E:\PePesLab-SOC 2.0\soc-home-lab
-```
+```markdown
+```text
 
 VM disks are stored separately and are **not** part of this repo:
 
-```
+```markdown
+```text
 E:\PePesLab-SOC 2.0\VMz
 ```
 

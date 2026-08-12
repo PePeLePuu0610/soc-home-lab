@@ -13,6 +13,7 @@
    - **Confirm:** rerun the Phase 4 network isolation test after hardening to make sure tightening the rules didn't also break log forwarding or agent connectivity.
 
 ### Exit Criteria for Phase 5
+
 - [ ] Snapshots taken of all VMs
 - [ ] Power-on cheat sheet written
 - [ ] Credentials stored securely

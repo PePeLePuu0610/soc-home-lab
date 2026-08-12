@@ -3,6 +3,7 @@
 **Goal:** Design the network and naming scheme on paper before building anything.
 
 ### 2.1 Network Zones
+
 Enterprise SOCs separate networks into zones so an attacker in one zone can't freely reach another. You'll simulate this with VMware's **virtual networks** (VMnet) and pfSense as the router between them.
 
 ![SOC lab network diagram: Internet through pfSense WAN interface, fanning out to Management, Corporate, and Attacker LAN zones](assets/network-zone-diagram.svg)
@@ -19,6 +20,7 @@ Enterprise SOCs separate networks into zones so an attacker in one zone can't fr
 pfSense gets one virtual network adapter per zone (4 total) and acts as the router/firewall between all of them — this is exactly how a real network's edge firewall works, just scaled down.
 
 ### 2.2 IP Address Plan
+
 | Device | Zone | IP |
 |---|---|---|
 | pfSense WAN | NAT | DHCP |
@@ -32,14 +34,17 @@ pfSense gets one virtual network adapter per zone (4 total) and acts as the rout
 | Kali | Attacker | 10.10.30.10 |
 
 ### 2.3 Data Flow Design
+
 Attack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
 Detection path: **Windows victim (Wazuh agent) + pfSense (IDS) → logs forwarded → SIEM (10.10.10.10)**
 Response path: **SIEM alert → SOAR → automated action back on Windows Server/victim**
 
 ### 2.4 Naming Convention
+
 Use a consistent prefix so VMs are easy to identify in VMware's library: `SOC-<role>-<os>`, e.g. `SOC-FW-pfSense`, `SOC-SIEM-ELK`, `SOC-VICTIM-Win11`, `SOC-ATK-Kali`.
 
 ### Exit Criteria for Phase 2
+
 - [ ] Network diagram (zones + subnets) written down
 - [ ] IP address table completed
 - [ ] Naming convention chosen

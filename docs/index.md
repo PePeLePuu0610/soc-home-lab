@@ -22,10 +22,10 @@ This lab doubles as a hands-on portfolio piece: every phase produces something d
 
 ## Repository Layout
 
-```
+```text
 soc-home-lab/
 ├── docs/            # This documentation site (built with MkDocs)
 ├── configs/          # Exported configs: pfSense rules, Wazuh rules, Suricata rules, docker-compose files
 ├── screenshots/       # Portfolio evidence — dashboards, alerts, playbook runs
 └── .github/workflows/  # CI/CD: docs linting, link checking, GitHub Pages deploy
-```
+```text

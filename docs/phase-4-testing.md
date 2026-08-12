@@ -13,5 +13,6 @@
 | Full chain | Repeat the brute-force test start to finish | You can trace: attack → IDS/HIDS alert → SIEM dashboard → SOAR action, without manual steps in between |
 
 ### Exit Criteria for Phase 4
+
 - [ ] All 7 tests above pass
 - [ ] Any failures documented with root cause (e.g., "logs weren't reaching Splunk because the forwarder wasn't installed")
