@@ -1,0 +1,96 @@
+name: Docs CI
+
+# Runs on every push and pull request so broken docs are caught before merge.
+# This is the "CI" half of the pipeline: it never deploys anything, only validates.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-markdown:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Run markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@v18
+        with:
+          globs: |
+            docs/**/*.md
+            README.md
+
+  check-links:
+    name: Check Links
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Check links in docs/
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/workflows/mlc-config.json'
+          folder-path: 'docs'
+
+      - name: Check links in top-level project files
+        uses: gaurav-nelson/github-action-markdown-link-check@v1
+        with:
+          use-quiet-mode: 'yes'
+          config-file: '.github/workflows/mlc-config.json'
+          file-path: 'README.md, GETTING_STARTED.md'
+
+  build-check:
+    name: Build Docs Site (validation only)
+    runs-on: ubuntu-latest
+    needs: [lint-markdown, check-links]
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build site (fails the job if MkDocs config/nav is broken)
+        run: mkdocs build --strict
+
+  validate-compose:
+    name: Validate Docker Compose Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Validate TheHive/Cortex compose syntax (vendored file)
+        run: |
+          cd configs/docker-compose/thehive
+          docker compose config --quiet
+
+      - name: Validate Greenbone/OpenVAS compose syntax (fetched live — not vendored on purpose, see configs/docker-compose/openvas/README.md)
+        run: |
+          mkdir -p /tmp/greenbone-ce && cd /tmp/greenbone-ce
+          curl -f -L https://greenbone.github.io/docs/latest/_static/compose.yaml -o compose.yaml
+          docker compose -f compose.yaml config --quiet
+
+  scan-for-secrets:
+    name: Scan for Accidentally Committed Secrets
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,14 @@
+{
+  "ignorePatterns": [
+    { "pattern": "^http://10\\." },
+    { "pattern": "^https://10\\." },
+    { "pattern": "^http://localhost" },
+    { "pattern": "^https://PePeLePuu0610\\.github\\.io/soc-home-lab/" },
+    { "pattern": "^https://github\\.com/PePeLePuu0610/soc-home-lab" }
+  ],
+  "aliveStatusCodes": [200, 206, 301, 302, 403],
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "15s",
+  "timeout": "20s"
+}

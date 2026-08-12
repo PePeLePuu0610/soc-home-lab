@@ -1,0 +1,36 @@
+site_name: Home SOC Lab
+site_description: A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.
+site_url: https://PePeLePuu0610.github.io/soc-home-lab/
+repo_url: https://github.com/PePeLePuu0610/soc-home-lab
+repo_name: PePeLePuu0610/soc-home-lab
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: indigo
+    accent: indigo
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.top
+    - content.code.copy
+    - toc.integrate
+
+nav:
+  - Home: index.md
+  - Phase 1 - Requirements: phase-1-requirements.md
+  - Phase 2 - Design: phase-2-design.md
+  - Phase 3 - Implementation: phase-3-implementation.md
+  - Phase 4 - Testing: phase-4-testing.md
+  - Phase 5 - Deployment: phase-5-deployment.md
+  - Phase 6 - Maintenance: phase-6-maintenance.md
+
+markdown_extensions:
+  - tables
+  - toc:
+      permalink: true
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
