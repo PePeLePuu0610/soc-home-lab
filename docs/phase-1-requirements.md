@@ -66,7 +66,7 @@ Download and stage these before Phase 3 begins — having everything ready up fr
 - [ ] **pfSense CE** — ISO from the official pfSense site (netgate.com/pfsense)
 - [ ] **VMware Workstation Pro** — already installed (confirmed on your host)
 
-### Operating systems (victims / directory) 
+### Operating systems (victims / directory)
 
 - [ ] **Windows Server** (2019/2022) ISO — Microsoft Evaluation Center (free 180-day trial ISO)
 - [ ] **Windows 10 or 11** ISO — Microsoft Evaluation Center or standard consumer ISO you're licensed for
