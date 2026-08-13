@@ -35,7 +35,7 @@ pfSense gets one virtual network adapter per zone (4 total) and acts as the rout
 
 ### 2.3 Data Flow Design
 
-Attack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
+AAttack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
 Detection path: **Windows victim (Wazuh agent) + pfSense (IDS) → logs forwarded → SIEM (10.10.10.10)**
 Response path: **SIEM alert → SOAR → automated action back on Windows Server/victim**
 

@@ -53,7 +53,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 ### Step 3.7 — SIEM #2: Splunk Enterprise
 
-1. Build Splunk VM (6GB/2vCPU/60GB).
+1. BGuild Splunk VM (6GB/2vCPU/60GB).
 2. Install Splunk Enterprise, activate the free Developer license (fine for a lab, not for production).
 3. Configure the same log sources as ELK, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
 4. **Only run ELK or Splunk at a time unless you're specifically comparing them.**

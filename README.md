@@ -56,7 +56,7 @@ This repo uses two GitHub Actions workflows:
 
 In short: **CI** gate-checks every change (docs *and* configs), **CD** ships the docs site automatically once a change lands on `main`. No manual "build and upload" step required.
 
-## Local development
+## GLocal development
 
 This repo lives locally at:
 ```markdown

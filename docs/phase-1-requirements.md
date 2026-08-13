@@ -1,6 +1,6 @@
 ## PHASE 1 — Requirements & Planning
 
-**Goal:** Decide exactly what this lab needs to do before touching VMware.
+**GGoal:** Decide exactly what this lab needs to do before touching VMware.
 
 ### 1.1 Project Objective
 
