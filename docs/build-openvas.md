@@ -25,10 +25,7 @@ sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 sudo apt-get update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
@@ -65,11 +62,42 @@ docker compose -p greenbone-community-edition logs -f
 
 Don't interrupt it partway through — a partial feed sync can leave the scanner in a broken state that's easier to fix by letting it finish than by restarting mid-download.
 
+**Fix the web UI's port binding before trying to log in — this step is easy to miss and the default will silently block remote access.** Greenbone's official compose file binds its `nginx` front-end (the actual web UI / TLS endpoint) to `127.0.0.1` only — reachable from inside the VM itself, not from your Windows host, regardless of firewall rules. This is a deliberate security default in Greenbone's compose file, not a bug, but it needs changing for this lab's use case:
+
+```bash
+nano compose.yaml
+```
+
+Find the `nginx:` service block. Under its `ports:` section, change:
+
+```yaml
+    ports:
+      - 127.0.0.1:443:443
+      - 127.0.0.1:9392:9392
+```
+
+to:
+
+```yaml
+    ports:
+      - 443:443
+      - 9392:9392
+```
+
+Save (`Ctrl+O`, `Enter`, `Ctrl+X`), then recreate the containers so the new port mapping takes effect — a restart alone won't pick up a port binding change, only a full recreate will:
+
+```bash
+docker compose -p greenbone-community-edition down
+docker compose -p greenbone-community-edition up -d
+```
+
+This doesn't touch your feed data — `down` without `-v` only removes containers, not the volumes holding everything you already downloaded.
+
 ## 3.8.5 — First login
 
-Once containers are up and the feed sync has finished:
+Once containers are back up:
 
-1. Browse to `https://10.10.10.12:9392` from your Windows host browser. Expect a **"Not secure"** browser warning — recent Greenbone versions default to HTTPS with a self-signed certificate, this is expected in a lab, not an error.
+1. Browse to `https://10.10.10.12` from your Windows host browser — **no port number**. Port 443 is HTTPS's default, so you don't need to type it; port 9392 is just a plain-HTTP redirector to 443, not a TLS endpoint itself, so don't use `https://` with `:9392` — that combination fails with a confusing "wrong version number" TLS error. Expect a **"Not secure"** browser warning either way — Greenbone's self-signed certificate is expected in a lab, not an error.
 2. Log in with username `admin`. Greenbone's first-run flow has you set a real password immediately — **do this now**, don't leave a default password in place even in a lab.
 
 ## 3.8.6 — Run your first scan
@@ -95,6 +123,8 @@ In VMware: **VM → Snapshot → Take Snapshot** → name it `OpenVAS working ba
 
 ## Troubleshooting
 
+- **`curl`/browser TLS error like "wrong version number" when hitting `:9392` over HTTPS:** port 9392 is a plain-HTTP redirector to port 443, not a TLS endpoint. Use `https://10.10.10.12` (no port, or explicit `:443`) instead — see 3.8.4's port-binding step above.
+- **Can't reach the UI at all, even though `docker compose ps` shows everything healthy:** almost certainly the default `127.0.0.1`-only port binding on the `nginx` service — see the fix in 3.8.4. This is the single most common blocker on this build, since every container can be perfectly healthy while the UI is still unreachable from outside the VM.
 - **UI loads but scan configs/feeds look empty or greyed out:** the feed sync from 3.8.4 likely hasn't finished yet. Check `docker compose -p greenbone-community-edition logs -f` for ongoing feed-update activity before assuming something's broken.
 - **`docker: permission denied` errors:** you ran a `docker` command without `sudo` before logging out/in after the `usermod -aG docker` step. Either log out and back in, or prefix commands with `sudo` in the meantime.
 - **Containers keep restarting or exiting:** check disk space with `df -h` first — the feed data is large, and a nearly-full 40GB disk can starve the containers partway through sync.
