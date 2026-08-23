@@ -146,6 +146,7 @@ In VMware: **VM → Snapshot → Take Snapshot** → name it `ELK working baseli
 - [ ] Kibana reachable at `http://10.10.10.10:5601`, login successful
 - [ ] Named personal admin user created (not just `elastic`)
 - [ ] Logstash listening on port 5044
+- [ ] **Log sources not yet wired up? That's expected here** — see [Configure Log Forwarding](configure-log-forwarding.md) for Wazuh/pfSense/Suricata, done as its own step once both SIEMs exist
 - [ ] Snapshot taken
 
 ## Troubleshooting: setup wizard stuck on "Completing setup"

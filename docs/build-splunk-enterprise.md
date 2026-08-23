@@ -71,6 +71,7 @@ Browse to `http://10.10.10.14:8000` from your Windows host browser, log in with 
 - [ ] Boot-start enabled via systemd, `splunk status` reports running
 - [ ] Receiving port 9997 configured
 - [ ] Splunk Web reachable at `http://10.10.10.14:8000`, login successful
+- [ ] **Log sources not yet wired up? That's expected here** — see [Configure Log Forwarding](configure-log-forwarding.md) for Wazuh/pfSense/Suricata, done as its own step once both SIEMs exist
 - [ ] Snapshot taken
 
 ## Troubleshooting: Splunk Web unreachable, service missing from `systemctl`

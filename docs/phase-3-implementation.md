@@ -51,7 +51,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 1. Build ELK VM (8GB/2vCPU/60GB — this is the heaviest VM in the lab), static IP `10.10.10.10`.
 2. Install Elasticsearch, Kibana, and Logstash.
-3. Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata.
+3. **Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata — see [Configure Log Forwarding](configure-log-forwarding.md).** Deliberately split out as its own step: it touches three separate VMs, not just this one, and is easy to defer until both SIEMs exist and you can wire up both at once.
 4. **Confirm:** logs appear in Kibana within a few minutes of test traffic.
 
 ### Step 3.7 — SIEM #2: Splunk Enterprise
@@ -60,7 +60,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
 2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
-3. Configure the same log sources as ELK, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
+3. **Configure the same log sources as ELK — see [Configure Log Forwarding](configure-log-forwarding.md)**, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
 4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~24GB total) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
 
 ### Step 3.8 — OpenVAS (Vulnerability Management)

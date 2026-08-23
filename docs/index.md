@@ -15,6 +15,7 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 | ↳ [Build Guide: ELK Stack](build-elk-stack.md) | Detailed Elasticsearch + Kibana + Logstash build, with troubleshooting |
 | ↳ [Build Guide: Splunk Enterprise](build-splunk-enterprise.md) | Detailed Splunk Enterprise build |
 | ↳ [Build Guide: OpenVAS](build-openvas.md) | Detailed Greenbone/OpenVAS vulnerability scanner build |
+| ↳ [Configure Log Forwarding](configure-log-forwarding.md) | Wazuh, pfSense, and Suricata → both ELK and Splunk |
 | [Phase 4 — Testing & Verification](phase-4-testing.md) | End-to-end attack/detection/response test matrix |
 | [Phase 5 — Deployment](phase-5-deployment.md) | Snapshots, hardening, go-live checklist |
 | [Phase 6 — Maintenance](phase-6-maintenance.md) | Ongoing patching and skills-building cadence |
