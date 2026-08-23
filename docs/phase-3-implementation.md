@@ -20,11 +20,11 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **5a. Confirm outbound internet access (needed for Windows Updates, `apt update`, tool downloads on every VM):**
 
-- Host-only networks are *not* internet-isolated by default — pfSense routes and NATs each LAN's traffic out through its WAN interface (which rides VMware's NAT network, VMnet8, out to your host's real connection) the same way a real office's internal network reaches the internet only through its edge firewall.
-- Check **Firewall → NAT → Outbound** is set to "Automatic" — this makes pfSense NAT traffic from all three Host-only subnets out to WAN with no extra config.
-- Set each VM's DNS server to its pfSense LAN IP (10.10.10.1 / 10.10.20.1 / 10.10.30.1), and confirm pfSense's DNS Resolver is enabled (**Services → DNS Resolver**) — default install has this on, but confirm it. No working DNS means updates will silently fail even with a good route.
-- **Temporarily allow outbound traffic while building/patching:** while you're actively installing OS updates or tools on a new VM, add a permissive "allow any outbound" rule on that VM's zone so nothing blocks the install. Remove or tighten it once the VM is fully built and patched — see the hardening step in Phase 5.
-- **Confirm:** from each VM, browse a website or run a package update and verify it completes successfully before moving to the next VM build.
+   - Host-only networks are *not* internet-isolated by default — pfSense routes and NATs each LAN's traffic out through its WAN interface (which rides VMware's NAT network, VMnet8, out to your host's real connection) the same way a real office's internal network reaches the internet only through its edge firewall.
+   - Check **Firewall → NAT → Outbound** is set to "Automatic" — this makes pfSense NAT traffic from all three Host-only subnets out to WAN with no extra config.
+   - Set each VM's DNS server to its pfSense LAN IP (10.10.10.5 / 10.10.20.5 / 10.10.30.5), and confirm pfSense's DNS Resolver is enabled (**Services → DNS Resolver**) — default install has this on, but confirm it. No working DNS means updates will silently fail even with a good route.
+   - **Temporarily allow outbound traffic while building/patching:** while you're actively installing OS updates or tools on a new VM, add a permissive "allow any outbound" rule on that VM's zone so nothing blocks the install. Remove or tighten it once the VM is fully built and patched — see the hardening step in Phase 5.
+   - **Confirm:** from each VM, browse a website or run a package update and verify it completes successfully before moving to the next VM build.
 
 ### Step 3.3 — Corporate LAN victims
 
@@ -40,29 +40,37 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 ### Step 3.5 — IDS (Suricata)
 
-1. Enable Suricata as a pfSense package (simplest route — installs directly on your firewall) *or* build a standalone Suricata VM if you want it separate.
+**Decision made:** installed as a pfSense package rather than a standalone VM, for simplicity — one less VM to build, patch, and keep running.
+
+1. ~~Enable Suricata as a pfSense package~~ **Done.**
 2. Point it at the Corp-zone interface so it inspects traffic to/from your victim machines.
 
 ### Step 3.6 — SIEM #1: ELK Stack
 
-1. Build ELK VM (8GB/2vCPU/60GB — this is the heaviest VM in the lab).
-2. Install Elasticsearch, Logstash, Kibana (or use Elastic's all-in-one installer).
+**Full step-by-step build guide: [Build Guide: ELK Stack VM](build-elk-stack.md)**
+
+1. Build ELK VM (8GB/2vCPU/60GB — this is the heaviest VM in the lab), static IP `10.10.10.10`.
+2. Install Elasticsearch, Kibana, and Logstash.
 3. Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata.
 4. **Confirm:** logs appear in Kibana within a few minutes of test traffic.
-5. **Power this VM off when not actively using it** — this is your biggest RAM consumer.
 
 ### Step 3.7 — SIEM #2: Splunk Enterprise
 
-1. BGuild Splunk VM (6GB/2vCPU/60GB).
-2. Install Splunk Enterprise, activate the free Developer license (fine for a lab, not for production).
+**Full step-by-step build guide: [Build Guide: Splunk Enterprise VM](build-splunk-enterprise.md)**
+
+1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
+2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
 3. Configure the same log sources as ELK, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
-4. **Only run ELK or Splunk at a time unless you're specifically comparing them.**
+4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~24GB total) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
 
 ### Step 3.8 — OpenVAS (Vulnerability Management)
 
-1. Build OpenVAS/Greenbone VM (4GB/2vCPU/40GB) — the official Greenbone Community Edition Docker install is the easiest path.
+**Full step-by-step build guide: [Build Guide: OpenVAS (Greenbone Community Edition)](build-openvas.md)**
+
+1. Build OpenVAS/Greenbone VM (4GB/2vCPU/40GB), static IP `10.10.10.12` — Docker-based install, using Greenbone's official Community Edition container stack.
 2. Point a scan at the Windows victim VM's IP.
 3. **Confirm:** a vulnerability report generates.
+4. **RAM note:** this is the tightest fit yet with two SIEMs already running — see the guide's "Before you start" section.
 
 ### Step 3.9 — SOAR
 

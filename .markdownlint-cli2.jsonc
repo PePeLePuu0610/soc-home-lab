@@ -1,9 +1,14 @@
 {
   "config": {
     "default": true,
-    "MD013": false,       // line-length — disabled, docs use long descriptive lines and wide tables
-    "MD033": false,       // allow inline HTML if ever needed
-    "MD041": false        // first line doesn't have to be a top-level heading in every file
+    "MD013": false,   // line-length — docs use long descriptive lines and wide tables on purpose
+    "MD033": false,   // allow inline HTML if ever needed
+    "MD041": false,   // first line doesn't have to be a top-level heading in every file
+    "MD060": false,   // table pipe spacing style — cosmetic only, doesn't affect rendering
+    "MD036": false,   // bold text used as a visual sub-label inside checklists (e.g. **SIEMs**) —
+                       // intentionally not a real heading, since it shouldn't appear in page nav/TOC
+    "MD007": false    // nested list indent under numbered steps (e.g. "1. **Step**\n   - detail")
+                       // is valid Markdown; this rule's default assumption doesn't fit that pattern
   },
   "globs": ["docs/**/*.md", "README.md"]
 }

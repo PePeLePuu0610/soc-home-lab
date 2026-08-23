@@ -13,7 +13,7 @@ Enterprise SOCs separate networks into zones so an attacker in one zone can't fr
 | Zone | VMware Network | Subnet | Who lives here |
 |---|---|---|---|
 | WAN (simulated internet) | NAT (VMnet8) | DHCP from host | pfSense's WAN interface only |
-| Management | Host-only (VMnet1) | 10.10.10.0/24 | SIEMs, Wazuh, OpenVAS, SOAR — the tools *you* use |
+| Management | Host-only (VMnet1) | 10.10.10.0/24 | SIEMs, Wazuh, OpenVAS, SOAR, management endpoint — the tools *you* use |
 | Corporate LAN | Host-only (VMnet2) | 10.10.20.0/24 | Windows Server (AD), Windows victim VM |
 | Attacker Zone | Host-only (VMnet3) | 10.10.30.0/24 | Kali |
 
@@ -24,18 +24,22 @@ pfSense gets one virtual network adapter per zone (4 total) and acts as the rout
 | Device | Zone | IP |
 |---|---|---|
 | pfSense WAN | NAT | DHCP |
-| pfSense LAN interfaces | Mgmt / Corp / Attacker | 10.10.10.1 / 10.10.20.1 / 10.10.30.1 |
-| SIEM (ELK or Splunk) | Management | 10.10.10.10 |
+| pfSense LAN interfaces | Mgmt / Corp / Attacker | 10.10.10.5 / 10.10.20.5 / 10.10.30.5 |
+| SIEM ELK | Management | 10.10.10.10 |
 | Wazuh manager | Management | 10.10.10.11 |
 | OpenVAS | Management | 10.10.10.12 |
 | SOAR | Management | 10.10.10.13 |
+| SIEM Splunk | Management | 10.10.10.14 |
+| Management Endpoint (KDE Linux) | Management | 10.10.10.15 |
 | Windows Server (AD) | Corp | 10.10.20.10 |
 | Windows victim | Corp | 10.10.20.20 |
 | Kali | Attacker | 10.10.30.10 |
 
+> **Note:** pfSense's LAN interface addresses were changed from `.1` to `.5` on each subnet after initial planning — every VM's default gateway and DNS server should point at the `.5` address on its zone. The original plan assigned one shared address for "SIEM (ELK or Splunk)," under the assumption you'd swap them in one at a time per the pod strategy in Phase 1; since both are built as permanent VMs running side by side for direct comparison, they now have distinct addresses. A **Management Endpoint (KDE Linux)** VM was also added at `10.10.10.15` — an analyst workstation living in the Management zone rather than a monitored asset, distinct from the Corp-zone Windows victim.
+
 ### 2.3 Data Flow Design
 
-AAttack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
+Attack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
 Detection path: **Windows victim (Wazuh agent) + pfSense (IDS) → logs forwarded → SIEM (10.10.10.10)**
 Response path: **SIEM alert → SOAR → automated action back on Windows Server/victim**
 

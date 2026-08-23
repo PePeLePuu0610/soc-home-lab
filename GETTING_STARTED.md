@@ -127,7 +127,7 @@ This is the loop you'll repeat every time you want to update documentation, add 
 
 ## Quick Troubleshooting
 
-| GProblem | Likely cause / fix |
+| Problem | Likely cause / fix |
 |---|---|
 | Red X on "Lint Markdown" | A Markdown formatting issue — click into the failed job to see the exact line/file it's complaining about |
 | Red X on "Check Links" | A link in your docs is broken or unreachable — fix or remove it |

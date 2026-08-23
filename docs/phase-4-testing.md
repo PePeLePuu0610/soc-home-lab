@@ -1,6 +1,6 @@
 ## PHASE 4 — Testing & Verification
 
-**GGoal:** Prove the lab actually detects and responds to attacks, end-to-end.
+**Goal:** Prove the lab actually detects and responds to attacks, end-to-end.
 
 | Test | Steps | Pass condition |
 |---|---|---|

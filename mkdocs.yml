@@ -23,6 +23,9 @@ nav:
   - Phase 1 - Requirements: phase-1-requirements.md
   - Phase 2 - Design: phase-2-design.md
   - Phase 3 - Implementation: phase-3-implementation.md
+  - Build Guide - ELK Stack: build-elk-stack.md
+  - Build Guide - Splunk Enterprise: build-splunk-enterprise.md
+  - Build Guide - OpenVAS: build-openvas.md
   - Phase 4 - Testing: phase-4-testing.md
   - Phase 5 - Deployment: phase-5-deployment.md
   - Phase 6 - Maintenance: phase-6-maintenance.md

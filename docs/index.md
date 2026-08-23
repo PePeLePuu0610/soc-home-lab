@@ -12,6 +12,9 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 | [Phase 1 — Requirements & Planning](phase-1-requirements.md) | Scope, hardware budget, success criteria, ISO/software checklist |
 | [Phase 2 — Design](phase-2-design.md) | Network zones, IP addressing, data flow, naming convention |
 | [Phase 3 — Implementation](phase-3-implementation.md) | Step-by-step build order for every VM |
+| ↳ [Build Guide: ELK Stack](build-elk-stack.md) | Detailed Elasticsearch + Kibana + Logstash build, with troubleshooting |
+| ↳ [Build Guide: Splunk Enterprise](build-splunk-enterprise.md) | Detailed Splunk Enterprise build |
+| ↳ [Build Guide: OpenVAS](build-openvas.md) | Detailed Greenbone/OpenVAS vulnerability scanner build |
 | [Phase 4 — Testing & Verification](phase-4-testing.md) | End-to-end attack/detection/response test matrix |
 | [Phase 5 — Deployment](phase-5-deployment.md) | Snapshots, hardening, go-live checklist |
 | [Phase 6 — Maintenance](phase-6-maintenance.md) | Ongoing patching and skills-building cadence |
@@ -28,4 +31,4 @@ soc-home-lab/
 ├── configs/          # Exported configs: pfSense rules, Wazuh rules, Suricata rules, docker-compose files
 ├── screenshots/       # Portfolio evidence — dashboards, alerts, playbook runs
 └── .github/workflows/  # CI/CD: docs linting, link checking, GitHub Pages deploy
-```text
+```
