@@ -26,6 +26,7 @@ nav:
   - Build Guide - ELK Stack: build-elk-stack.md
   - Build Guide - Splunk Enterprise: build-splunk-enterprise.md
   - Build Guide - OpenVAS: build-openvas.md
+  - Configure Log Forwarding: configure-log-forwarding.md
   - Phase 4 - Testing: phase-4-testing.md
   - Phase 5 - Deployment: phase-5-deployment.md
   - Phase 6 - Maintenance: phase-6-maintenance.md
