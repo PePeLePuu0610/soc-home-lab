@@ -2,11 +2,11 @@
 
 **VM name:** `SOC-SIEM-Splunk` · **Zone:** Management · **IP:** `10.10.10.14` · **Specs:** 6GB RAM / 2 vCPU / 60GB disk
 
-This guide covers building the Splunk Enterprise VM from your Ubuntu 22.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). It's built as a second, permanent SIEM alongside ELK for direct side-by-side comparison — see the IP address note in [Phase 2 — Design](phase-2-design.md#22-ip-address-plan) for why that changed the original one-shared-address plan.
+This guide covers building the Splunk Enterprise VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). It's built as a second, permanent SIEM alongside ELK for direct side-by-side comparison — see the IP address note in [Phase 2 — Design](phase-2-design.md#22-vm-inventory-ip-address-plan) for why that changed the original one-shared-address plan.
 
 ## Before you start
 
-**RAM check:** with Pod A running (pfSense + Windows victim + Wazuh, ~10GB) plus ELK (8GB) and Splunk (6GB), you're at roughly 24GB — comfortably inside 32GB with headroom for the host OS. No need to power anything off to build this alongside ELK.
+**RAM check:** with Pod A running (pfSense + Windows victim + Wazuh, ~10GB) plus ELK (**4GB actual**) and Splunk (6GB), you're at roughly 20GB — comfortably inside 32GB with plenty of headroom for the host OS. No need to power anything off to build this alongside ELK.
 
 Like ELK, this VM sits on the Management zone, so you can browse Splunk Web directly from your Windows host browser once it's built.
 

@@ -1,8 +1,8 @@
 # Build Guide: ELK Stack VM (Step 3.6)
 
-**VM name:** `SOC-SIEM-ELK` · **Zone:** Management · **IP:** `10.10.10.10` · **Specs:** 8GB RAM / 2 vCPU / 60GB disk
+**VM name:** `SOC-SIEM-ELK` · **Zone:** Management · **IP:** `10.10.10.10` · **Specs:** 4GB RAM / 4 vCPU / 60GB disk (actual — more CPU, less RAM than originally planned; running without errors as-is)
 
-This guide covers building the ELK Stack (Elasticsearch, Logstash, Kibana) VM from your Ubuntu 22.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Commands were verified against Elastic's current official documentation (Elastic Stack 9.x) rather than older tutorials, since package repos and default security behavior have changed across major versions.
+This guide covers building the ELK Stack (Elasticsearch, Logstash, Kibana) VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Commands were verified against Elastic's current official documentation (Elastic Stack 9.x) rather than older tutorials, since package repos and default security behavior have changed across major versions.
 
 ## Before you start
 
@@ -10,10 +10,10 @@ Both SIEM VMs (this one and Splunk) sit on the Management zone alongside Wazuh, 
 
 ## 3.6.1 — Clone the VM
 
-1. In VMware Workstation, right-click your Ubuntu 22.04 LTS template → **Manage → Clone**.
+1. In VMware Workstation, right-click your Ubuntu 24.04 LTS template → **Manage → Clone**.
 2. Choose **Create a full clone** (not linked — you want this VM independent of the template going forward).
 3. Name it `SOC-SIEM-ELK`, location `E:\PePesLab-SOC 2.0\VMz\SOC-SIEM-ELK`.
-4. Edit VM settings: **Memory → 8192 MB**, **Processors → 2**, **Network Adapter → Custom: VMnet1 (Management)**.
+4. Edit VM settings: **Memory → 4096 MB**, **Processors → 4**, **Network Adapter → Custom: VMnet1 (Management)**.
 5. Power on and log in.
 
 ## 3.6.2 — Configure networking and update the OS

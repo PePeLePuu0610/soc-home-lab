@@ -34,7 +34,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 ### Step 3.4 — Wazuh (HIDS/XDR)
 
-1. Build a Wazuh manager VM (4GB/2vCPU/40GB) — most people use the official Wazuh OVA or install on Ubuntu.
+1. Build a Wazuh manager VM on Ubuntu 24.04 (4GB/2vCPU/40GB), using Wazuh's official install script. **Decision made:** the official Wazuh OVA was tried first and abandoned after integration difficulties (different base OS from the rest of the lab caused several build steps to assume the wrong package manager, and its bundled Filebeat conflicted with the log-forwarding setup) — see [Configure Log Forwarding](configure-log-forwarding.md) for the full story. Building from scratch on the same Ubuntu base as everything else removed that whole class of problem.
 2. Install the Wazuh agent on the Windows victim VM and point it at the manager.
 3. **Confirm:** Wazuh dashboard shows the Windows agent as "active."
 
@@ -49,7 +49,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **Full step-by-step build guide: [Build Guide: ELK Stack VM](build-elk-stack.md)**
 
-1. Build ELK VM (8GB/2vCPU/60GB — this is the heaviest VM in the lab), static IP `10.10.10.10`.
+1. Build ELK VM on Ubuntu 24.04 (**actual: 4GB RAM / 4 vCPU** — heavier on CPU, lighter on RAM than originally planned — 60GB disk), static IP `10.10.10.10`.
 2. Install Elasticsearch, Kibana, and Logstash.
 3. **Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata — see [Configure Log Forwarding](configure-log-forwarding.md).** Deliberately split out as its own step: it touches three separate VMs, not just this one, and is easy to defer until both SIEMs exist and you can wire up both at once.
 4. **Confirm:** logs appear in Kibana within a few minutes of test traffic.
@@ -61,13 +61,13 @@ Build one item at a time. Fully finish and confirm each step works before starti
 1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
 2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
 3. **Configure the same log sources as ELK — see [Configure Log Forwarding](configure-log-forwarding.md)**, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
-4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~24GB total) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
+4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~20GB total, even less than originally planned since ELK ended up using less RAM than expected) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
 
 ### Step 3.8 — OpenVAS (Vulnerability Management)
 
 **Full step-by-step build guide: [Build Guide: OpenVAS (Greenbone Community Edition)](build-openvas.md)**
 
-1. Build OpenVAS/Greenbone VM (4GB/2vCPU/40GB), static IP `10.10.10.12` — Docker-based install, using Greenbone's official Community Edition container stack.
+1. Build OpenVAS/Greenbone VM on Ubuntu 24.04 (**actual: 6GB RAM** / 2vCPU / 40GB), static IP `10.10.10.12` — Docker-based install, using Greenbone's official Community Edition container stack.
 2. Point a scan at the Windows victim VM's IP.
 3. **Confirm:** a vulnerability report generates.
 4. **RAM note:** this is the tightest fit yet with two SIEMs already running — see the guide's "Before you start" section.

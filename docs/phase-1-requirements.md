@@ -25,26 +25,25 @@ Build a self-contained enterprise-style security environment that lets you pract
 
 This is the most important planning decision, so it gets its own table. Below is what each VM realistically needs, and what happens if you try to run them all simultaneously.
 
-| VM | RAM (min/lab-usable) | vCPU | Disk |
+| VM | RAM (planned / **actual once built**) | vCPU | Disk |
 |---|---|---|---|
-| pfSense | 1–2 GB | 2 | 20 GB |
-| Kali (attacker) | 4 GB | 2 | 40 GB |
-| Windows 10/11 (victim) | 4 GB | 2 | 60 GB |
-| Windows Server + AD | 4 GB | 2 | 60 GB |
-| ELK stack (single node) | 8 GB | 2 | 60 GB |
+| pfSense (Suricata runs as a package inside this VM, not separately) | 2 GB | 2 | 20 GB |
+| Kali (attacker) | 4 GB / **2 GB actual** | 2 | 40 GB |
+| Windows 10 (victim) | 4 GB | 2 | 60 GB |
+| Windows Server 2019 + AD | 4 GB | 2 | 60 GB |
+| ELK stack (single node) | 8 GB / **4 GB actual** | 2 / **4 actual** | 60 GB |
 | Splunk Enterprise (single instance) | 6 GB | 2 | 60 GB |
-| Wazuh manager + indexer | 4 GB | 2 | 40 GB |
-| Suricata (can live on pfSense or its own VM) | 2 GB | 1 | 20 GB |
-| OpenVAS/Greenbone | 4 GB | 2 | 40 GB |
-| SOAR (TheHive+Cortex or Shuffle) | 4 GB | 2 | 40 GB |
-| **Total if all run at once** | **~41 GB** | — | **~440 GB** |
+| Wazuh manager | 4 GB | 2 | 40 GB |
+| OpenVAS/Greenbone | 4 GB / **6 GB actual** | 2 | 40 GB |
+| SOAR (not yet built — planned) | 4 GB | 2 | 40 GB |
+| **Total, actual specs where built** | **~36 GB** | — | **~380 GB** |
 
-**Reality:** 41GB > your 32GB. Running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a **"pod" power-on strategy** instead of buying more hardware:
+**Reality:** even the improved ~36GB total is still tight against 32GB if every VM runs at once — running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a **"pod" power-on strategy** instead of buying more hardware:
 
 - **Pod A – Core Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
-- **Pod B – SIEM (swap in one at a time):** ELK *or* Splunk, not both, unless testing log forwarding side-by-side → 6–8 GB
-- **Pod C – Offense (on only during exercises):** Kali → 4 GB
-- **Pod D – Vulnerability/Response (on only when actively using):** OpenVAS, SOAR → 4–8 GB
+- **Pod B – SIEM (swap in one at a time):** ELK (4GB actual) *or* Splunk (6GB), not both, unless testing log forwarding side-by-side
+- **Pod C – Offense (on only during exercises):** Kali → 2 GB actual
+- **Pod D – Vulnerability/Response (on only when actively using):** OpenVAS (6GB actual), SOAR (4GB planned) → 6–10 GB
 
 This keeps your working set around 22–27 GB, leaving headroom for the Windows 11 host OS itself.
 
@@ -75,9 +74,9 @@ Download and stage these before Phase 3 begins — having everything ready up fr
 
 **Detection & monitoring**
 
-- [ ] **Wazuh** — official Wazuh OVA, or install script for Ubuntu Server ISO (Ubuntu Server 22.04 LTS recommended as the base OS)
+- [ ] **Wazuh** — install script for Ubuntu Server ISO (Ubuntu Server 24.04 LTS as the base OS). *Update: the official Wazuh OVA was tried first and abandoned after integration difficulties — see [Configure Log Forwarding](configure-log-forwarding.md) for why. A from-scratch install on the same Ubuntu base as every other VM turned out to be the more reliable path.*
 - [ ] **Suricata** — installed as a pfSense package (via pfSense's package manager, no separate ISO) *or* Ubuntu Server ISO if building it standalone
-- [ ] **Ubuntu Server 22.04 LTS** ISO — base OS for Wazuh/Suricata/ELK/OpenVAS/SOAR if not using vendor-provided images/OVAs
+- [ ] **Ubuntu Server 24.04 LTS** ISO — base OS for Wazuh/Suricata/ELK/OpenVAS/SOAR if not using vendor-provided images/OVAs
 
 **SIEMs**
 

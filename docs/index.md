@@ -5,6 +5,19 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 **Host specs:** 11th Gen Intel i7-1185G7 @ 3.00GHz | 32GB RAM | 1TB SSD
 **Methodology:** Waterfall — each phase is completed and signed off before the next begins.
 
+## Current Status
+
+| Component | Status |
+|---|---|
+| pfSense + Suricata | ✅ Running, no errors — all traffic currently allowed (hardening deferred to Phase 5) |
+| Windows victim + AD server | ✅ Built, Wazuh agents installed and reporting |
+| Wazuh | ✅ Rebuilt from scratch on Ubuntu 24.04 (replacing the original OVA) — running, dashboards accessible, auditing endpoints |
+| OpenVAS | ✅ Scans completing successfully, reports visible in-dashboard |
+| ELK Stack | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
+| Splunk Enterprise | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
+| Log forwarding (Wazuh/pfSense/Suricata → ELK & Splunk) | 🔄 In progress — see [Configure Log Forwarding](configure-log-forwarding.md) |
+| SOAR (Shuffle) | ⏸ Not started — blocked on log forwarding completion per Waterfall sequencing |
+
 ## Project Phases
 
 | Phase | Focus |

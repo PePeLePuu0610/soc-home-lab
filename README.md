@@ -9,6 +9,10 @@ A Security Operations Center (SOC) home lab built end-to-end on a single Windows
 
 **New to GitHub or CI/CD?** Start with [`GETTING_STARTED.md`](GETTING_STARTED.md) — a full step-by-step walkthrough assuming zero prior experience.
 
+## Current Status
+
+pfSense/Suricata, both victim machines, Wazuh, and OpenVAS are built and running. ELK and Splunk are both up with successful logins but **not yet receiving log data** — log forwarding integration is in progress (see [Configure Log Forwarding](https://pepelepuu0610.github.io/soc-home-lab/configure-log-forwarding/)). SOAR (Shuffle) is next, blocked until integration completes per this project's Waterfall sequencing. Full detail: [Current Status on the docs site](https://pepelepuu0610.github.io/soc-home-lab/#current-status).
+
 ## What's in this lab
 
 - **pfSense** — firewall/router segmenting the lab into Management, Corporate, and Attacker network zones

@@ -6,7 +6,7 @@ This is the most integration-heavy step in the build so far — three log source
 
 ## Before you start: the design decisions that shape everything below
 
-**Wazuh forwards via its own native syslog output, not Filebeat.** An earlier version of this guide had Wazuh's manager run a second Filebeat pointed at the external ELK stack — that turned out to be a bad idea for two reasons found while actually running it: the Wazuh manager VM in this lab is deployed from **Wazuh's official OVA appliance** (confirmed built on Amazon Linux 2023, hence `yum` rather than `apt` — different from every other VM in this lab, which is why that difference wasn't visible until hitting it directly), and more importantly, **that appliance already runs its own Filebeat**, shipping alerts to Wazuh's own built-in indexer and dashboard as part of its pre-packaged setup. Editing that file would have broken Wazuh's own UI to fix an unrelated problem. Instead, this guide uses Wazuh's built-in `<syslog_output>` feature in `ossec.conf` — a native manager capability, unrelated to Filebeat, that forwards alerts via syslog to any target you specify. It doesn't touch the existing Filebeat setup at all, and it works the same regardless of which OS or deployment method the manager uses.
+**Wazuh forwards via its own native syslog output, not Filebeat.** An earlier version of this guide had Wazuh's manager run a second Filebeat pointed at the external ELK stack — that turned out to be a bad idea for two reasons found while actually running it: at the time, the Wazuh manager was deployed from **Wazuh's official OVA appliance** (Amazon Linux 2023, hence `yum` rather than `apt` — different from every other VM in this lab, which is why that difference wasn't visible until hitting it directly), and more importantly, **that appliance already ran its own Filebeat**, shipping alerts to Wazuh's own built-in indexer and dashboard as part of its pre-packaged setup. Editing that file would have broken Wazuh's own UI to fix an unrelated problem. **The OVA has since been retired** — Wazuh was rebuilt from scratch on Ubuntu 24.04, matching every other Linux VM in the lab, after the OVA's differences caused enough friction across multiple build steps to justify starting over on a consistent base. The reasoning for using native `syslog_output` instead of a second Filebeat still holds regardless: Wazuh's own install script may still set up its own internal Filebeat+indexer on any OS if you used the all-in-one deployment method, so this guide continues to avoid touching that file either way. Instead, it uses Wazuh's built-in `<syslog_output>` feature in `ossec.conf` — a native manager capability, unrelated to Filebeat, that forwards alerts via syslog to any target you specify.
 
 **Suricata's full EVE JSON output to syslog is unreliable** — several current pfSense forum threads document it simply not working in some package versions. The **"Send Alerts to System Log" checkbox**, however, is confirmed working and is what this guide uses. Trade-off: you get Suricata's alert summaries (source/destination, signature, severity), not full packet payload detail. That's enough for this lab's detection/response goals; if you want full EVE JSON richness later, look into the community [pfELK project](https://github.com/pfelk/pfelk), which adds a `syslog-ng` package specifically for that.
 
@@ -25,20 +25,21 @@ This is the most integration-heavy step in the build so far — three log source
 
 ## Part 1 — Wazuh → both SIEMs (native syslog_output)
 
-Run these on the **Wazuh manager VM** (`10.10.10.11`). No package installation required for this part — this uses Wazuh's own manager binaries only, so it doesn't matter whether the underlying OS uses `apt` or `yum`.
+Run these on the **Wazuh manager VM** (`10.10.10.11`) — now rebuilt on Ubuntu 24.04. No package installation required for this part — this uses Wazuh's own manager binaries only, which follow the same layout regardless of host OS.
 
-**This VM is Wazuh's official OVA appliance** (confirmed Amazon Linux 2023 under the hood, which is why its package manager is `yum`, not `apt` — different from every other VM in this lab, which is why the earlier Filebeat approach broke). Wazuh has also been actively restructuring this exact part of the product recently — recent releases have removed Filebeat as the internal log-shipping component entirely and relocated the manager's install path from `/var/ossec` to `/var/wazuh-manager` on some versions. Rather than assume which side of that change your specific OVA build is on, confirm first:
+**Status: starting fresh here.** The findings below (`wazuh-control` only, no `ossec-control`) were confirmed on the previous OVA build — very likely still true on this rebuild since it's the same Wazuh version installed via the same official method, but worth re-confirming rather than assuming, given how much has already turned out different than expected today.
 
 ### 1.1 — Confirm the actual paths and tools on your install
 
 ```bash
 ls /var/ossec/etc/ossec.conf 2>/dev/null && echo "Found: /var/ossec/etc/ossec.conf"
 ls /var/wazuh-manager/etc/ossec.conf 2>/dev/null && echo "Found: /var/wazuh-manager/etc/ossec.conf"
-which wazuh-control 2>/dev/null && echo "wazuh-control is available"
-which ossec-control 2>/dev/null && echo "ossec-control is available"
+sudo ls -la /var/ossec/bin/ | grep -i control
 ```
 
-Use whichever config path actually printed for the rest of this section — the examples below assume the classic `/var/ossec` path and `ossec-control` (still current on most deployed OVA builds as of this writing), but substitute `/var/wazuh-manager` and `wazuh-control` throughout if that's what step 1.1 found instead. The `<syslog_output>` XML syntax itself is identical either way — only the path and the control script name change.
+Check the `bin/` directory directly rather than `which wazuh-control` / `which ossec-control` — Wazuh's control scripts aren't on the default `$PATH`, so `which` reports nothing found even when the binary is sitting right there in `/var/ossec/bin/`.
+
+**Confirmed on the previous OVA build:** classic `/var/ossec/etc/ossec.conf` path, and only `wazuh-control` exists — no `ossec-control` at all, not even as a compatibility symlink. Almost certainly still true here — same Wazuh version, same official install method — but run 1.1 above and confirm before proceeding, rather than skip straight to 1.2 assuming it carries over unchanged.
 
 ### 1.2 — Add syslog_output blocks to ossec.conf
 
@@ -60,14 +61,23 @@ Add these two blocks inside the outermost `<ossec_config>` tags (anywhere at tha
 </syslog_output>
 ```
 
-### 1.3 — Enable and restart
+**Save carefully — this exact step is where a previous attempt silently failed to save.** In nano: `Ctrl+O` (letter O, "Write Out"), then `Enter` to confirm the filename shown at the bottom, then `Ctrl+X` to exit. Don't skip straight to `Ctrl+X` without the `Ctrl+O`/`Enter` sequence first.
+
+**Verify immediately, before doing anything else:**
 
 ```bash
-sudo /var/ossec/bin/ossec-control enable client-syslog
-sudo systemctl restart wazuh-manager
+sudo grep -A3 syslog_output /var/ossec/etc/ossec.conf
 ```
 
-If 1.1 found `wazuh-control` instead, use `sudo /var/ossec/bin/wazuh-control enable client-syslog` (or the equivalent path under `/var/wazuh-manager/bin/` if that's what you have) in place of the `ossec-control` line above.
+This must show your two blocks before you move to 1.3. If it comes back blank, the edit didn't save — redo 1.2 rather than proceeding.
+
+### 1.3 — Restart the manager
+
+**Client-syslog is already enabled by default on current Wazuh versions** — confirmed directly: running `wazuh-control enable client-syslog` on this exact version just prints "This option is deprecated because Client Syslog is now enabled by default." That's not an error, and there's nothing to actually run for enabling it. Just restart so the manager picks up the new `syslog_output` blocks from 1.2:
+
+```bash
+sudo systemctl restart wazuh-manager
+```
 
 ### 1.4 — Verify it started
 
@@ -201,7 +211,7 @@ Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to
 
 ## Troubleshooting
 
-- **`ossec-control` or `wazuh-manager` won't restart after editing `ossec.conf`:** almost always malformed XML — a missing closing tag is the most common cause. Restore from the backup (`sudo cp /var/ossec/etc/ossec.conf.bak /var/ossec/etc/ossec.conf`) and re-edit more carefully, or run `sudo /var/ossec/bin/wazuh-control configtest` if your version supports it, before restarting again.
+- **`wazuh-control` (or `ossec-control`) or `wazuh-manager` won't restart after editing `ossec.conf`:** almost always malformed XML — a missing closing tag is the most common cause. Restore from the backup (`sudo cp /var/ossec/etc/ossec.conf.bak /var/ossec/etc/ossec.conf`) and re-edit more carefully, or run `sudo /var/ossec/bin/wazuh-control configtest` if your version supports it, before restarting again.
 - **No Wazuh events in Kibana/Splunk at all:** check `sudo tail -50 /var/ossec/logs/alerts/alerts.json` on the Wazuh manager first — if that file itself is empty or not updating, the problem is upstream of syslog forwarding entirely (no agents reporting, or no rules triggering). Generate a test alert (a few failed SSH logins against the Windows victim) before troubleshooting the forwarding pipeline.
 - **`ossec.log` shows the forwarding lines but nothing arrives at Logstash/Splunk:** confirm the target IP/port actually matches what you configured on the receiving side, and check `sudo ss -tunlp | grep 5141` (or `5515`) on the *receiving* VM to confirm something is actually listening.
 - **pfSense/Suricata events missing from one SIEM but present in the other:** double check both entries are actually present under **Remote log servers** in pfSense (2.2) — it's easy to only add one when editing.
