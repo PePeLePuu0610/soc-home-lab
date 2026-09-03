@@ -1,0 +1,1179 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/configure-log-forwarding/">
+      
+      
+        <link rel="prev" href="../elk-ingestion-plan/">
+      
+      
+        <link rel="next" href="../phase-4-testing/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Configure Log Forwarding - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configure-log-forwarding-wazuh-pfsense-suricata-openvas-and-windows-elk-and-splunk" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configure Log Forwarding
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start-the-design-decisions-that-shape-everything-below" class="md-nav__link">
+    <span class="md-ellipsis">
+      Before you start: the design decisions that shape everything below
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-1-wazuh-both-siems-native-syslog_output" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 1 — Wazuh → both SIEMs (native syslog_output)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 1 — Wazuh → both SIEMs (native syslog_output)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-confirm-the-actual-paths-and-tools-on-your-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 — Confirm the actual paths and tools on your install
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-add-syslog_output-blocks-to-ossecconf" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 — Add syslog_output blocks to ossec.conf
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-restart-the-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 — Restart the manager
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-verify-it-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 — Verify it started
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-2-pfsense-suricata-both-siems-shared-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 2 — pfSense + Suricata → both SIEMs (shared setup)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 2 — pfSense + Suricata → both SIEMs (shared setup)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-enable-suricata-alerts-to-the-system-log" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 — Enable Suricata alerts to the system log
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-configure-pfsenses-remote-syslog-forwarding" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 — Configure pfSense's remote syslog forwarding
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-3-configure-elk-to-receive-both-syslog-streams-and-route-by-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 3 — Configure ELK to receive both syslog streams and route by source
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 3 — Configure ELK to receive both syslog streams and route by source">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-add-two-syslog-inputs-and-route-by-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 — Add two syslog inputs and route by port
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-verify-in-kibana" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 — Verify in Kibana
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-4-configure-splunk-to-receive-both-syslog-streams" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 4 — Configure Splunk to receive both syslog streams
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 4 — Configure Splunk to receive both syslog streams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verify
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-5-openvas-elk" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 5 — OpenVAS → ELK
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 5 — OpenVAS → ELK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-install-python-gvm-and-filebeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 — Install python-gvm and Filebeat
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-write-the-export-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 — Write the export script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-confirm-the-gmp-socket-path-and-test-the-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 — Confirm the GMP socket path and test the script
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-schedule-it-and-wire-up-filebeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.4 — Schedule it and wire up Filebeat
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.5 — Verify
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-6-windows-elk-via-winlogbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      Part 6 — Windows → ELK (via Winlogbeat)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Part 6 — Windows → ELK (via Winlogbeat)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-download-and-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 — Download and install
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-configure" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 — Configure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#63-install-and-start-the-service" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.3 — Install and start the service
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#64-verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.4 — Verify
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-criteria-for-completing-steps-36-37s-log-source-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit criteria for completing Steps 3.6 / 3.7's log source configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="configure-log-forwarding-wazuh-pfsense-suricata-openvas-and-windows-elk-and-splunk">Configure Log Forwarding: Wazuh, pfSense, Suricata, OpenVAS, and Windows → ELK and Splunk<a class="headerlink" href="#configure-log-forwarding-wazuh-pfsense-suricata-openvas-and-windows-elk-and-splunk" title="Permanent link">&para;</a></h1>
+<p><strong>Completes:</strong> Step 3.6.3 (ELK log sources) and Step 3.7.3 (Splunk log sources), deliberately done <em>after</em> both SIEMs and OpenVAS were already built — this is a return trip per Waterfall discipline: don't move on to SOAR (3.9) until the SIEMs are actually receiving data, since SOAR's entire job is acting on alerts that need to already be flowing in. See <a href="../elk-ingestion-plan/">ELK Ingestion Plan</a> for the objectives/sequencing/exit-gate view of this same work.</p>
+<p>This is the most integration-heavy step in the build so far — five log sources, two destinations. Every method below was checked against current documentation rather than older tutorials, because this specific integration has a lot of stale advice floating around that breaks on current versions. Parts 1-4 (Wazuh, pfSense, Suricata) cover both ELK and Splunk; Parts 5-6 (OpenVAS, Windows) currently cover ELK only — Splunk equivalents are noted as follow-up work.</p>
+<h2 id="before-you-start-the-design-decisions-that-shape-everything-below">Before you start: the design decisions that shape everything below<a class="headerlink" href="#before-you-start-the-design-decisions-that-shape-everything-below" title="Permanent link">&para;</a></h2>
+<p><strong>Wazuh forwards via its own native syslog output, not Filebeat.</strong> An earlier version of this guide had Wazuh's manager run a second Filebeat pointed at the external ELK stack — that turned out to be a bad idea for two reasons found while actually running it: at the time, the Wazuh manager was deployed from <strong>Wazuh's official OVA appliance</strong> (Amazon Linux 2023, hence <code>yum</code> rather than <code>apt</code> — different from every other VM in this lab, which is why that difference wasn't visible until hitting it directly), and more importantly, <strong>that appliance already ran its own Filebeat</strong>, shipping alerts to Wazuh's own built-in indexer and dashboard as part of its pre-packaged setup. Editing that file would have broken Wazuh's own UI to fix an unrelated problem. <strong>The OVA has since been retired</strong> — Wazuh was rebuilt from scratch on Ubuntu 24.04, matching every other Linux VM in the lab, after the OVA's differences caused enough friction across multiple build steps to justify starting over on a consistent base. The reasoning for using native <code>syslog_output</code> instead of a second Filebeat still holds regardless: Wazuh's own install script may still set up its own internal Filebeat+indexer on any OS if you used the all-in-one deployment method, so this guide continues to avoid touching that file either way. Instead, it uses Wazuh's built-in <code>&lt;syslog_output&gt;</code> feature in <code>ossec.conf</code> — a native manager capability, unrelated to Filebeat, that forwards alerts via syslog to any target you specify.</p>
+<p><strong>Suricata's full EVE JSON output to syslog is unreliable</strong> — several current pfSense forum threads document it simply not working in some package versions. The <strong>"Send Alerts to System Log" checkbox</strong>, however, is confirmed working and is what this guide uses. Trade-off: you get Suricata's alert summaries (source/destination, signature, severity), not full packet payload detail. That's enough for this lab's detection/response goals; if you want full EVE JSON richness later, look into the community <a href="https://github.com/pfelk/pfelk">pfELK project</a>, which adds a <code>syslog-ng</code> package specifically for that.</p>
+<p><strong>Every source gets its own port.</strong> Rather than trying to distinguish sources by parsing message content (fragile), Wazuh, and pfSense/Suricata each forward to a <em>different</em> port on each SIEM. That makes routing to the correct index/sourcetype deterministic instead of pattern-matching guesswork.</p>
+<p><strong>Non-privileged ports throughout.</strong> Your Splunk service already runs as a dedicated non-root <code>splunk</code> user (from the Step 3.7 root-deprecation fix), and Logstash has the same constraint — neither can bind to traditional syslog port 514 without root. This guide uses <code>5140</code>/<code>5141</code> for the ELK-side listeners and <code>5514</code>/<code>5515</code> for the Splunk-side ones instead.</p>
+<p><strong>pfSense can forward to multiple remote syslog servers at once</strong> (up to three) — so one pfSense configuration step feeds both SIEMs simultaneously, rather than needing separate setups.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>→ ELK (Logstash)</th>
+<th>→ Splunk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Wazuh</td>
+<td><code>10.10.10.10:5141</code></td>
+<td><code>10.10.10.14:5515</code></td>
+</tr>
+<tr>
+<td>pfSense + Suricata</td>
+<td><code>10.10.10.10:5140</code></td>
+<td><code>10.10.10.14:5514</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-1-wazuh-both-siems-native-syslog_output">Part 1 — Wazuh → both SIEMs (native syslog_output)<a class="headerlink" href="#part-1-wazuh-both-siems-native-syslog_output" title="Permanent link">&para;</a></h2>
+<p>Run these on the <strong>Wazuh manager VM</strong> (<code>10.10.10.11</code>) — now rebuilt on Ubuntu 24.04. No package installation required for this part — this uses Wazuh's own manager binaries only, which follow the same layout regardless of host OS.</p>
+<p><strong>Status: starting fresh here.</strong> The findings below (<code>wazuh-control</code> only, no <code>ossec-control</code>) were confirmed on the previous OVA build — very likely still true on this rebuild since it's the same Wazuh version installed via the same official method, but worth re-confirming rather than assuming, given how much has already turned out different than expected today.</p>
+<h3 id="11-confirm-the-actual-paths-and-tools-on-your-install">1.1 — Confirm the actual paths and tools on your install<a class="headerlink" href="#11-confirm-the-actual-paths-and-tools-on-your-install" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>ls<span class="w"> </span>/var/ossec/etc/ossec.conf<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Found: /var/ossec/etc/ossec.conf"</span>
+ls<span class="w"> </span>/var/wazuh-manager/etc/ossec.conf<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Found: /var/wazuh-manager/etc/ossec.conf"</span>
+sudo<span class="w"> </span>ls<span class="w"> </span>-la<span class="w"> </span>/var/ossec/bin/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>control
+</code></pre></div>
+<p>Check the <code>bin/</code> directory directly rather than <code>which wazuh-control</code> / <code>which ossec-control</code> — Wazuh's control scripts aren't on the default <code>$PATH</code>, so <code>which</code> reports nothing found even when the binary is sitting right there in <code>/var/ossec/bin/</code>.</p>
+<p><strong>Confirmed on the previous OVA build:</strong> classic <code>/var/ossec/etc/ossec.conf</code> path, and only <code>wazuh-control</code> exists — no <code>ossec-control</code> at all, not even as a compatibility symlink. Almost certainly still true here — same Wazuh version, same official install method — but run 1.1 above and confirm before proceeding, rather than skip straight to 1.2 assuming it carries over unchanged.</p>
+<h3 id="12-add-syslog_output-blocks-to-ossecconf">1.2 — Add syslog_output blocks to ossec.conf<a class="headerlink" href="#12-add-syslog_output-blocks-to-ossecconf" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>cp<span class="w"> </span>/var/ossec/etc/ossec.conf<span class="w"> </span>/var/ossec/etc/ossec.conf.bak
+sudo<span class="w"> </span>nano<span class="w"> </span>/var/ossec/etc/ossec.conf
+</code></pre></div>
+<p>Add these two blocks inside the outermost <code>&lt;ossec_config&gt;</code> tags (anywhere at that level — order relative to other blocks doesn't matter):</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;syslog_output&gt;</span>
+<span class="w">  </span><span class="nt">&lt;server&gt;</span>10.10.10.10<span class="nt">&lt;/server&gt;</span>
+<span class="w">  </span><span class="nt">&lt;port&gt;</span>5141<span class="nt">&lt;/port&gt;</span>
+<span class="nt">&lt;/syslog_output&gt;</span>
+<span class="nt">&lt;syslog_output&gt;</span>
+<span class="w">  </span><span class="nt">&lt;server&gt;</span>10.10.10.14<span class="nt">&lt;/server&gt;</span>
+<span class="w">  </span><span class="nt">&lt;port&gt;</span>5515<span class="nt">&lt;/port&gt;</span>
+<span class="nt">&lt;/syslog_output&gt;</span>
+</code></pre></div>
+<p><strong>Save carefully — this exact step is where a previous attempt silently failed to save.</strong> In nano: <code>Ctrl+O</code> (letter O, "Write Out"), then <code>Enter</code> to confirm the filename shown at the bottom, then <code>Ctrl+X</code> to exit. Don't skip straight to <code>Ctrl+X</code> without the <code>Ctrl+O</code>/<code>Enter</code> sequence first.</p>
+<p><strong>Verify immediately, before doing anything else:</strong></p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>grep<span class="w"> </span>-A3<span class="w"> </span>syslog_output<span class="w"> </span>/var/ossec/etc/ossec.conf
+</code></pre></div>
+<p>This must show your two blocks before you move to 1.3. If it comes back blank, the edit didn't save — redo 1.2 rather than proceeding.</p>
+<h3 id="13-restart-the-manager">1.3 — Restart the manager<a class="headerlink" href="#13-restart-the-manager" title="Permanent link">&para;</a></h3>
+<p><strong>Client-syslog is already enabled by default on current Wazuh versions</strong> — confirmed directly: running <code>wazuh-control enable client-syslog</code> on this exact version just prints "This option is deprecated because Client Syslog is now enabled by default." That's not an error, and there's nothing to actually run for enabling it. Just restart so the manager picks up the new <code>syslog_output</code> blocks from 1.2:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>wazuh-manager
+</code></pre></div>
+<h3 id="14-verify-it-started">1.4 — Verify it started<a class="headerlink" href="#14-verify-it-started" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>tail<span class="w"> </span>-20<span class="w"> </span>/var/ossec/logs/ossec.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>syslog
+</code></pre></div>
+<p>You're looking for two lines like <code>Forwarding alerts via syslog to: '10.10.10.10:5141'</code> and <code>...'10.10.10.14:5515'</code>. If those don't appear, double check the XML in 1.2 is well-formed — a broken <code>ossec.conf</code> can prevent Wazuh services from starting entirely, which is why 1.2 backs up the original file first.</p>
+<h2 id="part-2-pfsense-suricata-both-siems-shared-setup">Part 2 — pfSense + Suricata → both SIEMs (shared setup)<a class="headerlink" href="#part-2-pfsense-suricata-both-siems-shared-setup" title="Permanent link">&para;</a></h2>
+<h3 id="21-enable-suricata-alerts-to-the-system-log">2.1 — Enable Suricata alerts to the system log<a class="headerlink" href="#21-enable-suricata-alerts-to-the-system-log" title="Permanent link">&para;</a></h3>
+<p>In pfSense: <strong>Services → Suricata → Interfaces</strong>, click the pencil icon on your Corp-zone interface → <strong>Logging Settings</strong> tab → check <strong>"Send Alerts to System Log"</strong>. Also set <strong>Log Facility: auth</strong> and <strong>Log Priority: notice</strong> — this specific combination is what reliably works; other facility/priority pairs have been reported as inconsistent.</p>
+<p>Save, then <strong>restart Suricata on that interface</strong> — it only reads this setting on startup, a running instance won't pick up the change on its own.</p>
+<h3 id="22-configure-pfsenses-remote-syslog-forwarding">2.2 — Configure pfSense's remote syslog forwarding<a class="headerlink" href="#22-configure-pfsenses-remote-syslog-forwarding" title="Permanent link">&para;</a></h3>
+<p><strong>Status → System Logs → Settings</strong> tab → <strong>Remote Logging Options</strong> section:</p>
+<ul>
+<li>Check <strong>Send log messages to remote syslog server</strong></li>
+<li><strong>Source Address:</strong> Default (any)</li>
+<li><strong>IP Protocol:</strong> IPv4</li>
+<li><strong>Remote log servers:</strong> add both —</li>
+<li><code>10.10.10.10:5140</code> (ELK)</li>
+<li><code>10.10.10.14:5514</code> (Splunk)</li>
+<li><strong>Remote Syslog Contents:</strong> check <strong>Everything</strong></li>
+</ul>
+<p>Save. This single configuration now sends pfSense's firewall/system logs <em>and</em> Suricata's alerts (via 2.1) to both SIEMs at once.</p>
+<p><strong>Note on message length:</strong> pfSense's built-in syslog truncates messages around 480 bytes — fine for the alert summaries this guide targets, not enough for full packet payloads. Not a concern for this build's scope.</p>
+<h2 id="part-3-configure-elk-to-receive-both-syslog-streams-and-route-by-source">Part 3 — Configure ELK to receive both syslog streams and route by source<a class="headerlink" href="#part-3-configure-elk-to-receive-both-syslog-streams-and-route-by-source" title="Permanent link">&para;</a></h2>
+<p>Run these on the <strong>ELK VM</strong> (<code>10.10.10.10</code>).</p>
+<h3 id="31-add-two-syslog-inputs-and-route-by-port">3.1 — Add two syslog inputs and route by port<a class="headerlink" href="#31-add-two-syslog-inputs-and-route-by-port" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/logstash/conf.d/beats-to-es.conf
+</code></pre></div>
+<p>Replace the whole file with:</p>
+<p><div class="highlight"><pre><span></span><code>input {
+  beats {
+    port =&gt; 5044
+  }
+  syslog {
+    port =&gt; 5140
+    type =&gt; "pfsense_suricata"
+  }
+  syslog {
+    port =&gt; 5141
+    type =&gt; "wazuh"
+  }
+}
+
+filter {
+  if [type] == "wazuh" {
+    json {
+      source =&gt; "message"
+    }
+    mutate { add_field =&gt; { "[@metadata][target_index]" =&gt; "wazuh-alerts" } }
+  } else if [type] == "pfsense_suricata" {
+    mutate { add_field =&gt; { "[@metadata][target_index]" =&gt; "pfsense-suricata" } }
+  } else if [log_source] == "openvas" {
+    mutate { add_field =&gt; { "[@metadata][target_index]" =&gt; "openvas-scans" } }
+  } else if [agent][type] == "winlogbeat" {
+    mutate { add_field =&gt; { "[@metadata][target_index]" =&gt; "windows-events" } }
+  } else {
+    mutate { add_field =&gt; { "[@metadata][target_index]" =&gt; "soc-lab-other" } }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts =&gt; ["https://10.10.10.10:9200"]
+    user =&gt; "elastic"
+    password =&gt; "&lt;your-password&gt;"
+    ssl_certificate_verification =&gt; false
+    index =&gt; "%{[@metadata][target_index]}-%{+YYYY.MM.dd}"
+  }
+}
+</code></pre></div>
+yyy
+Routing by <code>type</code> (set per-input, at the port level) is deterministic for the syslog sources — no message-content guessing required. The <code>json</code> filter on the Wazuh branch parses Wazuh's JSON-formatted alert payload into real fields rather than leaving it as one long string; pfSense/Suricata's plain syslog lines are left as-is. The two new <code>beats</code>-based branches (<code>[log_source] == "openvas"</code> and <code>[agent][type] == "winlogbeat"</code>) are covered in Parts 5 and 6 below — the <code>beats</code> input on 5044 that was previously unused now carries both.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>logstash
+sudo<span class="w"> </span>ss<span class="w"> </span>-tunlp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">'5044|5140|5141'</span><span class="w">   </span><span class="c1"># confirm all three inputs are listening</span>
+</code></pre></div>
+<h3 id="32-verify-in-kibana">3.2 — Verify in Kibana<a class="headerlink" href="#32-verify-in-kibana" title="Permanent link">&para;</a></h3>
+<p>Browse to <code>http://10.10.10.10:5601</code> → <code>Discover</code> (or search <code>Data Views</code>) → create a data view matching <code>wazuh-alerts-*</code> and one matching <code>pfsense-suricata-*</code>. Generate some traffic (log into the Windows victim a few times, run a quick Nmap scan from Kali at the Corp zone) and confirm events appear within a minute or two.</p>
+<hr />
+<h2 id="part-4-configure-splunk-to-receive-both-syslog-streams">Part 4 — Configure Splunk to receive both syslog streams<a class="headerlink" href="#part-4-configure-splunk-to-receive-both-syslog-streams" title="Permanent link">&para;</a></h2>
+<p>Run this in <strong>Splunk Web</strong> (<code>http://10.10.10.14:8000</code>) on the <strong>Splunk VM</strong>.</p>
+<p><strong>Settings → Data Inputs → UDP → New Local UDP port</strong>, twice:</p>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Source type</th>
+<th>Index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>5514</code></td>
+<td><code>pfsense_suricata</code></td>
+<td><code>main</code> (or a dedicated <code>pfsense</code> index)</td>
+</tr>
+<tr>
+<td><code>5515</code></td>
+<td><code>wazuh_alerts</code></td>
+<td><code>main</code> (or a dedicated <code>wazuh</code> index)</td>
+</tr>
+</tbody>
+</table>
+<p>Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to these exact ports, events should start arriving as soon as each input is active — no further changes needed on the source side.</p>
+<h3 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h3>
+<p><strong>Search → <code>index=main sourcetype=wazuh_alerts</code></strong> should show Wazuh events; <strong><code>index=main sourcetype=pfsense_suricata</code></strong> should show pfSense/Suricata events. Same test traffic as the Kibana verification in Part 3.2 works here too.</p>
+<hr />
+<h2 id="part-5-openvas-elk">Part 5 — OpenVAS → ELK<a class="headerlink" href="#part-5-openvas-elk" title="Permanent link">&para;</a></h2>
+<p><strong>This is the roughest integration of the five.</strong> Unlike Wazuh and pfSense, OpenVAS has no native syslog or Beats output for scan results. The community tools that exist for this exact purpose have real problems: <code>gvm-logstash</code> is explicitly marked "no longer actively maintained... for historical reference only" by its own maintainers, and <code>VulnWhisperer</code> (the other commonly recommended option) has multiple recent forum reports of connection failures against current GVM versions. Rather than build on either, this uses <strong><code>python-gvm</code></strong> — the library Greenbone itself maintains for talking to GVM's own management protocol (GMP) — in a small script, which is more work up front but has no third-party reliability risk baked in. <strong>Expect to iterate on this one more than the others.</strong></p>
+<p>Run these on the <strong>OpenVAS VM</strong> (<code>10.10.10.12</code>).</p>
+<h3 id="51-install-python-gvm-and-filebeat">5.1 — Install python-gvm and Filebeat<a class="headerlink" href="#51-install-python-gvm-and-filebeat" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>python3-pip
+pip3<span class="w"> </span>install<span class="w"> </span>python-gvm<span class="w"> </span>--break-system-packages
+wget<span class="w"> </span>-qO<span class="w"> </span>-<span class="w"> </span>https://artifacts.elastic.co/GPG-KEY-elasticsearch<span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span>-o<span class="w"> </span>/usr/share/keyrings/elasticsearch-keyring.gpg
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/9.x/apt stable main"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/elastic-9.x.list
+sudo<span class="w"> </span>apt<span class="w"> </span>update
+sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>filebeat<span class="w"> </span>-y
+</code></pre></div>
+<h3 id="52-write-the-export-script">5.2 — Write the export script<a class="headerlink" href="#52-write-the-export-script" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>nano<span class="w"> </span>/opt/gvm-export.py
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="sd">"""Export completed GVM scan results as newline-delimited JSON for Filebeat to ship."""</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gvm.connections</span><span class="w"> </span><span class="kn">import</span> <span class="n">UnixSocketConnection</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gvm.protocols.gmp</span><span class="w"> </span><span class="kn">import</span> <span class="n">Gmp</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gvm.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">EtreeCheckCommandTransform</span>
+
+<span class="n">SOCKET_PATH</span> <span class="o">=</span> <span class="s2">"/run/gvmd/gvmd.sock"</span>   <span class="c1"># confirm this path matches your install — see 5.3</span>
+<span class="n">OUTPUT_FILE</span> <span class="o">=</span> <span class="s2">"/var/log/gvm-export/results.ndjson"</span>
+<span class="n">GVM_USERNAME</span> <span class="o">=</span> <span class="s2">"admin"</span>
+<span class="n">GVM_PASSWORD</span> <span class="o">=</span> <span class="s2">"REPLACE_ME"</span>
+
+<span class="n">connection</span> <span class="o">=</span> <span class="n">UnixSocketConnection</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">SOCKET_PATH</span><span class="p">)</span>
+<span class="n">transform</span> <span class="o">=</span> <span class="n">EtreeCheckCommandTransform</span><span class="p">()</span>
+
+<span class="k">with</span> <span class="n">Gmp</span><span class="p">(</span><span class="n">connection</span><span class="o">=</span><span class="n">connection</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">transform</span><span class="p">)</span> <span class="k">as</span> <span class="n">gmp</span><span class="p">:</span>
+    <span class="n">gmp</span><span class="o">.</span><span class="n">authenticate</span><span class="p">(</span><span class="n">GVM_USERNAME</span><span class="p">,</span> <span class="n">GVM_PASSWORD</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">gmp</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">filter_string</span><span class="o">=</span><span class="s2">"apply_overrides=0 rows=500 sort-by=created"</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">OUTPUT_FILE</span><span class="p">,</span> <span class="s2">"a"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">result</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">"result"</span><span class="p">):</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">"@timestamp"</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">"Z"</span><span class="p">,</span>
+                <span class="s2">"result_id"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"id"</span><span class="p">),</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">findtext</span><span class="p">(</span><span class="s2">"name"</span><span class="p">),</span>
+                <span class="s2">"host"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">findtext</span><span class="p">(</span><span class="s2">"host"</span><span class="p">),</span>
+                <span class="s2">"severity"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">findtext</span><span class="p">(</span><span class="s2">"severity"</span><span class="p">),</span>
+                <span class="s2">"threat"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">findtext</span><span class="p">(</span><span class="s2">"threat"</span><span class="p">),</span>
+                <span class="s2">"description"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">findtext</span><span class="p">(</span><span class="s2">"description"</span><span class="p">),</span>
+            <span class="p">}</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">record</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="53-confirm-the-gmp-socket-path-and-test-the-script">5.3 — Confirm the GMP socket path and test the script<a class="headerlink" href="#53-confirm-the-gmp-socket-path-and-test-the-script" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>find<span class="w"> </span>/<span class="w"> </span>-name<span class="w"> </span><span class="s2">"gvmd.sock"</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</code></pre></div>
+<p>Update <code>SOCKET_PATH</code> in the script if it differs from the guess above, then:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/log/gvm-export
+sudo<span class="w"> </span>python3<span class="w"> </span>/opt/gvm-export.py
+cat<span class="w"> </span>/var/log/gvm-export/results.ndjson
+</code></pre></div>
+<p>You should see one JSON object per line, one per scan finding. If this errors out, the message will usually point at either a wrong socket path or wrong credentials — both are worth checking before assuming something's more deeply broken.</p>
+<h3 id="54-schedule-it-and-wire-up-filebeat">5.4 — Schedule it and wire up Filebeat<a class="headerlink" href="#54-schedule-it-and-wire-up-filebeat" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>crontab<span class="w"> </span>-e
+</code></pre></div>
+<p>Add a line to run it every 15 minutes:</p>
+<div class="highlight"><pre><span></span><code>*/15 * * * * /usr/bin/python3 /opt/gvm-export.py
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/filebeat/filebeat.yml
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nt">filebeat.inputs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">filestream</span>
+<span class="w">    </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openvas-results</span>
+<span class="w">    </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">paths</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">/var/log/gvm-export/results.ndjson</span>
+<span class="w">    </span><span class="nt">parsers</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ndjson</span><span class="p">:</span>
+<span class="w">          </span><span class="nt">target</span><span class="p">:</span><span class="w"> </span><span class="s">""</span>
+<span class="w">          </span><span class="nt">add_error_key</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">    </span><span class="nt">fields</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">log_source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">openvas</span>
+<span class="w">    </span><span class="nt">fields_under_root</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="nt">output.logstash</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"10.10.10.10:5044"</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>filebeat
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>filebeat
+</code></pre></div>
+<h3 id="55-verify">5.5 — Verify<a class="headerlink" href="#55-verify" title="Permanent link">&para;</a></h3>
+<p>Run the script manually once more (<code>sudo python3 /opt/gvm-export.py</code>) to generate fresh data immediately rather than waiting for the cron schedule, then check Kibana for a <code>openvas-scans-*</code> data view with results in it.</p>
+<hr />
+<h2 id="part-6-windows-elk-via-winlogbeat">Part 6 — Windows → ELK (via Winlogbeat)<a class="headerlink" href="#part-6-windows-elk-via-winlogbeat" title="Permanent link">&para;</a></h2>
+<p>This is more standard ground than Part 5 — Winlogbeat is Elastic's own official shipper for exactly this, stable across many versions. This ships <strong>raw Windows Event Logs</strong> directly to ELK, separate from Wazuh's curated alerts — useful for a portfolio to show both curated SIEM alerting <em>and</em> raw log-hunting capability side by side. Do this on <strong>both</strong> Windows machines: the victim (<code>10.10.20.20</code>) and the AD server (<code>10.10.20.10</code>) — the AD server's logs are especially valuable for spotting authentication and lateral-movement activity later in Phase 4.</p>
+<p>Run these in an <strong>Administrator PowerShell</strong> on each Windows machine.</p>
+<h3 id="61-download-and-install">6.1 — Download and install<a class="headerlink" href="#61-download-and-install" title="Permanent link">&para;</a></h3>
+<p>Download the Winlogbeat Windows zip from <code>elastic.co/downloads/beats/winlogbeat</code> (matching version 9.x, same major version as your ELK stack), then:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Expand-Archive</span> <span class="p">.\</span><span class="n">winlogbeat</span><span class="p">-</span><span class="n">9</span><span class="p">.</span><span class="n">x</span><span class="p">.</span><span class="n">x-windows-x86_64</span><span class="p">.</span><span class="n">zip</span> <span class="n">-DestinationPath</span> <span class="s1">'C:\Program Files\'</span>
+<span class="nb">Rename-Item</span> <span class="s1">'C:\Program Files\winlogbeat-9.x.x-windows-x86_64'</span> <span class="s1">'Winlogbeat'</span>
+<span class="nb">cd </span><span class="s1">'C:\Program Files\Winlogbeat'</span>
+</code></pre></div>
+<h3 id="62-configure">6.2 — Configure<a class="headerlink" href="#62-configure" title="Permanent link">&para;</a></h3>
+<p>Edit <code>winlogbeat.yml</code> in that folder:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">winlogbeat.event_logs</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Application</span>
+<span class="w">    </span><span class="nt">ignore_older</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">72h</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Security</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">System</span>
+
+<span class="nt">output.logstash</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">hosts</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">"10.10.10.10:5044"</span><span class="p p-Indicator">]</span>
+</code></pre></div>
+<h3 id="63-install-and-start-the-service">6.3 — Install and start the service<a class="headerlink" href="#63-install-and-start-the-service" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">PowerShell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">UnRestricted</span> <span class="o">-File</span> <span class="p">.\</span><span class="nb">install-service</span><span class="n">-winlogbeat</span><span class="p">.</span><span class="n">ps1</span>
+<span class="nb">Start-Service</span> <span class="n">winlogbeat</span>
+</code></pre></div>
+<h3 id="64-verify">6.4 — Verify<a class="headerlink" href="#64-verify" title="Permanent link">&para;</a></h3>
+<p>Check Kibana for a <code>windows-events-*</code> data view — Winlogbeat automatically tags every event with <code>agent.type: winlogbeat</code> (which is what Part 3's Logstash config routes on) and <code>winlog.computer_name</code> (which tells you which of the two Windows machines each event came from, without needing separate indices per host).</p>
+<hr />
+<h2 id="exit-criteria-for-completing-steps-36-37s-log-source-configuration">Exit criteria for completing Steps 3.6 / 3.7's log source configuration<a class="headerlink" href="#exit-criteria-for-completing-steps-36-37s-log-source-configuration" title="Permanent link">&para;</a></h2>
+<p><strong>ELK:</strong></p>
+<ul>
+<li>[ ] Wazuh's <code>ossec.conf</code> has both <code>syslog_output</code> blocks, <code>client-syslog</code> enabled, <code>wazuh-manager</code> restarted cleanly</li>
+<li>[ ] Wazuh's <code>ossec.log</code> confirms it's forwarding to both <code>10.10.10.10:5141</code> and <code>10.10.10.14:5515</code></li>
+<li>[ ] Suricata's "Send Alerts to System Log" enabled and interface restarted</li>
+<li>[ ] pfSense remote logging configured with both SIEM targets</li>
+<li>[ ] Logstash listening on 5044, 5140, and 5141</li>
+<li>[ ] Wazuh alerts visible in Kibana under <code>wazuh-alerts-*</code></li>
+<li>[ ] pfSense/Suricata events visible in Kibana under <code>pfsense-suricata-*</code></li>
+<li>[ ] <code>gvm-export.py</code> runs cleanly and produces NDJSON output; cron job scheduled</li>
+<li>[ ] OpenVAS scan results visible in Kibana under <code>openvas-scans-*</code></li>
+<li>[ ] Winlogbeat installed and running on both Windows victim and AD server</li>
+<li>[ ] Windows events visible in Kibana under <code>windows-events-*</code>, distinguishable by <code>winlog.computer_name</code></li>
+</ul>
+<p><strong>Splunk:</strong></p>
+<ul>
+<li>[ ] Both Splunk UDP inputs (5514, 5515) created and active</li>
+<li>[ ] Wazuh alerts visible in Splunk under <code>sourcetype=wazuh_alerts</code></li>
+<li>[ ] pfSense/Suricata events visible in Splunk under <code>sourcetype=pfsense_suricata</code></li>
+<li>[ ] <em>(OpenVAS and Windows → Splunk not yet built — follow-up work, same underlying export script/Winlogbeat install can feed both once ELK side is confirmed working)</em></li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>wazuh-control</code> (or <code>ossec-control</code>) or <code>wazuh-manager</code> won't restart after editing <code>ossec.conf</code>:</strong> almost always malformed XML — a missing closing tag is the most common cause. Restore from the backup (<code>sudo cp /var/ossec/etc/ossec.conf.bak /var/ossec/etc/ossec.conf</code>) and re-edit more carefully, or run <code>sudo /var/ossec/bin/wazuh-control configtest</code> if your version supports it, before restarting again.</li>
+<li><strong>No Wazuh events in Kibana/Splunk at all:</strong> check <code>sudo tail -50 /var/ossec/logs/alerts/alerts.json</code> on the Wazuh manager first — if that file itself is empty or not updating, the problem is upstream of syslog forwarding entirely (no agents reporting, or no rules triggering). Generate a test alert (a few failed SSH logins against the Windows victim) before troubleshooting the forwarding pipeline.</li>
+<li><strong><code>ossec.log</code> shows the forwarding lines but nothing arrives at Logstash/Splunk:</strong> confirm the target IP/port actually matches what you configured on the receiving side, and check <code>sudo ss -tunlp | grep 5141</code> (or <code>5515</code>) on the <em>receiving</em> VM to confirm something is actually listening.</li>
+<li><strong>pfSense/Suricata events missing from one SIEM but present in the other:</strong> double check both entries are actually present under <strong>Remote log servers</strong> in pfSense (2.2) — it's easy to only add one when editing.</li>
+<li><strong>Suricata alerts still not appearing even after enabling "Send Alerts to System Log":</strong> confirm you restarted Suricata on that specific interface — this setting is read once at startup, not hot-reloaded.</li>
+<li><strong>Port already in use, or permission denied binding a port:</strong> confirm nothing else on that VM is already bound to the port (<code>sudo ss -tunlp | grep &lt;port&gt;</code>), and confirm you're not accidentally trying to use a port below 1024 with a non-root service.</li>
+<li><strong><code>gvm-export.py</code> fails to connect:</strong> the Unix socket path in <code>find / -name "gvmd.sock"</code> (5.3) is the actual source of truth — don't assume the path in the script example matches your install. Also confirm the <code>admin</code> credentials in the script match what you set during OpenVAS's first login.</li>
+<li><strong><code>gvm-export.py</code> runs but produces an empty file:</strong> means GVM has no results matching the filter — confirm at least one scan has actually completed in the Greenbone UI first.</li>
+<li><strong>Winlogbeat service won't start:</strong> run it in the foreground for diagnostics: <code>.\winlogbeat.exe -c .\winlogbeat.yml -configtest -e</code> from the install directory — this prints the actual error instead of just failing silently as a Windows service.</li>
+<li><strong>Windows events not appearing in Kibana despite Winlogbeat running:</strong> confirm Windows Firewall on that VM isn't blocking outbound traffic to <code>10.10.10.10:5044</code> — unlike the Linux VMs in this lab, Windows Firewall is enabled by default and can silently drop this.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

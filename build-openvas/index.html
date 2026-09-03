@@ -1,0 +1,768 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/build-openvas/">
+      
+      
+        <link rel="prev" href="../build-splunk-enterprise/">
+      
+      
+        <link rel="next" href="../elk-ingestion-plan/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Build Guide - OpenVAS - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#build-guide-openvas-greenbone-community-edition-vm-step-38" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Build Guide - OpenVAS
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-you-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      Before you start
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#381-clone-the-vm" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.1 — Clone the VM
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#382-configure-networking-and-update-the-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.2 — Configure networking and update the OS
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#383-install-docker-engine" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.3 — Install Docker Engine
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#384-deploy-greenbone-community-edition" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.4 — Deploy Greenbone Community Edition
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#385-first-login" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.5 — First login
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#386-run-your-first-scan" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.6 — Run your first scan
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#387-snapshot-and-sign-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.8.7 — Snapshot and sign off
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.8.7 — Snapshot and sign off">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exit-criteria-for-step-38" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit criteria for Step 3.8
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="build-guide-openvas-greenbone-community-edition-vm-step-38">Build Guide: OpenVAS (Greenbone Community Edition) VM (Step 3.8)<a class="headerlink" href="#build-guide-openvas-greenbone-community-edition-vm-step-38" title="Permanent link">&para;</a></h1>
+<p><strong>VM name:</strong> <code>SOC-Vuln-OpenVAS</code> · <strong>Zone:</strong> Management · <strong>IP:</strong> <code>10.10.10.12</code> · <strong>Specs:</strong> 6GB RAM / 2 vCPU / 40GB disk (actual — more RAM than originally planned)</p>
+<p>This guide coverss building the OpenVAS/Greenbone vulnerability scanning VM from your Ubuntu 24.04 LTS template, as part of <a href="../phase-3-implementation/">Phase 3 — Implementation</a>. Docker install steps were verified against Docker's current official documentation. The Greenbone stack itself is deliberately <strong>not vendored</strong> as a static compose file in this repo — see <a href="https://github.com/PePeLePuu0610/soc-home-lab/blob/main/configs/docker-compose/openvas/README.md"><code>configs/docker-compose/openvas/README.md</code></a> for why — this guide fetches Greenbone's live official file at build time instead.</p>
+<h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
+<p><strong>RAM check.</strong> With Pod A (pfSense + Windows victim + Wazuh, ~10GB) plus ELK (<strong>4GB actual</strong>) and Splunk (6GB) already running, you're at ~20GB. Adding OpenVAS (<strong>6GB actual</strong>) brings you to ~26GB, leaving ~6GB for the Windows host itself — better headroom than originally planned, since ELK ended up needing less RAM than expected even though OpenVAS needed more. Still, if the host feels sluggish while OpenVAS's first-run feed download is chewing through CPU/disk (see 3.8.4), it's fine to temporarily power off ELK or Splunk until the build is done. Neither is doing active work for this step.</p>
+<h2 id="381-clone-the-vm">3.8.1 — Clone the VM<a class="headerlink" href="#381-clone-the-vm" title="Permanent link">&para;</a></h2>
+<p>Same process as the SIEM builds: clone the Ubuntu 24.04 LTS template → name <code>SOC-Vuln-OpenVAS</code> → <code>E:\PePesLab-SOC 2.0\VMz\SOC-Vuln-OpenVAS</code> → <strong>Memory 6144 MB, Processors 2, Network: VMnet1 (Management)</strong>.</p>
+<h2 id="382-configure-networking-and-update-the-os">3.8.2 — Configure networking and update the OS<a class="headerlink" href="#382-configure-networking-and-update-the-os" title="Permanent link">&para;</a></h2>
+<p>Same pattern as <a href="../build-elk-stack/#362-configure-networking-and-update-the-os">ELK's 3.6.2</a>, but use address <code>10.10.10.12/24</code> and hostname <code>SOC-Vuln-OpenVAS</code>.</p>
+<h2 id="383-install-docker-engine">3.8.3 — Install Docker Engine<a class="headerlink" href="#383-install-docker-engine" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>ca-certificates<span class="w"> </span>curl
+sudo<span class="w"> </span>install<span class="w"> </span>-m<span class="w"> </span><span class="m">0755</span><span class="w"> </span>-d<span class="w"> </span>/etc/apt/keyrings
+sudo<span class="w"> </span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://download.docker.com/linux/ubuntu/gpg<span class="w"> </span>-o<span class="w"> </span>/etc/apt/keyrings/docker.asc
+sudo<span class="w"> </span>chmod<span class="w"> </span>a+r<span class="w"> </span>/etc/apt/keyrings/docker.asc
+
+<span class="nb">echo</span><span class="w"> </span><span class="s2">"deb [arch=</span><span class="k">$(</span>dpkg<span class="w"> </span>--print-architecture<span class="k">)</span><span class="s2"> signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu </span><span class="k">$(</span>.<span class="w"> </span>/etc/os-release<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"</span><span class="nv">$VERSION_CODENAME</span><span class="s2">"</span><span class="k">)</span><span class="s2"> stable"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/docker.list<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+
+sudo<span class="w"> </span>apt-get<span class="w"> </span>update
+sudo<span class="w"> </span>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker-ce<span class="w"> </span>docker-ce-cli<span class="w"> </span>containerd.io<span class="w"> </span>docker-buildx-plugin<span class="w"> </span>docker-compose-plugin
+</code></pre></div>
+<p>Let your own user run <code>docker</code> without <code>sudo</code> every time (optional but convenient):</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+</code></pre></div>
+<p><strong>Log out and back in</strong> for that group change to take effect — it won't apply to your current session.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>hello-world
+</code></pre></div>
+<p>If that prints a "Hello from Docker!" message, the install is good.</p>
+<h2 id="384-deploy-greenbone-community-edition">3.8.4 — Deploy Greenbone Community Edition<a class="headerlink" href="#384-deploy-greenbone-community-edition" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>mkdir<span class="w"> </span>-p<span class="w"> </span>~/greenbone-ce<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/greenbone-ce
+curl<span class="w"> </span>-f<span class="w"> </span>-L<span class="w"> </span>https://greenbone.github.io/docs/latest/_static/compose.yaml<span class="w"> </span>-o<span class="w"> </span>compose.yaml
+docker<span class="w"> </span>compose<span class="w"> </span>-p<span class="w"> </span>greenbone-community-edition<span class="w"> </span>pull
+docker<span class="w"> </span>compose<span class="w"> </span>-p<span class="w"> </span>greenbone-community-edition<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<p><strong>This takes a while — plan for 30–60+ minutes.</strong> The first run downloads Greenbone's full vulnerability feed data (NVTs, CERT-Bund advisories, CVE data), which is a large amount of data over a slow connection. Watch progress with:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-p<span class="w"> </span>greenbone-community-edition<span class="w"> </span>logs<span class="w"> </span>-f
+</code></pre></div>
+<p>Don't interrupt it partway through — a partial feed sync can leave the scanner in a broken state that's easier to fix by letting it finish than by restarting mid-download.</p>
+<p><strong>Fix the web UI's port binding before trying to log in — this step is easy to miss and the default will silently block remote access.</strong> Greenbone's official compose file binds its <code>nginx</code> front-end (the actual web UI / TLS endpoint) to <code>127.0.0.1</code> only — reachable from inside the VM itself, not from your Windows host, regardless of firewall rules. This is a deliberate security default in Greenbone's compose file, not a bug, but it needs changing for this lab's use case:</p>
+<div class="highlight"><pre><span></span><code>nano<span class="w"> </span>compose.yaml
+</code></pre></div>
+<p>Find the <code>nginx:</code> service block. Under its <code>ports:</code> section, change:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:443:443</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">127.0.0.1:9392:9392</span>
+</code></pre></div>
+<p>to:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="nt">ports</span><span class="p">:</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">443:443</span>
+<span class="w">      </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9392:9392</span>
+</code></pre></div>
+<p>Save (<code>Ctrl+O</code>, <code>Enter</code>, <code>Ctrl+X</code>), then recreate the containers so the new port mapping takes effect — a restart alone won't pick up a port binding change, only a full recreate will:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>compose<span class="w"> </span>-p<span class="w"> </span>greenbone-community-edition<span class="w"> </span>down
+docker<span class="w"> </span>compose<span class="w"> </span>-p<span class="w"> </span>greenbone-community-edition<span class="w"> </span>up<span class="w"> </span>-d
+</code></pre></div>
+<p>This doesn't touch your feed data — <code>down</code> without <code>-v</code> only removes containers, not the volumes holding everything you already downloaded.</p>
+<h2 id="385-first-login">3.8.5 — First login<a class="headerlink" href="#385-first-login" title="Permanent link">&para;</a></h2>
+<p>Once containers are back up:</p>
+<ol>
+<li>Browse to <code>https://10.10.10.12</code> from your Windows host browser — <strong>no port number</strong>. Port 443 is HTTPS's default, so you don't need to type it; port 9392 is just a plain-HTTP redirector to 443, not a TLS endpoint itself, so don't use <code>https://</code> with <code>:9392</code> — that combination fails with a confusing "wrong version number" TLS error. Expect a <strong>"Not secure"</strong> browser warning either way — Greenbone's self-signed certificate is expected in a lab, not an error.</li>
+<li>Log in with username <code>admin</code>. Greenbone's first-run flow has you set a real password immediately — <strong>do this now</strong>, don't leave a default password in place even in a lab.</li>
+</ol>
+<h2 id="386-run-your-first-scan">3.8.6 — Run your first scan<a class="headerlink" href="#386-run-your-first-scan" title="Permanent link">&para;</a></h2>
+<ol>
+<li>In the Greenbone UI, go to <strong>Configuration → Targets → New Target</strong>. Name it <code>Windows Victim</code>, host <code>10.10.20.20</code> (your Corp-zone Windows victim VM).</li>
+<li>Go to <strong>Scans → Tasks → New Task</strong>. Name it <code>Windows Victim Baseline Scan</code>, select the target you just created, use the default <strong>Full and fast</strong> scan config to start.</li>
+<li>Start the task and let it run — a first scan against a single host typically takes anywhere from several minutes to an hour depending on scan config and how much of the feed has finished syncing.</li>
+<li><strong>Confirm:</strong> once complete, the task produces a <strong>Report</strong> with findings (even a clean Windows install usually surfaces a handful of informational or low-severity items) — that report is your Phase 1 success criterion for vulnerability management.</li>
+</ol>
+<h2 id="387-snapshot-and-sign-off">3.8.7 — Snapshot and sign off<a class="headerlink" href="#387-snapshot-and-sign-off" title="Permanent link">&para;</a></h2>
+<p>In VMware: <strong>VM → Snapshot → Take Snapshot</strong> → name it <code>OpenVAS working baseline</code>.</p>
+<h3 id="exit-criteria-for-step-38">Exit criteria for Step 3.8<a class="headerlink" href="#exit-criteria-for-step-38" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] VM built, static IP <code>10.10.10.12</code>, hostname set</li>
+<li>[ ] Docker Engine installed and verified with <code>hello-world</code></li>
+<li>[ ] Greenbone Community Edition containers running, feed sync completed</li>
+<li>[ ] Logged into Greenbone Web UI, default <code>admin</code> password changed</li>
+<li>[ ] Target and task created against the Windows victim VM</li>
+<li>[ ] Scan completed, report generated with findings</li>
+<li>[ ] Snapshot taken</li>
+</ul>
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong><code>curl</code>/browser TLS error like "wrong version number" when hitting <code>:9392</code> over HTTPS:</strong> port 9392 is a plain-HTTP redirector to port 443, not a TLS endpoint. Use <code>https://10.10.10.12</code> (no port, or explicit <code>:443</code>) instead — see 3.8.4's port-binding step above.</li>
+<li><strong>Can't reach the UI at all, even though <code>docker compose ps</code> shows everything healthy:</strong> almost certainly the default <code>127.0.0.1</code>-only port binding on the <code>nginx</code> service — see the fix in 3.8.4. This is the single most common blocker on this build, since every container can be perfectly healthy while the UI is still unreachable from outside the VM.</li>
+<li><strong>UI loads but scan configs/feeds look empty or greyed out:</strong> the feed sync from 3.8.4 likely hasn't finished yet. Check <code>docker compose -p greenbone-community-edition logs -f</code> for ongoing feed-update activity before assuming something's broken.</li>
+<li><strong><code>docker: permission denied</code> errors:</strong> you ran a <code>docker</code> command without <code>sudo</code> before logging out/in after the <code>usermod -aG docker</code> step. Either log out and back in, or prefix commands with <code>sudo</code> in the meantime.</li>
+<li><strong>Containers keep restarting or exiting:</strong> check disk space with <code>df -h</code> first — the feed data is large, and a nearly-full 40GB disk can starve the containers partway through sync.</li>
+<li><strong>Can't reach <code>https://10.10.10.12:9392</code> at all:</strong> confirm the containers are actually up with <code>docker compose -p greenbone-community-edition ps</code> — all should show <code>running</code> or <code>healthy</code>, not <code>exited</code>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

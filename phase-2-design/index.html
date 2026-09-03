@@ -1,0 +1,805 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/phase-2-design/">
+      
+      
+        <link rel="prev" href="../phase-1-requirements/">
+      
+      
+        <link rel="next" href="../phase-3-implementation/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Phase 2 - Design - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-2-design" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 2 - Design
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHASE 2 — Design
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PHASE 2 — Design">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-network-zones" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Network Zones
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-vm-inventory-ip-address-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 VM Inventory &amp; IP Address Plan
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-data-flow-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3 Data Flow Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-naming-convention" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4 Naming Convention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-criteria-for-phase-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit Criteria for Phase 2
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Phase 2 - Design</h1>
+
+<h2 id="phase-2-design">PHASE 2 — Design<a class="headerlink" href="#phase-2-design" title="Permanent link">&para;</a></h2>
+<p><strong>Goal:</strong> Design the network and naming scheme on paper before building anything.</p>
+<h3 id="21-network-zones">2.1 Network Zones<a class="headerlink" href="#21-network-zones" title="Permanent link">&para;</a></h3>
+<p>Enterprise SOCs separate networks into zones so an attacker in one zone can't freely reach another. You'll simulate this with VMware's <strong>virtual networks</strong> (VMnet) and pfSense as the router between them.</p>
+<p><img alt="SOC lab network diagram: Internet through pfSense WAN interface, fanning out to Management, Corporate, and Attacker LAN zones" src="../assets/network-zone-diagram.svg" /></p>
+<p><em>Internet reaches pfSense's WAN interface, which routes out to three isolated LAN interfaces — one per zone below.</em></p>
+<table>
+<thead>
+<tr>
+<th>Zone</th>
+<th>VMware Network</th>
+<th>Subnet</th>
+<th>Who lives here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WAN (simulated internet)</td>
+<td>NAT (VMnet8)</td>
+<td>Reserved DHCP lease</td>
+<td>pfSense's WAN interface only</td>
+</tr>
+<tr>
+<td>Management</td>
+<td>Host-only (VMnet1)</td>
+<td>10.10.10.0/24</td>
+<td>SIEMs, Wazuh, OpenVAS, SOAR, management endpoint — the tools <em>you</em> use</td>
+</tr>
+<tr>
+<td>Corporate LAN</td>
+<td>Host-only (VMnet2)</td>
+<td>10.10.20.0/24</td>
+<td>Windows Server (AD), Windows victim VM</td>
+</tr>
+<tr>
+<td>Attacker Zone</td>
+<td>Host-only (VMnet3)</td>
+<td>10.10.30.0/24</td>
+<td>Kali</td>
+</tr>
+</tbody>
+</table>
+<p>pfSense gets one virtual network adapter per zone (4 total) and acts as the router/firewall between all of them — this is exactly how a real network's edge firewall works, just scaled down.</p>
+<h3 id="22-vm-inventory-ip-address-plan">2.2 VM Inventory &amp; IP Address Plan<a class="headerlink" href="#22-vm-inventory-ip-address-plan" title="Permanent link">&para;</a></h3>
+<p>This is the authoritative, as-built reference — kept in sync with actual builds, not just the original plan.</p>
+<table>
+<thead>
+<tr>
+<th>VM Name</th>
+<th>Rolee</th>
+<th>RAM</th>
+<th>vCPU</th>
+<th>Disk</th>
+<th>IP Address</th>
+<th>OS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SOC-FW-pfSense</td>
+<td>Firewall/router</td>
+<td>2GB</td>
+<td>2</td>
+<td>20GB</td>
+<td>WAN: reserved DHCP lease (<code>10.10.40.101</code>) · Mgmt: <code>10.10.10.5/24</code> · Corp: <code>10.10.20.5/24</code> · Attacker: <code>10.10.30.5/24</code></td>
+<td>FreeBSD</td>
+</tr>
+<tr>
+<td>SOC-atk-Kali</td>
+<td>Attacker</td>
+<td>2GB</td>
+<td>2</td>
+<td>40GB</td>
+<td><code>10.10.30.10/24</code></td>
+<td>Kali 2026-1</td>
+</tr>
+<tr>
+<td>SOC-Vict-Win10</td>
+<td>Corp victim</td>
+<td>4GB</td>
+<td>2</td>
+<td>60GB</td>
+<td><code>10.10.20.20/24</code></td>
+<td>Windows 10</td>
+</tr>
+<tr>
+<td>SOC-ADSRV-Win19</td>
+<td>Domain Controller</td>
+<td>4GB</td>
+<td>2</td>
+<td>60GB</td>
+<td><code>10.10.20.10/24</code></td>
+<td>Windows Server 2019 Standard (not activated)</td>
+</tr>
+<tr>
+<td>SOC-SIEM-ELK</td>
+<td>SIEM #1</td>
+<td>4GB</td>
+<td>4</td>
+<td>60GB</td>
+<td><code>10.10.10.10/24</code></td>
+<td>Ubuntu 24.04</td>
+</tr>
+<tr>
+<td>SOC-SIEM-Splunk</td>
+<td>SIEM #2</td>
+<td>6GB</td>
+<td>2</td>
+<td>60GB</td>
+<td><code>10.10.10.14/24</code></td>
+<td>Ubuntu 24.04</td>
+</tr>
+<tr>
+<td>SOC-XDR-Wazuh</td>
+<td>HIDS/XDR</td>
+<td>4GB</td>
+<td>2</td>
+<td>40GB</td>
+<td><code>10.10.10.11/24</code></td>
+<td>Ubuntu 24.04</td>
+</tr>
+<tr>
+<td>SOC-Vuln-OpenVAS</td>
+<td>Vulnerability scanner</td>
+<td>6GB</td>
+<td>2</td>
+<td>40GB</td>
+<td><code>10.10.10.12/24</code></td>
+<td>Ubuntu 24.04</td>
+</tr>
+<tr>
+<td><em>SOC-SOAR-Shuffle (planned)</em></td>
+<td>SOAR</td>
+<td>4GB (planned)</td>
+<td>2 (planned)</td>
+<td>40GB (planned)</td>
+<td><code>10.10.10.13/24</code></td>
+<td>Ubuntu 24.04 (planned)</td>
+</tr>
+<tr>
+<td><em>Management Endpoint (planned)</em></td>
+<td>Analyst workstation</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td><code>10.10.10.15/24</code></td>
+<td>KDE Linux (planned)</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Notes on deviations from the original plan:</strong> pfSense's WAN is a <strong>reserved DHCP lease</strong> (<code>10.10.40.101</code>), not a plain dynamic address — worth knowing if it ever needs to be reconfirmed after a host reboot. ELK ended up built with <strong>more vCPU, less RAM</strong> than originally planned (4 vCPU / 4GB vs. the planned 2 vCPU / 8GB) — running without errors as-is. OpenVAS ended up with <strong>more RAM</strong> than planned (6GB vs. 4GB). pfSense's LAN interface addresses were changed from <code>.1</code> to <code>.5</code> on each subnet — every VM's default gateway and DNS server should point at the <code>.5</code> address on its zone. <strong>SIEM ELK and Splunk both run permanently side by side</strong> rather than swapping in one at a time, since the pod strategy in Phase 1 assumed only one would run at once — see that phase's updated RAM math. <strong>Wazuh was rebuilt from scratch on Ubuntu 24.04</strong>, replacing an earlier build on Wazuh's official OVA (Amazon Linux 2023) that was abandoned after integration difficulties — different base OS from the rest of the lab caused build steps to assume the wrong package manager, and the OVA's bundled Filebeat conflicted with the log-forwarding setup. See <a href="../configure-log-forwarding/">Configure Log Forwarding</a> for the full story. Wazuh now matches every other Linux VM in the lab (Ubuntu 24.04), removing that whole class of problem going forward.</p>
+</blockquote>
+<h3 id="23-data-flow-design">2.3 Data Flow Design<a class="headerlink" href="#23-data-flow-design" title="Permanent link">&para;</a></h3>
+<p>Attack traffic path: <strong>Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)</strong>
+Detection path: <strong>Windows victim (Wazuh agent) + pfSense (IDS) → logs forwarded → SIEM (10.10.10.10)</strong>
+Response path: <strong>SIEM alert → SOAR → automated action back on Windows Server/victim</strong></p>
+<h3 id="24-naming-convention">2.4 Naming Convention<a class="headerlink" href="#24-naming-convention" title="Permanent link">&para;</a></h3>
+<p>Use a consistent prefix so VMs are easy to identify in VMware's library: <code>SOC-&lt;role&gt;-&lt;os&gt;</code>, e.g. <code>SOC-FW-pfSense</code>, <code>SOC-SIEM-ELK</code>, <code>SOC-Vict-Win10</code>, <code>SOC-atk-Kali</code>, <code>SOC-ADSRV-Win19</code>, <code>SOC-XDR-Wazuh</code>, <code>SOC-Vuln-OpenVAS</code> — see the inventory table in 2.2 for the full current list.</p>
+<h3 id="exit-criteria-for-phase-2">Exit Criteria for Phase 2<a class="headerlink" href="#exit-criteria-for-phase-2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Network diagram (zones + subnets) written down</li>
+<li>[ ] IP address table completed</li>
+<li>[ ] Naming convention chosen</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

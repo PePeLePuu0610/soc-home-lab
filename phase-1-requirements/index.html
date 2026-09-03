@@ -1,0 +1,860 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/phase-1-requirements/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../phase-2-design/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Phase 1 - Requirements - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#phase-1-requirements-planning" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Phase 1 - Requirements
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-requirements-planning" class="md-nav__link">
+    <span class="md-ellipsis">
+      PHASE 1 — Requirements &amp; Planning
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PHASE 1 — Requirements & Planning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-project-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 Project Objective
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-in-scope-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 In-Scope Components
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-critical-constraint-your-hardware-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 Critical Constraint: Your Hardware Budget
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-success-criteria-what-done-looks-like" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Success Criteria (what "done" looks like)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-iso-software-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.5 ISO &amp; Software Checklist
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit-criteria-for-phase-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit Criteria for Phase 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+  <h1>Phase 1 - Requirements</h1>
+
+<h2 id="phase-1-requirements-planning">PHASE 1 — Requirements &amp; Planning<a class="headerlink" href="#phase-1-requirements-planning" title="Permanent link">&para;</a></h2>
+<p><strong>Goal:</strong> Decide exactly what this lab needs to do before touching VMware.</p>
+<h3 id="11-project-objective">1.1 Project Objective<a class="headerlink" href="#11-project-objective" title="Permanent link">&para;</a></h3>
+<p>Build a self-contained enterprise-style security environment that lets you practice the full SOC (Security Operations Center) workflow: an attack happens → a sensor detects it → a SIEM (Security Information and Event Management tool — collects and analyzes logs) shows it → you investigate → you respond.</p>
+<h3 id="12-in-scope-components">1.2 In-Scope Components<a class="headerlink" href="#12-in-scope-components" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Purpose</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense</td>
+<td>Firewall/router — separates and controls traffic between network zones</td>
+<td>Network isolation</td>
+</tr>
+<tr>
+<td>Elastic Stack (ELK)</td>
+<td>Log collection, search, dashboards</td>
+<td>SIEM #1</td>
+</tr>
+<tr>
+<td>Splunk Enterprise (free dev license)</td>
+<td>Log collection, search, dashboards</td>
+<td>SIEM #2</td>
+</tr>
+<tr>
+<td>Wazuh</td>
+<td>Host-based intrusion detection (HIDS) + basic XDR (Extended Detection &amp; Response)</td>
+<td>Endpoint monitoring</td>
+</tr>
+<tr>
+<td>Suricata</td>
+<td>Network Intrusion Detection System (IDS) — watches network traffic for attack patterns. <strong>Decision made:</strong> installed as a pfSense package rather than a standalone VM, for simplicity</td>
+<td>Network monitoring</td>
+</tr>
+<tr>
+<td>OpenVAS (Greenbone)</td>
+<td>Vulnerability scanning</td>
+<td>Vulnerability management</td>
+</tr>
+<tr>
+<td>SOAR (Shuffle or TheHive + Cortex)</td>
+<td>Security Orchestration, Automation and Response — automates your response steps</td>
+<td>Response automation</td>
+</tr>
+<tr>
+<td>Kali Linux</td>
+<td>Attacker machine used to generate real traffic/attacks to detect</td>
+<td>Attack simulation</td>
+</tr>
+<tr>
+<td>Windows 10/11 + Windows Server (AD)</td>
+<td>"Victim" machines representing a real corporate network</td>
+<td>Target environment</td>
+</tr>
+<tr>
+<td>Management Endpoint (KDE Linux)</td>
+<td>Analyst workstation living in the Management zone, added after initial planning</td>
+<td>Analyst tooling</td>
+</tr>
+</tbody>
+</table>
+<h3 id="13-critical-constraint-your-hardware-budget">1.3 Critical Constraint: Your Hardware Budget<a class="headerlink" href="#13-critical-constraint-your-hardware-budget" title="Permanent link">&para;</a></h3>
+<p>This is the most important planning decision, so it gets its own table. Below is what each VM realistically needs, and what happens if you try to run them all simultaneously.</p>
+<table>
+<thead>
+<tr>
+<th>VM</th>
+<th>RAM (planned / <strong>actual once built</strong>)</th>
+<th>vCPU</th>
+<th>Disk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense (Suricata runs as a package inside this VM, not separately)</td>
+<td>2 GB</td>
+<td>2</td>
+<td>20 GB</td>
+</tr>
+<tr>
+<td>Kali (attacker)</td>
+<td>4 GB / <strong>2 GB actual</strong></td>
+<td>2</td>
+<td>40 GB</td>
+</tr>
+<tr>
+<td>Windows 10 (victim)</td>
+<td>4 GB</td>
+<td>2</td>
+<td>60 GB</td>
+</tr>
+<tr>
+<td>Windows Server 2019 + AD</td>
+<td>4 GB</td>
+<td>2</td>
+<td>60 GB</td>
+</tr>
+<tr>
+<td>ELK stack (single node)</td>
+<td>8 GB / <strong>4 GB actual</strong></td>
+<td>2 / <strong>4 actual</strong></td>
+<td>60 GB</td>
+</tr>
+<tr>
+<td>Splunk Enterprise (single instance)</td>
+<td>6 GB</td>
+<td>2</td>
+<td>60 GB</td>
+</tr>
+<tr>
+<td>Wazuh manager</td>
+<td>4 GB</td>
+<td>2</td>
+<td>40 GB</td>
+</tr>
+<tr>
+<td>OpenVAS/Greenbone</td>
+<td>4 GB / <strong>6 GB actual</strong></td>
+<td>2</td>
+<td>40 GB</td>
+</tr>
+<tr>
+<td>SOAR (not yet built — planned)</td>
+<td>4 GB</td>
+<td>2</td>
+<td>40 GB</td>
+</tr>
+<tr>
+<td><strong>Total, actual specs where built</strong></td>
+<td><strong>~36 GB</strong></td>
+<td>—</td>
+<td><strong>~380 GB</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Reality:</strong> even the improved ~36GB total is still tight against 32GB if every VM runs at once — running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a <strong>"pod" power-on strategy</strong> instead of buying more hardware:</p>
+<ul>
+<li><strong>Pod A – Coree Detection (always on while working):</strong> pfSense, one victim VM, Wazuh → ~10–11 GB</li>
+<li><strong>Pod B – SIEM (swap in one at a time):</strong> ELK (4GB actual) <em>or</em> Splunk (6GB), not both, unless testing log forwarding side-by-side</li>
+<li><strong>Pod C – Offense (on only during exercises):</strong> Kali → 2 GB actual</li>
+<li><strong>Pod D – Vulnerability/Response (on only when actively using):</strong> OpenVAS (6GB actual), SOAR (4GB planned) → 6–10 GB</li>
+</ul>
+<p>This keeps your working set around 22–27 GB, leaving headroom for the Windows 11 host OS itself.</p>
+<p>Disk: 440GB of VM disks will fit inside your ~517GB free, but only if you build most disks as <strong>thin-provisioned</strong> (VMware allocates space as it's actually used, not all upfront) — this is a setting you'll choose in Phase 3.</p>
+<h3 id="14-success-criteria-what-done-looks-like">1.4 Success Criteria (what "done" looks like)<a class="headerlink" href="#14-success-criteria-what-done-looks-like" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Kali can attack a victim VM and Wazuh shows an alert</li>
+<li>[ ] IDS logs network-level attack traffic</li>
+<li>[ ] At least one SIEM ingests logs from Wazuh, pfSense, and the IDS</li>
+<li>[ ] OpenVAS produces a vulnerability report on a victim VM</li>
+<li>[ ] SOAR tool can execute at least one automated response action (e.g., disable a user, block an IP)</li>
+</ul>
+<h3 id="15-iso-software-checklist">1.5 ISO &amp; Software Checklist<a class="headerlink" href="#15-iso-software-checklist" title="Permanent link">&para;</a></h3>
+<p>Download and stage these before Phase 3 begins — having everything ready up front avoids stalling mid-build waiting on downloads. All are free for lab/personal use.</p>
+<p><strong>Core infrastructure</strong></p>
+<ul>
+<li>[ ] <strong>pfSense CE</strong> — ISO from the official pfSense site (netgate.com/pfsense)</li>
+<li>[ ] <strong>VMware Workstation Pro</strong> — already installed (confirmed on your host)</li>
+</ul>
+<p><strong>Operating systems (victims / directory)</strong></p>
+<ul>
+<li>[ ] <strong>Windows Server</strong> (2019/2022) ISO — Microsoft Evaluation Center (free 180-day trial ISO)</li>
+<li>[ ] <strong>Windows 10 or 11</strong> ISO — Microsoft Evaluation Center or standard consumer ISO you're licensed for</li>
+<li>[ ] <strong>Kali Linux</strong> ISO/VMware image — official Kali downloads page (VMware pre-built image saves setup time)</li>
+</ul>
+<p><strong>Detection &amp; monitoring</strong></p>
+<ul>
+<li>[ ] <strong>Wazuh</strong> — install script for Ubuntu Server ISO (Ubuntu Server 24.04 LTS as the base OS). <em>Update: the official Wazuh OVA was tried first and abandoned after integration difficulties — see <a href="../configure-log-forwarding/">Configure Log Forwarding</a> for why. A from-scratch install on the same Ubuntu base as every other VM turned out to be the more reliable path.</em></li>
+<li>[ ] <strong>Suricata</strong> — installed as a pfSense package (via pfSense's package manager, no separate ISO) <em>or</em> Ubuntu Server ISO if building it standalone</li>
+<li>[ ] <strong>Ubuntu Server 24.04 LTS</strong> ISO — base OS for Wazuh/Suricata/ELK/OpenVAS/SOAR if not using vendor-provided images/OVAs</li>
+</ul>
+<p><strong>SIEMs</strong></p>
+<ul>
+<li>[ ] <strong>Elastic Stack (ELK)</strong> — Elasticsearch, Logstash, Kibana installers/packages from elastic.co (or Elastic's all-in-one installer), installed on Ubuntu Server</li>
+<li>[ ] <strong>Elastic Agent / Beats</strong> — for forwarding logs from Windows/Linux VMs to ELK</li>
+<li>[ ] <strong>Splunk Enterprise</strong> (free Developer license) — installer from splunk.com, requires free account signup</li>
+<li>[ ] <strong>Splunk Universal Forwarder</strong> — for forwarding logs from Windows/Linux VMs to Splunk</li>
+</ul>
+<p><strong>Vulnerability management</strong></p>
+<ul>
+<li>[ ] <strong>Greenbone Community Edition (OpenVAS)</strong> — Docker Compose install (Docker Engine required on Ubuntu Server base) from greenbone.github.io</li>
+</ul>
+<p><strong>SOAR</strong></p>
+<ul>
+<li>[ ] <strong>TheHive + Cortex</strong> — installers/Docker images from thehive-project.org, installed on Ubuntu Server, <em>or</em></li>
+<li>[ ] <strong>Shuffle</strong> — Docker Compose install from shuffler.io (simpler drag-and-drop alternative)</li>
+</ul>
+<p><strong>Supporting tools</strong></p>
+<ul>
+<li>[ ] <strong>Docker Engine</strong> — needed for OpenVAS/Greenbone and optionally TheHive/Shuffle; install via Ubuntu's package manager</li>
+<li>[ ] <strong>Sysmon</strong> — Microsoft Sysinternals, installed on Windows victim VMs for richer endpoint logging (feeds Wazuh/SIEM)</li>
+<li>[ ] <strong>Windows Server ISO validation</strong> — confirm the 180-day eval ISO's expiration date so you know when you'll need to re-arm or rebuild it</li>
+</ul>
+<p><strong>Exit criteria for this checklist</strong></p>
+<ul>
+<li>[ ] All ISOs/installers downloaded and saved in one folder on the host</li>
+<li>[ ] Checksums verified where the vendor provides them (protects against a corrupted download causing a mysterious install failure later)</li>
+<li>[ ] Free accounts created where required (Splunk, Elastic if needed)</li>
+</ul>
+<h3 id="exit-criteria-for-phase-1">Exit Criteria for Phase 1<a class="headerlink" href="#exit-criteria-for-phase-1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[ ] Component list finalized</li>
+<li>[ ] Hardware budget understood and accepted</li>
+<li>[ ] Pod strategy accepted</li>
+<li>[ ] Success criteria written down</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>
