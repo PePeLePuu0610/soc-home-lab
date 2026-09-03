@@ -1,8 +1,8 @@
-# Configure Log Forwarding: Wazuh, pfSense, and Suricata → ELK and Splunk
+# Configure Log Forwarding: Wazuh, pfSense, Suricata, OpenVAS, and Windows → ELK and Splunk
 
-**Completes:** Step 3.6.3 (ELK log sources) and Step 3.7.3 (Splunk log sources), deliberately done *after* both SIEMs and OpenVAS were already built — this is a return trip per Waterfall discipline: don't move on to SOAR (3.9) until the SIEMs are actually receiving data, since SOAR's entire job is acting on alerts that need to already be flowing in.
+**Completes:** Step 3.6.3 (ELK log sources) and Step 3.7.3 (Splunk log sources), deliberately done *after* both SIEMs and OpenVAS were already built — this is a return trip per Waterfall discipline: don't move on to SOAR (3.9) until the SIEMs are actually receiving data, since SOAR's entire job is acting on alerts that need to already be flowing in. See [ELK Ingestion Plan](elk-ingestion-plan.md) for the objectives/sequencing/exit-gate view of this same work.
 
-This is the most integration-heavy step in the build so far — three log sources, two destinations, six real connections. Every method below was checked against current documentation rather than older tutorials, because this specific integration has a lot of stale advice floating around that breaks on current versions.
+This is the most integration-heavy step in the build so far — five log sources, two destinations. Every method below was checked against current documentation rather than older tutorials, because this specific integration has a lot of stale advice floating around that breaks on current versions. Parts 1-4 (Wazuh, pfSense, Suricata) cover both ELK and Splunk; Parts 5-6 (OpenVAS, Windows) currently cover ELK only — Splunk equivalents are noted as follow-up work.
 
 ## Before you start: the design decisions that shape everything below
 
@@ -146,6 +146,10 @@ filter {
     mutate { add_field => { "[@metadata][target_index]" => "wazuh-alerts" } }
   } else if [type] == "pfsense_suricata" {
     mutate { add_field => { "[@metadata][target_index]" => "pfsense-suricata" } }
+  } else if [log_source] == "openvas" {
+    mutate { add_field => { "[@metadata][target_index]" => "openvas-scans" } }
+  } else if [agent][type] == "winlogbeat" {
+    mutate { add_field => { "[@metadata][target_index]" => "windows-events" } }
   } else {
     mutate { add_field => { "[@metadata][target_index]" => "soc-lab-other" } }
   }
@@ -162,9 +166,7 @@ output {
 }
 ```
 
-Routing by `type` (set per-input, at the port level) is deterministic — no message-content guessing required. The `json` filter on the Wazuh branch parses Wazuh's JSON-formatted alert payload into real fields rather than leaving it as one long string; pfSense/Suricata's plain syslog lines are left as-is.
-
-The `beats` input on 5044 is left in place even though nothing currently uses it, in case you want a Beats-based source later — it's harmless to leave configured.
+Routing by `type` (set per-input, at the port level) is deterministic for the syslog sources — no message-content guessing required. The `json` filter on the Wazuh branch parses Wazuh's JSON-formatted alert payload into real fields rather than leaving it as one long string; pfSense/Suricata's plain syslog lines are left as-is. The two new `beats`-based branches (`[log_source] == "openvas"` and `[agent][type] == "winlogbeat"`) are covered in Parts 5 and 6 below — the `beats` input on 5044 that was previously unused now carries both.
 
 ```bash
 sudo systemctl restart logstash
@@ -196,7 +198,174 @@ Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to
 
 ---
 
+## Part 5 — OpenVAS → ELK
+
+**This is the roughest integration of the five.** Unlike Wazuh and pfSense, OpenVAS has no native syslog or Beats output for scan results. The community tools that exist for this exact purpose have real problems: `gvm-logstash` is explicitly marked "no longer actively maintained... for historical reference only" by its own maintainers, and `VulnWhisperer` (the other commonly recommended option) has multiple recent forum reports of connection failures against current GVM versions. Rather than build on either, this uses **`python-gvm`** — the library Greenbone itself maintains for talking to GVM's own management protocol (GMP) — in a small script, which is more work up front but has no third-party reliability risk baked in. **Expect to iterate on this one more than the others.**
+
+Run these on the **OpenVAS VM** (`10.10.10.12`).
+
+### 5.1 — Install python-gvm and Filebeat
+
+```bash
+sudo apt update
+sudo apt install -y python3-pip
+pip3 install python-gvm --break-system-packages
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elasticsearch-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/elasticsearch-keyring.gpg] https://artifacts.elastic.co/packages/9.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-9.x.list
+sudo apt update
+sudo apt install filebeat -y
+```
+
+### 5.2 — Write the export script
+
+```bash
+sudo nano /opt/gvm-export.py
+```
+
+```python
+#!/usr/bin/env python3
+"""Export completed GVM scan results as newline-delimited JSON for Filebeat to ship."""
+import json
+from datetime import datetime
+from gvm.connections import UnixSocketConnection
+from gvm.protocols.gmp import Gmp
+from gvm.transforms import EtreeCheckCommandTransform
+
+SOCKET_PATH = "/run/gvmd/gvmd.sock"   # confirm this path matches your install — see 5.3
+OUTPUT_FILE = "/var/log/gvm-export/results.ndjson"
+GVM_USERNAME = "admin"
+GVM_PASSWORD = "REPLACE_ME"
+
+connection = UnixSocketConnection(path=SOCKET_PATH)
+transform = EtreeCheckCommandTransform()
+
+with Gmp(connection=connection, transform=transform) as gmp:
+    gmp.authenticate(GVM_USERNAME, GVM_PASSWORD)
+    results = gmp.get_results(filter_string="apply_overrides=0 rows=500 sort-by=created")
+
+    with open(OUTPUT_FILE, "a") as f:
+        for result in results.findall("result"):
+            record = {
+                "@timestamp": datetime.utcnow().isoformat() + "Z",
+                "result_id": result.get("id"),
+                "name": result.findtext("name"),
+                "host": result.findtext("host"),
+                "severity": result.findtext("severity"),
+                "threat": result.findtext("threat"),
+                "description": result.findtext("description"),
+            }
+            f.write(json.dumps(record) + "\n")
+```
+
+### 5.3 — Confirm the GMP socket path and test the script
+
+```bash
+sudo find / -name "gvmd.sock" 2>/dev/null
+```
+
+Update `SOCKET_PATH` in the script if it differs from the guess above, then:
+
+```bash
+sudo mkdir -p /var/log/gvm-export
+sudo python3 /opt/gvm-export.py
+cat /var/log/gvm-export/results.ndjson
+```
+
+You should see one JSON object per line, one per scan finding. If this errors out, the message will usually point at either a wrong socket path or wrong credentials — both are worth checking before assuming something's more deeply broken.
+
+### 5.4 — Schedule it and wire up Filebeat
+
+```bash
+sudo crontab -e
+```
+
+Add a line to run it every 15 minutes:
+
+```text
+*/15 * * * * /usr/bin/python3 /opt/gvm-export.py
+```
+
+```bash
+sudo nano /etc/filebeat/filebeat.yml
+```
+
+```yaml
+filebeat.inputs:
+  - type: filestream
+    id: openvas-results
+    enabled: true
+    paths:
+      - /var/log/gvm-export/results.ndjson
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+    fields:
+      log_source: openvas
+    fields_under_root: true
+
+output.logstash:
+  hosts: ["10.10.10.10:5044"]
+```
+
+```bash
+sudo systemctl enable filebeat
+sudo systemctl restart filebeat
+```
+
+### 5.5 — Verify
+
+Run the script manually once more (`sudo python3 /opt/gvm-export.py`) to generate fresh data immediately rather than waiting for the cron schedule, then check Kibana for a `openvas-scans-*` data view with results in it.
+
+---
+
+## Part 6 — Windows → ELK (via Winlogbeat)
+
+This is more standard ground than Part 5 — Winlogbeat is Elastic's own official shipper for exactly this, stable across many versions. This ships **raw Windows Event Logs** directly to ELK, separate from Wazuh's curated alerts — useful for a portfolio to show both curated SIEM alerting *and* raw log-hunting capability side by side. Do this on **both** Windows machines: the victim (`10.10.20.20`) and the AD server (`10.10.20.10`) — the AD server's logs are especially valuable for spotting authentication and lateral-movement activity later in Phase 4.
+
+Run these in an **Administrator PowerShell** on each Windows machine.
+
+### 6.1 — Download and install
+
+Download the Winlogbeat Windows zip from `elastic.co/downloads/beats/winlogbeat` (matching version 9.x, same major version as your ELK stack), then:
+
+```powershell
+Expand-Archive .\winlogbeat-9.x.x-windows-x86_64.zip -DestinationPath 'C:\Program Files\'
+Rename-Item 'C:\Program Files\winlogbeat-9.x.x-windows-x86_64' 'Winlogbeat'
+cd 'C:\Program Files\Winlogbeat'
+```
+
+### 6.2 — Configure
+
+Edit `winlogbeat.yml` in that folder:
+
+```yaml
+winlogbeat.event_logs:
+  - name: Application
+    ignore_older: 72h
+  - name: Security
+  - name: System
+
+output.logstash:
+  hosts: ["10.10.10.10:5044"]
+```
+
+### 6.3 — Install and start the service
+
+```powershell
+PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
+Start-Service winlogbeat
+```
+
+### 6.4 — Verify
+
+Check Kibana for a `windows-events-*` data view — Winlogbeat automatically tags every event with `agent.type: winlogbeat` (which is what Part 3's Logstash config routes on) and `winlog.computer_name` (which tells you which of the two Windows machines each event came from, without needing separate indices per host).
+
+---
+
 ## Exit criteria for completing Steps 3.6 / 3.7's log source configuration
+
+**ELK:**
 
 - [ ] Wazuh's `ossec.conf` has both `syslog_output` blocks, `client-syslog` enabled, `wazuh-manager` restarted cleanly
 - [ ] Wazuh's `ossec.log` confirms it's forwarding to both `10.10.10.10:5141` and `10.10.10.14:5515`
@@ -205,9 +374,17 @@ Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to
 - [ ] Logstash listening on 5044, 5140, and 5141
 - [ ] Wazuh alerts visible in Kibana under `wazuh-alerts-*`
 - [ ] pfSense/Suricata events visible in Kibana under `pfsense-suricata-*`
+- [ ] `gvm-export.py` runs cleanly and produces NDJSON output; cron job scheduled
+- [ ] OpenVAS scan results visible in Kibana under `openvas-scans-*`
+- [ ] Winlogbeat installed and running on both Windows victim and AD server
+- [ ] Windows events visible in Kibana under `windows-events-*`, distinguishable by `winlog.computer_name`
+
+**Splunk:**
+
 - [ ] Both Splunk UDP inputs (5514, 5515) created and active
 - [ ] Wazuh alerts visible in Splunk under `sourcetype=wazuh_alerts`
 - [ ] pfSense/Suricata events visible in Splunk under `sourcetype=pfsense_suricata`
+- [ ] *(OpenVAS and Windows → Splunk not yet built — follow-up work, same underlying export script/Winlogbeat install can feed both once ELK side is confirmed working)*
 
 ## Troubleshooting
 
@@ -217,3 +394,7 @@ Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to
 - **pfSense/Suricata events missing from one SIEM but present in the other:** double check both entries are actually present under **Remote log servers** in pfSense (2.2) — it's easy to only add one when editing.
 - **Suricata alerts still not appearing even after enabling "Send Alerts to System Log":** confirm you restarted Suricata on that specific interface — this setting is read once at startup, not hot-reloaded.
 - **Port already in use, or permission denied binding a port:** confirm nothing else on that VM is already bound to the port (`sudo ss -tunlp | grep <port>`), and confirm you're not accidentally trying to use a port below 1024 with a non-root service.
+- **`gvm-export.py` fails to connect:** the Unix socket path in `find / -name "gvmd.sock"` (5.3) is the actual source of truth — don't assume the path in the script example matches your install. Also confirm the `admin` credentials in the script match what you set during OpenVAS's first login.
+- **`gvm-export.py` runs but produces an empty file:** means GVM has no results matching the filter — confirm at least one scan has actually completed in the Greenbone UI first.
+- **Winlogbeat service won't start:** run it in the foreground for diagnostics: `.\winlogbeat.exe -c .\winlogbeat.yml -configtest -e` from the install directory — this prints the actual error instead of just failing silently as a Windows service.
+- **Windows events not appearing in Kibana despite Winlogbeat running:** confirm Windows Firewall on that VM isn't blocking outbound traffic to `10.10.10.10:5044` — unlike the Linux VMs in this lab, Windows Firewall is enabled by default and can silently drop this.

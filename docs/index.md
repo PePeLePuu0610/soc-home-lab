@@ -15,7 +15,7 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 | OpenVAS | ✅ Scans completing successfully, reports visible in-dashboard |
 | ELK Stack | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
 | Splunk Enterprise | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
-| Log forwarding (Wazuh/pfSense/Suricata → ELK & Splunk) | 🔄 In progress — see [Configure Log Forwarding](configure-log-forwarding.md) |
+| Log forwarding (Wazuh/pfSense/Suricata/OpenVAS/Windows → ELK, Wazuh/pfSense/Suricata → Splunk) | 🔄 In progress — see [ELK Ingestion Plan](elk-ingestion-plan.md) |
 | SOAR (Shuffle) | ⏸ Not started — blocked on log forwarding completion per Waterfall sequencing |
 
 ## Project Phases
@@ -28,7 +28,8 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 | ↳ [Build Guide: ELK Stack](build-elk-stack.md) | Detailed Elasticsearch + Kibana + Logstash build, with troubleshooting |
 | ↳ [Build Guide: Splunk Enterprise](build-splunk-enterprise.md) | Detailed Splunk Enterprise build |
 | ↳ [Build Guide: OpenVAS](build-openvas.md) | Detailed Greenbone/OpenVAS vulnerability scanner build |
-| ↳ [Configure Log Forwarding](configure-log-forwarding.md) | Wazuh, pfSense, and Suricata → both ELK and Splunk |
+| ↳ [ELK Ingestion Plan](elk-ingestion-plan.md) | Objectives, sequencing, and exit gates for all five log sources → ELK |
+| ↳ [Configure Log Forwarding](configure-log-forwarding.md) | Full step-by-step commands: Wazuh, pfSense, Suricata, OpenVAS, and Windows → ELK and Splunk |
 | [Phase 4 — Testing & Verification](phase-4-testing.md) | End-to-end attack/detection/response test matrix |
 | [Phase 5 — Deployment](phase-5-deployment.md) | Snapshots, hardening, go-live checklist |
 | [Phase 6 — Maintenance](phase-6-maintenance.md) | Ongoing patching and skills-building cadence |

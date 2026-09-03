@@ -51,7 +51,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 1. Build ELK VM on Ubuntu 24.04 (**actual: 4GB RAM / 4 vCPU** — heavier on CPU, lighter on RAM than originally planned — 60GB disk), static IP `10.10.10.10`.
 2. Install Elasticsearch, Kibana, and Logstash.
-3. **Configure Logstash/Beats to receive logs from Wazuh, pfSense, and Suricata — see [Configure Log Forwarding](configure-log-forwarding.md).** Deliberately split out as its own step: it touches three separate VMs, not just this one, and is easy to defer until both SIEMs exist and you can wire up both at once.
+3. **Configure Logstash/Beats to receive logs from Wazuh, pfSense, Suricata, OpenVAS, and Windows — see [ELK Ingestion Plan](elk-ingestion-plan.md)** for objectives/sequencing/exit gates, or jump straight to [Configure Log Forwarding](configure-log-forwarding.md) for the commands. Deliberately split out as its own step: it touches five separate VMs, not just this one, and is easy to defer until both SIEMs and OpenVAS exist and you can wire up everything at once.
 4. **Confirm:** logs appear in Kibana within a few minutes of test traffic.
 
 ### Step 3.7 — SIEM #2: Splunk Enterprise
