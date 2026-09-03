@@ -2,7 +2,7 @@
 
 **VM name:** `SOC-Vuln-OpenVAS` · **Zone:** Management · **IP:** `10.10.10.12` · **Specs:** 6GB RAM / 2 vCPU / 40GB disk (actual — more RAM than originally planned)
 
-This guide covers building the OpenVAS/Greenbone vulnerability scanning VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Docker install steps were verified against Docker's current official documentation. The Greenbone stack itself is deliberately **not vendored** as a static compose file in this repo — see [`configs/docker-compose/openvas/README.md`](https://github.com/PePeLePuu0610/soc-home-lab/blob/main/configs/docker-compose/openvas/README.md) for why — this guide fetches Greenbone's live official file at build time instead.
+This guide coverss building the OpenVAS/Greenbone vulnerability scanning VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Docker install steps were verified against Docker's current official documentation. The Greenbone stack itself is deliberately **not vendored** as a static compose file in this repo — see [`configs/docker-compose/openvas/README.md`](https://github.com/PePeLePuu0610/soc-home-lab/blob/main/configs/docker-compose/openvas/README.md) for why — this guide fetches Greenbone's live official file at build time instead.
 
 ## Before you start
 

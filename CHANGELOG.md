@@ -12,3 +12,4 @@ All notable changes to this project are logged here. Format loosely follows [Kee
 - CI pipeline now validates docker-compose syntax and scans for accidentally committed secrets (gitleaks).
 - `GETTING_STARTED.md` — zero-experience walkthrough for GitHub Desktop, VS Code/Copilot, and the CI/CD pipeline.
 - README updated to reference actual local path (`E:\PePesLab-SOC 2.0\soc-home-lab`).
+- 

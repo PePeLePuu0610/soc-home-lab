@@ -2,7 +2,7 @@
 
 **VM name:** `SOC-SIEM-Splunk` · **Zone:** Management · **IP:** `10.10.10.14` · **Specs:** 6GB RAM / 2 vCPU / 60GB disk
 
-This guide covers building the Splunk Enterprise VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). It's built as a second, permanent SIEM alongside ELK for direct side-by-side comparison — see the IP address note in [Phase 2 — Design](phase-2-design.md#22-vm-inventory-ip-address-plan) for why that changed the original one-shared-address plan.
+This guide coverss building the Splunk Enterprise VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). It's built as a second, permanent SIEM alongside ELK for direct side-by-side comparison — see the IP address note in [Phase 2 — Design](phase-2-design.md#22-vm-inventory-ip-address-plan) for why that changed the original one-shared-address plan.
 
 ## Before you start
 

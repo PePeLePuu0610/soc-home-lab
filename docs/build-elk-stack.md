@@ -2,7 +2,7 @@
 
 **VM name:** `SOC-SIEM-ELK` · **Zone:** Management · **IP:** `10.10.10.10` · **Specs:** 4GB RAM / 4 vCPU / 60GB disk (actual — more CPU, less RAM than originally planned; running without errors as-is)
 
-This guide covers building the ELK Stack (Elasticsearch, Logstash, Kibana) VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Commands were verified against Elastic's current official documentation (Elastic Stack 9.x) rather than older tutorials, since package repos and default security behavior have changed across major versions.
+This guide coverss building the ELK Stack (Elasticsearch, Logstash, Kibana) VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Commands were verified against Elastic's current official documentation (Elastic Stack 9.x) rather than older tutorials, since package repos and default security behavior have changed across major versions.
 
 ## Before you start
 

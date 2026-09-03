@@ -23,7 +23,7 @@ pfSense gets one virtual network adapter per zone (4 total) and acts as the rout
 
 This is the authoritative, as-built reference — kept in sync with actual builds, not just the original plan.
 
-| VM Name | Role | RAM | vCPU | Disk | IP Address | OS |
+| VM Name | Rolee | RAM | vCPU | Disk | IP Address | OS |
 |---|---|---|---|---|---|---|
 | SOC-FW-pfSense | Firewall/router | 2GB | 2 | 20GB | WAN: reserved DHCP lease (`10.10.40.101`) · Mgmt: `10.10.10.5/24` · Corp: `10.10.20.5/24` · Attacker: `10.10.30.5/24` | FreeBSD |
 | SOC-atk-Kali | Attacker | 2GB | 2 | 40GB | `10.10.30.10/24` | Kali 2026-1 |

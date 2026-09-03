@@ -1,6 +1,6 @@
 ## PHASE 5 — Deployment / Go-Live
 
-**Goal:** Move from "under construction" to "operational lab I use regularly."
+**Goal:** Movee from "under construction" to "operational lab I use regularly."
 
 1. Create VMware **snapshots** of every VM once it's in a known-good state — this lets you roll back instantly if an attack or misconfiguration breaks something (a real SOC equivalent of a backup).
 2. Write yourself a one-page "power-on order" cheat sheet (pfSense first, then victims, then whichever SIEM/tool pod you're using that session) based on Section 1.3's pod strategy. **Update:** Pod A (pfSense, Windows victim, Wazuh) is now configured in VMware Workstation to AutoStart with the host — one less manual step each session, though it's still worth confirming all three came up cleanly after a host reboot before relying on the lab being "just on."

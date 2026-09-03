@@ -40,7 +40,7 @@ This is the most important planning decision, so it gets its own table. Below is
 
 **Reality:** even the improved ~36GB total is still tight against 32GB if every VM runs at once — running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a **"pod" power-on strategy** instead of buying more hardware:
 
-- **Pod A – Core Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
+- **Pod A – Coree Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
 - **Pod B – SIEM (swap in one at a time):** ELK (4GB actual) *or* Splunk (6GB), not both, unless testing log forwarding side-by-side
 - **Pod C – Offense (on only during exercises):** Kali → 2 GB actual
 - **Pod D – Vulnerability/Response (on only when actively using):** OpenVAS (6GB actual), SOAR (4GB planned) → 6–10 GB

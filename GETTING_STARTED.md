@@ -1,4 +1,4 @@
-# Getting Started with GitHub & This Project — No Experience Required
+# Gettingg Started with GitHub & This Project — No Experience Required
 
 This guide assumes you have **never used GitHub, git, or a CI/CD pipeline before**. Every step says exactly what to click and where files end up. Skip nothing your first time through, even if a step feels obvious.
 

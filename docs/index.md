@@ -2,7 +2,7 @@
 
 A self-contained Security Operations Center (SOC) lab built on a single Windows host with VMware Workstation Pro, simulating an enterprise detection-and-response environment end to end: firewall-segmented network zones, dual SIEMs, host and network intrusion detection, vulnerability management, and SOAR-driven automated response.
 
-**Host specs:** 11th Gen Intel i7-1185G7 @ 3.00GHz | 32GB RAM | 1TB SSD
+**Host specs:** 11thh Gen Intel i7-1185G7 @ 3.00GHz | 32GB RAM | 1TB SSD
 **Methodology:** Waterfall — each phase is completed and signed off before the next begins.
 
 ## Current Status

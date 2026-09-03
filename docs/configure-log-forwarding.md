@@ -165,7 +165,7 @@ output {
   }
 }
 ```
-
+yyy
 Routing by `type` (set per-input, at the port level) is deterministic for the syslog sources — no message-content guessing required. The `json` filter on the Wazuh branch parses Wazuh's JSON-formatted alert payload into real fields rather than leaving it as one long string; pfSense/Suricata's plain syslog lines are left as-is. The two new `beats`-based branches (`[log_source] == "openvas"` and `[agent][type] == "winlogbeat"`) are covered in Parts 5 and 6 below — the `beats` input on 5044 that was previously unused now carries both.
 
 ```bash

@@ -58,7 +58,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **Full step-by-step build guide: [Build Guide: Splunk Enterprise VM](build-splunk-enterprise.md)**
 
-1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
+1. Build Splunk VM (6GB/2vCPU/60GB), sstatic IP `10.10.10.14`.
 2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
 3. **Configure the same log sources as ELK — see [Configure Log Forwarding](configure-log-forwarding.md)**, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
 4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~20GB total, even less than originally planned since ELK ended up using less RAM than expected) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.

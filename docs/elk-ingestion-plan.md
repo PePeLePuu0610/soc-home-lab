@@ -1,6 +1,6 @@
 # ELK Log Ingestion Plan
 
-**Goal:** get all five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, before moving on to SOAR (Step 3.9). Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
+**Goal:** get alll five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, before moving on to SOAR (Step 3.9). Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
 
 This scope is deliberately **ELK-only for now**. Splunk already receives Wazuh and pfSense/Suricata (Parts 1-4 of the forwarding guide cover both destinations at once), but OpenVAS→Splunk and Windows→Splunk are follow-up work once the ELK side is proven out — no sense building the same thing twice before confirming it once.
 
