@@ -12,14 +12,14 @@ This is the most integration-heavy step in the build so far — five log sources
 
 **Every source gets its own port.** Rather than trying to distinguish sources by parsing message content (fragile), Wazuh, and pfSense/Suricata each forward to a *different* port on each SIEM. That makes routing to the correct index/sourcetype deterministic instead of pattern-matching guesswork.
 
-**Non-privileged ports throughout.** Your Splunk service already runs as a dedicated non-root `splunk` user (from the Step 3.7 root-deprecation fix), and Logstash has the same constraint — neither can bind to traditional syslog port 514 without root. This guide uses `5140`/`5141` for the ELK-side listeners and `5514`/`5515` for the Splunk-side ones instead.
+**Non-privileged ports throughout.** Your Splunk service already runs as a dedicated non-root `splunk` user (from the Step 3.7 root-deprecation fix), and Logstash has the same constraint — neither can bind to traditional syslog port 514 without root. This guide therefore uses ports above 1024 everywhere. **The exact port assignments below are the as-built ones recorded in [Integration and Validation](integration-validation.md)** — an earlier draft of this guide had pfSense's two ports the other way round, so if you are cross-referencing older notes, trust the table below.
 
 **pfSense can forward to multiple remote syslog servers at once** (up to three) — so one pfSense configuration step feeds both SIEMs simultaneously, rather than needing separate setups.
 
 | Source | → ELK (Logstash) | → Splunk |
 |---|---|---|
 | Wazuh | `10.10.10.10:5141` | `10.10.10.14:5515` |
-| pfSense + Suricata | `10.10.10.10:5140` | `10.10.10.14:5514` |
+| pfSense + Suricata | `10.10.10.10:5514` | `10.10.10.14:5140` |
 
 ---
 
@@ -54,12 +54,17 @@ Add these two blocks inside the outermost `<ossec_config>` tags (anywhere at tha
 <syslog_output>
   <server>10.10.10.10</server>
   <port>5141</port>
+  <format>json</format>
 </syslog_output>
 <syslog_output>
   <server>10.10.10.14</server>
   <port>5515</port>
 </syslog_output>
 ```
+
+**The `<format>json</format>` line on the ELK block is load-bearing.** Part 3's Logstash config applies a `json { source => "message" }` filter to this stream — without `format json` here, Wazuh sends plain text, that filter fails, and alerts land in Elasticsearch as one unparsed string with no queryable `agent`/`rule` fields. The Splunk block deliberately has no `format` line: it keeps the default text format, which is why structured field extraction on the Splunk side is noted as follow-up work in Part 4.
+
+Also confirm `<jsonout_output>yes</jsonout_output>` is enabled elsewhere in the same file — it usually is by default, but `format json` depends on it.
 
 **Save carefully — this exact step is where a previous attempt silently failed to save.** In nano: `Ctrl+O` (letter O, "Write Out"), then `Enter` to confirm the filename shown at the bottom, then `Ctrl+X` to exit. Don't skip straight to `Ctrl+X` without the `Ctrl+O`/`Enter` sequence first.
 
@@ -103,8 +108,8 @@ Save, then **restart Suricata on that interface** — it only reads this setting
 - **Source Address:** Default (any)
 - **IP Protocol:** IPv4
 - **Remote log servers:** add both —
-  - `10.10.10.10:5140` (ELK)
-  - `10.10.10.14:5514` (Splunk)
+  - `10.10.10.10:5514` (ELK)
+  - `10.10.10.14:5140` (Splunk)
 - **Remote Syslog Contents:** check **Everything**
 
 Save. This single configuration now sends pfSense's firewall/system logs *and* Suricata's alerts (via 2.1) to both SIEMs at once.
@@ -115,7 +120,41 @@ Save. This single configuration now sends pfSense's firewall/system logs *and* S
 
 Run these on the **ELK VM** (`10.10.10.10`).
 
-### 3.1 — Add two syslog inputs and route by port
+**Before editing anything: understand how Logstash loads these files.** `pipelines.yml` globs **every** `/etc/logstash/conf.d/*.conf` file into a single `main` pipeline. Filenames do **not** isolate pipelines — a `10-pfsense.conf` and a `beats-to-es.conf` are concatenated into one config, not run independently. This bites in two specific ways, both hit during the real build:
+
+- **Duplicate listeners.** Two files each declaring `beats { port => 5044 }` collide.
+- **Cross-contamination of outputs.** Any *unconditional* `output { elasticsearch { ... } }` receives **every** event in the pipeline, regardless of which file defined it — so pfSense events silently get written by outputs meant for other sources.
+
+So first, inventory what's actually there:
+
+```bash
+ls -la /etc/logstash/conf.d/
+```
+
+Remove or consolidate anything redundant before proceeding, and guard filters and outputs with explicit conditionals (`if [type] == "pfsense"` / `if [type] != "pfsense"`) rather than relying on file separation. The config below is written as a single consolidated file on that assumption.
+
+### 3.0 — Create a least-privilege Elasticsearch user
+
+Don't use the `elastic` superuser for ingestion. Create a dedicated account with only the privileges Logstash actually needs — same principle as the non-root `splunk` service account from Step 3.7.
+
+In Kibana → search `Roles` → **Create role** named `logstash_writer`:
+
+- **Cluster privileges:** `monitor`, `manage_index_templates`
+- **Index privileges:** `write`, `create`, `create_index`
+- **Index patterns:** `pfsense-*`, `logstash-*`, `wazuh-alerts-*`, `openvas-scans-*`, `windows-events-*`, `soc-lab-other-*`
+
+Then search `Users` → **Create user** `logstash_internal`, assign it the `logstash_writer` role.
+
+Store its password in the Logstash keystore rather than in the config file, so no secret ever lands in the repo:
+
+```bash
+sudo /usr/share/logstash/bin/logstash-keystore create
+sudo /usr/share/logstash/bin/logstash-keystore add ES_PASSWORD
+```
+
+Reference it as `${ES_PASSWORD}` in the config below.
+
+### 3.1 — Add the syslog inputs and route by source
 
 ```bash
 sudo nano /etc/logstash/conf.d/beats-to-es.conf
@@ -129,8 +168,8 @@ input {
     port => 5044
   }
   syslog {
-    port => 5140
-    type => "pfsense_suricata"
+    port => 5514
+    type => "pfsense"
   }
   syslog {
     port => 5141
@@ -144,8 +183,8 @@ filter {
       source => "message"
     }
     mutate { add_field => { "[@metadata][target_index]" => "wazuh-alerts" } }
-  } else if [type] == "pfsense_suricata" {
-    mutate { add_field => { "[@metadata][target_index]" => "pfsense-suricata" } }
+  } else if [type] == "pfsense" {
+    mutate { add_field => { "[@metadata][target_index]" => "pfsense" } }
   } else if [log_source] == "openvas" {
     mutate { add_field => { "[@metadata][target_index]" => "openvas-scans" } }
   } else if [agent][type] == "winlogbeat" {
@@ -158,24 +197,39 @@ filter {
 output {
   elasticsearch {
     hosts => ["https://10.10.10.10:9200"]
-    user => "elastic"
-    password => "<your-password>"
+    user => "logstash_internal"
+    password => "${ES_PASSWORD}"
     ssl_certificate_verification => false
+    ilm_enabled => false
+    data_stream => false
     index => "%{[@metadata][target_index]}-%{+YYYY.MM.dd}"
   }
 }
 ```
-yyy
+
 Routing by `type` (set per-input, at the port level) is deterministic for the syslog sources — no message-content guessing required. The `json` filter on the Wazuh branch parses Wazuh's JSON-formatted alert payload into real fields rather than leaving it as one long string; pfSense/Suricata's plain syslog lines are left as-is. The two new `beats`-based branches (`[log_source] == "openvas"` and `[agent][type] == "winlogbeat"`) are covered in Parts 5 and 6 below — the `beats` input on 5044 that was previously unused now carries both.
+
+`ilm_enabled => false` and `data_stream => false` are required because this config writes to **explicit daily indices** (`%{+YYYY.MM.dd}`). Leave them out and Elasticsearch's index lifecycle management or data-stream defaults will fight the daily naming, producing indices you don't expect.
+
+**Validate the config before restarting** — a syntax error otherwise takes the service down and the reason is buried in the journal. Escaped underscores, Markdown-formatted URLs pasted from documentation, and stray closing braces are the usual culprits:
+
+```bash
+sudo -u logstash /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+```
+
+Only once that reports the configuration is OK:
 
 ```bash
 sudo systemctl restart logstash
-sudo ss -tunlp | grep -E '5044|5140|5141'   # confirm all three inputs are listening
+sudo systemctl status logstash --no-pager
+sudo ss -tunlp | grep -E '5044|5514|5141'   # confirm all three inputs are listening
 ```
+
+If you need to see events as they arrive while debugging, temporarily add `stdout { codec => rubydebug }` to the output block — then remove it, revalidate, and restart once the source is confirmed, since it's noisy and writes every event to the journal.
 
 ### 3.2 — Verify in Kibana
 
-Browse to `http://10.10.10.10:5601` → `Discover` (or search `Data Views`) → create a data view matching `wazuh-alerts-*` and one matching `pfsense-suricata-*`. Generate some traffic (log into the Windows victim a few times, run a quick Nmap scan from Kali at the Corp zone) and confirm events appear within a minute or two.
+Browse to `http://10.10.10.10:5601` → `Discover` (or search `Data Views`) → create a data view matching `wazuh-alerts-*` and one matching `pfsense-*`. Note that **Suricata alerts arrive on the same UDP 5514 receiver as pfSense's own logs and land in `pfsense-*` alongside them** — they are not split into a separate index. Generate some traffic (log into the Windows victim a few times, run a quick Nmap scan from Kali at the Corp zone) and confirm events appear within a minute or two.
 
 ---
 
@@ -187,14 +241,23 @@ Run this in **Splunk Web** (`http://10.10.10.14:8000`) on the **Splunk VM**.
 
 | Port | Source type | Index |
 |---|---|---|
-| `5514` | `pfsense_suricata` | `main` (or a dedicated `pfsense` index) |
-| `5515` | `wazuh_alerts` | `main` (or a dedicated `wazuh` index) |
+| `5140` | `syslog` | `main` |
+| `5515` | `syslog` | `main` |
 
 Since both pfSense (Part 2) and Wazuh (Part 1) are already configured to send to these exact ports, events should start arriving as soon as each input is active — no further changes needed on the source side.
 
 ### Verify
 
-**Search → `index=main sourcetype=wazuh_alerts`** should show Wazuh events; **`index=main sourcetype=pfsense_suricata`** should show pfSense/Suricata events. Same test traffic as the Kibana verification in Part 3.2 works here too.
+Both inputs use the built-in `syslog` sourcetype, so distinguish them by input port rather than sourcetype:
+
+```spl
+index=main source="udp:5140" "filterlog"
+index=main source="udp:5515"
+```
+
+The first returns pfSense firewall events, the second Wazuh alerts. Same test traffic as the Kibana verification in Part 3.2 works here too.
+
+**Structured field extraction is follow-up work.** The Wazuh forwarding block to Splunk retains its default text format (only the ELK block sets `<format>json</format>`), so Splunk receives these as unparsed syslog text. Searching works; field-level querying will need `props.conf`/`transforms.conf` extraction added later.
 
 ---
 
@@ -371,9 +434,9 @@ Check Kibana for a `windows-events-*` data view — Winlogbeat automatically tag
 - [ ] Wazuh's `ossec.log` confirms it's forwarding to both `10.10.10.10:5141` and `10.10.10.14:5515`
 - [ ] Suricata's "Send Alerts to System Log" enabled and interface restarted
 - [ ] pfSense remote logging configured with both SIEM targets
-- [ ] Logstash listening on 5044, 5140, and 5141
+- [ ] Logstash listening on 5044, 5514, and 5141
 - [ ] Wazuh alerts visible in Kibana under `wazuh-alerts-*`
-- [ ] pfSense/Suricata events visible in Kibana under `pfsense-suricata-*`
+- [ ] pfSense/Suricata events visible in Kibana under `pfsense-*`
 - [ ] `gvm-export.py` runs cleanly and produces NDJSON output; cron job scheduled
 - [ ] OpenVAS scan results visible in Kibana under `openvas-scans-*`
 - [ ] Winlogbeat installed and running on both Windows victim and AD server
@@ -381,9 +444,9 @@ Check Kibana for a `windows-events-*` data view — Winlogbeat automatically tag
 
 **Splunk:**
 
-- [ ] Both Splunk UDP inputs (5514, 5515) created and active
-- [ ] Wazuh alerts visible in Splunk under `sourcetype=wazuh_alerts`
-- [ ] pfSense/Suricata events visible in Splunk under `sourcetype=pfsense_suricata`
+- [ ] Both Splunk UDP inputs (5140, 5515) created and active
+- [ ] Wazuh alerts visible in Splunk under `source="udp:5515"`
+- [ ] pfSense/Suricata events visible in Splunk under `source="udp:5140"`
 - [ ] *(OpenVAS and Windows → Splunk not yet built — follow-up work, same underlying export script/Winlogbeat install can feed both once ELK side is confirmed working)*
 
 ## Troubleshooting

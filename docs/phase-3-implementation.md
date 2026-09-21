@@ -58,7 +58,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **Full step-by-step build guide: [Build Guide: Splunk Enterprise VM](build-splunk-enterprise.md)**
 
-1. Build Splunk VM (6GB/2vCPU/60GB), sstatic IP `10.10.10.14`.
+1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
 2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
 3. **Configure the same log sources as ELK — see [Configure Log Forwarding](configure-log-forwarding.md)**, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
 4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~20GB total, even less than originally planned since ELK ended up using less RAM than expected) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
@@ -74,8 +74,12 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 ### Step 3.9 — SOAR
 
-1. Build SOAR VM (4GB/2vCPU/40GB) — TheHive + Cortex (case management + automated analysis) is the closest to what real SOC teams use; Shuffle is a lighter, drag-and-drop alternative if you want something simpler to start.
-2. Connect it to your SIEM so alerts can trigger a case/playbook.
+**Status: unblocked and next up.** Prerequisite met — Wazuh, pfSense, and Suricata alerts are verified flowing into both SIEMs; see [Integration and Validation](integration-validation.md) and the [ELK Ingestion Plan](elk-ingestion-plan.md) exit gates.
+
+**Decision made:** Shuffle (VM role `soc-soar-shuffle`, planned at `10.10.10.13`), rather than TheHive + Cortex. Shuffle's drag-and-drop workflow builder is the lighter starting point, and given how much of this build has been spent on integration debugging, the simpler option is the better use of time here.
+
+1. Build SOAR VM on Ubuntu 24.04 (4GB/2vCPU/40GB), static IP `10.10.10.13`.
+2. Connect it to your SIEM so alerts can trigger a case/playbook. Wazuh alerts are the realistic trigger source — they're already parsed into structured fields on the ELK side.
 3. Build one simple playbook (e.g., "on brute-force alert, disable the targeted AD account").
 
 ### Step 3.10 — Kali (Attacker)

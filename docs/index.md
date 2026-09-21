@@ -2,21 +2,24 @@
 
 A self-contained Security Operations Center (SOC) lab built on a single Windows host with VMware Workstation Pro, simulating an enterprise detection-and-response environment end to end: firewall-segmented network zones, dual SIEMs, host and network intrusion detection, vulnerability management, and SOAR-driven automated response.
 
-**Host specs:** 11thh Gen Intel i7-1185G7 @ 3.00GHz | 32GB RAM | 1TB SSD
+**Host specs:** 11th Gen Intel i7-1185G7 @ 3.00GHz | 32GB RAM | 1TB SSD
 **Methodology:** Waterfall — each phase is completed and signed off before the next begins.
 
 ## Current Status
 
 | Component | Status |
 |---|---|
-| pfSense + Suricata | ✅ Running, no errors — all traffic currently allowed (hardening deferred to Phase 5) |
+| pfSense + Suricata | ✅ Running — all traffic currently allowed (hardening deferred to Phase 5) |
 | Windows victim + AD server | ✅ Built, Wazuh agents installed and reporting |
-| Wazuh | ✅ Rebuilt from scratch on Ubuntu 24.04 (replacing the original OVA) — running, dashboards accessible, auditing endpoints |
-| OpenVAS | ✅ Scans completing successfully, reports visible in-dashboard |
-| ELK Stack | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
-| Splunk Enterprise | ⚠️ Running, login working — **no log data flowing yet** (integration in progress) |
-| Log forwarding (Wazuh/pfSense/Suricata/OpenVAS/Windows → ELK, Wazuh/pfSense/Suricata → Splunk) | 🔄 In progress — see [ELK Ingestion Plan](elk-ingestion-plan.md) |
-| SOAR (Shuffle) | ⏸ Not started — blocked on log forwarding completion per Waterfall sequencing |
+| Wazuh | ✅ Rebuilt from scratch on Ubuntu 24.04 (replacing the original OVA) — running, auditing endpoints |
+| OpenVAS | ✅ Scan of Windows victim completed and report reviewed (unauthenticated; coverage limitations documented) |
+| ELK Stack | ✅ **Receiving Wazuh, pfSense, and Suricata** — verified with deterministic tests |
+| Splunk Enterprise | ✅ **Receiving Wazuh, pfSense, and Suricata** — structured field extraction still follow-up work |
+| OpenVAS → ELK ingestion | ⏸ Not started — additive coverage, not a SOAR blocker |
+| Windows → ELK via Winlogbeat | ⏸ Not started — Windows events already reach ELK via Wazuh agent; this adds raw event logs |
+| SOAR (Shuffle) | 🔜 **Unblocked, next up** — alerts confirmed flowing into both SIEMs |
+
+Full validation record with evidence: [Integration and Validation](integration-validation.md). Open security debt (temporary Suricata test rule, Elasticsearch cert bypass, retention policy) is tracked there and in the [ELK Ingestion Plan](elk-ingestion-plan.md).
 
 ## Project Phases
 
@@ -30,6 +33,7 @@ A self-contained Security Operations Center (SOC) lab built on a single Windows 
 | ↳ [Build Guide: OpenVAS](build-openvas.md) | Detailed Greenbone/OpenVAS vulnerability scanner build |
 | ↳ [ELK Ingestion Plan](elk-ingestion-plan.md) | Objectives, sequencing, and exit gates for all five log sources → ELK |
 | ↳ [Configure Log Forwarding](configure-log-forwarding.md) | Full step-by-step commands: Wazuh, pfSense, Suricata, OpenVAS, and Windows → ELK and Splunk |
+| ↳ [Integration and Validation](integration-validation.md) | As-built record of Steps 3.6–3.8: what was configured, what evidence proved it, what's open |
 | [Phase 4 — Testing & Verification](phase-4-testing.md) | End-to-end attack/detection/response test matrix |
 | [Phase 5 — Deployment](phase-5-deployment.md) | Snapshots, hardening, go-live checklist |
 | [Phase 6 — Maintenance](phase-6-maintenance.md) | Ongoing patching and skills-building cadence |

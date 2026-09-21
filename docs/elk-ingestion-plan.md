@@ -1,6 +1,6 @@
 # ELK Log Ingestion Plan
 
-**Goal:** get alll five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, before moving on to SOAR (Step 3.9). Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
+**Goal:** get all five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, before moving on to SOAR (Step 3.9). Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
 
 This scope is deliberately **ELK-only for now**. Splunk already receives Wazuh and pfSense/Suricata (Parts 1-4 of the forwarding guide cover both destinations at once), but OpenVAS→Splunk and Windows→Splunk are follow-up work once the ELK side is proven out — no sense building the same thing twice before confirming it once.
 
@@ -9,8 +9,8 @@ This scope is deliberately **ELK-only for now**. Splunk already receives Wazuh a
 | # | Source | Destination index | Method | Guide section |
 |---|---|---|---|---|
 | 1 | Wazuh | `wazuh-alerts-*` | Native `syslog_output` | [Part 1](configure-log-forwarding.md#part-1-wazuh-both-siems-native-syslog_output) |
-| 2 | pfSense | `pfsense-suricata-*` | Built-in remote syslog | [Part 2.2](configure-log-forwarding.md#22-configure-pfsenses-remote-syslog-forwarding) |
-| 3 | Suricata | `pfsense-suricata-*` | "Send Alerts to System Log" + pfSense's syslog forwarding | [Part 2.1](configure-log-forwarding.md#21-enable-suricata-alerts-to-the-system-log) |
+| 2 | pfSense | `pfsense-*` | Built-in remote syslog (UDP 5514) | [Part 2.2](configure-log-forwarding.md#22-configure-pfsenses-remote-syslog-forwarding) |
+| 3 | Suricata | `pfsense-*` (shares pfSense's receiver and index — not separated) | "Send Alerts to System Log" + pfSense's syslog forwarding | [Part 2.1](configure-log-forwarding.md#21-enable-suricata-alerts-to-the-system-log) |
 | 4 | OpenVAS | `openvas-scans-*` | Custom `python-gvm` export script + Filebeat | [Part 5](configure-log-forwarding.md#part-5-openvas-elk) |
 | 5 | Windows (victim + AD) | `windows-events-*` | Winlogbeat | [Part 6](configure-log-forwarding.md#part-6-windows-elk-via-winlogbeat) |
 
@@ -27,35 +27,55 @@ This isn't arbitrary ordering — it's a deliberate risk-management call, same p
 
 Each gate is a specific, checkable pass/fail condition — not "it should be working," an actual thing you can point at.
 
-### Gate 1 — Wazuh → ELK
+### Gate 1 — Wazuh → ELK ✅ PASSED
 
 **Pass condition:** generate a test alert (a few failed SSH/RDP logins against the Windows victim), and within 2 minutes it appears in Kibana's `wazuh-alerts-*` data view with parsed fields (not one giant unparsed string).
 
-### Gate 2 — pfSense → ELK
+**Evidence:** manager alert (agent `000`, rule `5502`) and Windows endpoint alert (agent `001`, `soc-vict-win10`, rule `60602`) both confirmed in Kibana with structured `agent`/`rule` fields and no parse-failure tags. Required adding `<format>json</format>` to the ELK `syslog_output` block. See [Integration and Validation §3](integration-validation.md#3-integrated-wazuh-elk).
 
-**Pass condition:** any normal firewall log line (e.g. a blocked connection attempt) appears in Kibana's `pfsense-suricata-*` data view within 2 minutes of it happening.
+### Gate 2 — pfSense → ELK ✅ PASSED
 
-### Gate 3 — Suricata → ELK
+**Pass condition:** any normal firewall log line (e.g. a blocked connection attempt) appears in Kibana's `pfsense-*` data view within 2 minutes of it happening.
 
-**Pass condition:** run a quick Nmap scan from Kali against the Windows victim; a corresponding Suricata alert appears in the same `pfsense-suricata-*` data view within 2 minutes.
+**Evidence:** UDP marker test confirmed in Kibana, then real firewall traffic confirmed, then re-confirmed after debug output was removed and the service restarted. See [Integration and Validation §2](integration-validation.md#2-verified-pfsense-elk).
 
-### Gate 4 — OpenVAS → ELK
+### Gate 3 — Suricata → ELK ✅ PASSED
+
+**Pass condition:** a deliberately triggered IDS detection appears in the `pfsense-*` data view within 2 minutes.
+
+**Evidence:** service start/stop messages were explicitly rejected as insufficient proof of detection. A temporary rule (SID `1000001`, ICMP echo from `10.10.20.20` to `10.10.20.5`) was added to produce a deterministic alert, triggered with `ping -n 4` from the Windows victim, and confirmed in Kibana with matching SID, source, and destination. **Open item:** remove SID `1000001` and restart the Corporate interface instance. See [Integration and Validation §4](integration-validation.md#4-verified-suricata-elk).
+
+### Gate 4 — OpenVAS → ELK ⏸ NOT STARTED
+
+Note that Step 3.8's own requirement (run a scan, produce a report) **is** met — a completed scan of `10.10.20.20` was reviewed in Greenbone's own UI, documented in [Integration and Validation §6](integration-validation.md#6-verified-openvas-scanning-and-report-generation). What remains open is *shipping those results into ELK*, which is this gate's separate concern.
 
 **Pass condition:** after manually running `gvm-export.py` following a completed scan, at least one result document appears in Kibana's `openvas-scans-*` data view with recognizable fields (`name`, `host`, `severity`, `threat`). The cron schedule running unattended for at least one full cycle without manual intervention is the secondary, "actually done" condition — the manual run proves the mechanism works, the unattended cycle proves it's actually production-ready for this lab.
 
-### Gate 5 — Windows → ELK
+### Gate 5 — Windows → ELK ⏸ NOT STARTED (partially satisfied by another path)
+
+**Judgment call worth making deliberately:** Windows telemetry *does* already reach ELK — via the Wazuh agent on `soc-vict-win10` (agent `001`), confirmed under Gate 1 with Windows rule `60602` visible in Kibana. If the objective is "Windows security events are visible in ELK," that's arguably already met.
+
+This gate covers the *different* capability of shipping **raw Windows Event Logs** via Winlogbeat — Wazuh sends curated, rule-matched alerts; Winlogbeat sends everything. For a portfolio, having both is worth something: it demonstrates curated SIEM alerting and raw log-hunting side by side. It is not required for SOAR to function.
 
 **Pass condition:** both the Windows victim and the AD server show events in Kibana's `windows-events-*` data view, distinguishable from each other via the `winlog.computer_name` field — not just one of the two machines reporting.
 
 ## Overall Phase Exit Gate
 
-All five individual gates above pass, **and**:
+**Status: Gates 1–3 passed. Gates 4–5 open.**
 
-- [ ] All five data views exist in Kibana and were verified with real, freshly-generated traffic (not just leftover test data from earlier troubleshooting)
-- [ ] The [Configure Log Forwarding](configure-log-forwarding.md) exit criteria checklist is fully checked for the ELK column
-- [ ] `docs/index.md`'s Current Status table is updated to reflect ELK ingestion as complete
+- [x] Wazuh, pfSense, and Suricata verified in ELK with freshly-generated traffic
+- [x] Same three sources additionally verified in Splunk (see [Integration and Validation §5](integration-validation.md#5-configured-and-verified-splunk-ingestion))
+- [ ] OpenVAS results shipping into `openvas-scans-*`
+- [ ] Winlogbeat shipping raw Windows events into `windows-events-*`
+- [ ] Security debt cleared: remove temporary Suricata SID `1000001`; replace the Elasticsearch certificate-verification bypass with trusted CA verification; define index retention
 
-Once all of that is true, Step 3.9 (SOAR/Shuffle) is unblocked — see [Phase 3 Implementation](phase-3-implementation.md#step-39-soar).
+### Is SOAR unblocked?
+
+**Yes, for the purpose of building it.** SOAR's dependency is *alerts flowing into a SIEM* — Gates 1–3 satisfy that, and Wazuh alerts (the realistic trigger source for automated response playbooks) are confirmed present in both SIEMs with parsed fields.
+
+Gates 4 and 5 are **additive coverage, not blockers**: OpenVAS results are periodic scan findings rather than real-time alerts, and raw Windows event logs duplicate a path Wazuh already covers in curated form. Treat them as follow-up work that can proceed in parallel with, or after, Step 3.9 — see [Phase 3 Implementation](phase-3-implementation.md#step-39-soar).
+
+The security-debt items above are the ones genuinely worth clearing sooner rather than later, since a leftover test IDS rule will generate noise that muddies Phase 4's attack-simulation testing.
 
 ## What's deliberately out of scope here
 

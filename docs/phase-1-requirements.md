@@ -16,7 +16,7 @@ Build a self-contained enterprise-style security environment that lets you pract
 | Wazuh | Host-based intrusion detection (HIDS) + basic XDR (Extended Detection & Response) | Endpoint monitoring |
 | Suricata | Network Intrusion Detection System (IDS) — watches network traffic for attack patterns. **Decision made:** installed as a pfSense package rather than a standalone VM, for simplicity | Network monitoring |
 | OpenVAS (Greenbone) | Vulnerability scanning | Vulnerability management |
-| SOAR (Shuffle or TheHive + Cortex) | Security Orchestration, Automation and Response — automates your response steps | Response automation |
+| SOAR — **Shuffle** (decided) | Security Orchestration, Automation and Response — automates your response steps | Response automation |
 | Kali Linux | Attacker machine used to generate real traffic/attacks to detect | Attack simulation |
 | Windows 10/11 + Windows Server (AD) | "Victim" machines representing a real corporate network | Target environment |
 | Management Endpoint (KDE Linux) | Analyst workstation living in the Management zone, added after initial planning | Analyst tooling |
@@ -40,7 +40,7 @@ This is the most important planning decision, so it gets its own table. Below is
 
 **Reality:** even the improved ~36GB total is still tight against 32GB if every VM runs at once — running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a **"pod" power-on strategy** instead of buying more hardware:
 
-- **Pod A – Coree Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
+- **Pod A – Core Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
 - **Pod B – SIEM (swap in one at a time):** ELK (4GB actual) *or* Splunk (6GB), not both, unless testing log forwarding side-by-side
 - **Pod C – Offense (on only during exercises):** Kali → 2 GB actual
 - **Pod D – Vulnerability/Response (on only when actively using):** OpenVAS (6GB actual), SOAR (4GB planned) → 6–10 GB
@@ -91,12 +91,11 @@ Download and stage these before Phase 3 begins — having everything ready up fr
 
 **SOAR**
 
-- [ ] **TheHive + Cortex** — installers/Docker images from thehive-project.org, installed on Ubuntu Server, *or*
-- [ ] **Shuffle** — Docker Compose install from shuffler.io (simpler drag-and-drop alternative)
+- [ ] **Shuffle** (decided — see Step 3.9) — Docker Compose install from shuffler.io, installed on Ubuntu Server. *TheHive + Cortex was the alternative considered; Shuffle's drag-and-drop builder was chosen as the lighter starting point, given how much of this build's time has already gone to integration debugging.*
 
 **Supporting tools**
 
-- [ ] **Docker Engine** — needed for OpenVAS/Greenbone and optionally TheHive/Shuffle; install via Ubuntu's package manager
+- [ ] **Docker Engine** — needed for OpenVAS/Greenbone and for Shuffle; install via Ubuntu's package manager
 - [ ] **Sysmon** — Microsoft Sysinternals, installed on Windows victim VMs for richer endpoint logging (feeds Wazuh/SIEM)
 - [ ] **Windows Server ISO validation** — confirm the 180-day eval ISO's expiration date so you know when you'll need to re-arm or rebuild it
 

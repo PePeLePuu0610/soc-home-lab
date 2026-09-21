@@ -9,9 +9,13 @@ A Security Operations Center (SOC) home lab built end-to-end on a single Windows
 
 **New to GitHub or CI/CD?** Start with [`GETTING_STARTED.md`](GETTING_STARTED.md) — a full step-by-step walkthrough assuming zero prior experience.
 
-## Current Sttatus
+## Current Status
 
-pfSense/Suricata, both victim machines, Wazuh, and OpenVAS are built and running. ELK and Splunk are both up with successful logins but **not yet receiving log data** — log forwarding integration is in progress (see [Configure Log Forwarding](https://pepelepuu0610.github.io/soc-home-lab/configure-log-forwarding/)). SOAR (Shuffle) is next, blocked until integration completes per this project's Waterfall sequencing. Full detail: [Current Status on the docs site](https://pepelepuu0610.github.io/soc-home-lab/#current-status).
+pfSense/Suricata, both victim machines, Wazuh, and OpenVAS are built and running. **Both SIEMs are now receiving logs**: Wazuh alerts, pfSense firewall logs, and Suricata IDS detections are verified end-to-end in ELK and Splunk, using deterministic tests rather than incidental traffic. OpenVAS has completed a scan of the Windows victim with the report reviewed.
+
+SOAR (Shuffle) is next and unblocked. Two additive ingestion paths remain open — OpenVAS results into ELK, and raw Windows Event Logs via Winlogbeat — neither of which blocks SOAR.
+
+Full evidence-backed record: [Integration and Validation](https://pepelepuu0610.github.io/soc-home-lab/integration-validation/) · [Current Status table](https://pepelepuu0610.github.io/soc-home-lab/#current-status).
 
 ## What's in this lab
 
@@ -20,7 +24,7 @@ pfSense/Suricata, both victim machines, Wazuh, and OpenVAS are built and running
 - **Wazuh** — host-based intrusion detection (HIDS) / XDR
 - **Suricata** — network intrusion detection (IDS)
 - **OpenVAS (Greenbone)** — vulnerability scanning
-- **SOAR** (TheHive + Cortex, or Shuffle) — automated response playbooks
+- **SOAR** — Shuffle — automated response playbooks
 - **Kali Linux** — attacker VM used to generate real detectable traffic
 - **Windows Server (AD) + Windows 10/11** — simulated corporate target environment
 
