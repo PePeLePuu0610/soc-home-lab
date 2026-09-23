@@ -12,6 +12,10 @@
 | SOAR response | Trigger the alert type your playbook watches for | Playbook fires and completes its action automatically |
 | Full chain | Repeat the brute-force test start to finish | You can trace: attack → IDS/HIDS alert → SIEM dashboard → SOAR action, without manual steps in between |
 
+### Baseline already validated
+
+Step 3.9 proved a controlled Windows Application event can trigger a marker-file response through Wazuh and Shuffle, with a separate manual reversal. Positive conditions executed the downstream action; negative conditions skipped it. This is a SOAR plumbing baseline, not proof of brute-force detection, host containment, network isolation, or the full attack-to-SIEM-to-response chain. The OpenVAS baseline found one host and four informational results; authenticated vulnerability coverage remains open. See [Shuffle evidence](build-shuffle.md) and [integration record](integration-validation.md).
+
 ### Exit Criteria for Phase 4
 
 - [ ] All 7 tests above pass

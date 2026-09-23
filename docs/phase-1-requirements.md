@@ -23,39 +23,36 @@ Build a self-contained enterprise-style security environment that lets you pract
 
 ### 1.3 Critical Constraint: Your Hardware Budget
 
-This is the most important planning decision, so it gets its own table. Below is what each VM realistically needs, and what happens if you try to run them all simultaneously.
-
-| VM | RAM (planned / **actual once built**) | vCPU | Disk |
+| VM | RAM | vCPU | Configured disk capacity |
 |---|---|---|---|
-| pfSense (Suricata runs as a package inside this VM, not separately) | 2 GB | 2 | 20 GB |
-| Kali (attacker) | 4 GB / **2 GB actual** | 2 | 40 GB |
-| Windows 10 (victim) | 4 GB | 2 | 60 GB |
-| Windows Server 2019 + AD | 4 GB | 2 | 60 GB |
-| ELK stack (single node) | 8 GB / **4 GB actual** | 2 / **4 actual** | 60 GB |
-| Splunk Enterprise (single instance) | 6 GB | 2 | 60 GB |
-| Wazuh manager | 4 GB | 2 | 40 GB |
-| OpenVAS/Greenbone | 4 GB / **6 GB actual** | 2 | 40 GB |
-| SOAR (not yet built — planned) | 4 GB | 2 | 40 GB |
-| **Total, actual specs where built** | **~36 GB** | — | **~380 GB** |
+| pfSense / Suricata | 2 GB | 2 | 80 GB |
+| Kali | 4 GB | 4 | 40 GB |
+| Windows 10 victim | 4 GB | 2 | 60 GB |
+| Windows Server 2019 / AD | 4 GB | 2 | 60 GB |
+| ELK | 8 GB | 4 | 100 GB |
+| Splunk | 6 GB | 2 | 100 GB |
+| Wazuh, including Indexer | 6 GB | 4 | 100 GB |
+| OpenVAS | 6 GB | 2 | 100 GB |
+| Shuffle | 8 GB | 4 | Approximately 100 GB (98 GB filesystem observed) |
+| **Total** | **48 GB** | — | **Approximately 740 GB** |
 
-**Reality:** even the improved ~36GB total is still tight against 32GB if every VM runs at once — running everything simultaneously will thrash the host (heavy swapping, VMs freezing). This is normal for a home SOC lab — even professional lab guides assume you toggle VMs on and off. The plan below solves this with a **"pod" power-on strategy** instead of buying more hardware:
+These are the operator-reported current allocations; disk capacity is not physical consumption. The host has 32GB RAM and a dedicated 500GB external SSD for the VMs. Approximately 197GB was free before Shuffle deployment; current free space has not been remeasured. Thin provisioning does not prevent eventual capacity exhaustion.
 
-- **Pod A – Core Detection (always on while working):** pfSense, one victim VM, Wazuh → ~10–11 GB
-- **Pod B – SIEM (swap in one at a time):** ELK (4GB actual) *or* Splunk (6GB), not both, unless testing log forwarding side-by-side
-- **Pod C – Offense (on only during exercises):** Kali → 2 GB actual
-- **Pod D – Vulnerability/Response (on only when actively using):** OpenVAS (6GB actual), SOAR (4GB planned) → 6–10 GB
+- **Pod A — routine core:** pfSense + one Windows victim + Wazuh = 12GB.
+- **SIEM sessions:** add ELK (8GB) or Splunk (6GB) as needed. Both together with Pod A total 26GB, leaving only 6GB for the host.
+- **SOAR sessions:** Pod A + Shuffle = 20GB. Keep ELK, Splunk, OpenVAS, Kali, and the additional AD VM off unless needed.
+- **Scan sessions:** Pod A + OpenVAS = 18GB.
+- **Attack sessions:** add Kali (4GB) and only the receivers required by the test.
 
-This keeps your working set around 22–27 GB, leaving headroom for the Windows 11 host OS itself.
-
-Disk: 440GB of VM disks will fit inside your ~517GB free, but only if you build most disks as **thin-provisioned** (VMware allocates space as it's actually used, not all upfront) — this is a setting you'll choose in Phase 3.
+Both SIEMs are installed, but are not permanently powered on. Adding ELK to a SOAR session reaches 28GB before host memory use, so this is not the routine operating set.
 
 ### 1.4 Success Criteria (what "done" looks like)
 
 - [ ] Kali can attack a victim VM and Wazuh shows an alert
 - [ ] IDS logs network-level attack traffic
-- [ ] At least one SIEM ingests logs from Wazuh, pfSense, and the IDS
-- [ ] OpenVAS produces a vulnerability report on a victim VM
-- [ ] SOAR tool can execute at least one automated response action (e.g., disable a user, block an IP)
+- [x] Both SIEMs ingest logs from Wazuh, pfSense, and the IDS
+- [x] OpenVAS produces a victim scan report (limited unauthenticated coverage; see validation record)
+- [x] SOAR executes a controlled marker-file response; a separate manual workflow reverses it. Account disabling and IP blocking remain future exercises.
 
 ### 1.5 ISO & Software Checklist
 

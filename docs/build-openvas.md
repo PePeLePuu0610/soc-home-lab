@@ -1,12 +1,12 @@
 # Build Guide: OpenVAS (Greenbone Community Edition) VM (Step 3.8)
 
-**VM name:** `SOC-Vuln-OpenVAS` · **Zone:** Management · **IP:** `10.10.10.12` · **Specs:** 6GB RAM / 2 vCPU / 40GB disk (actual — more RAM than originally planned)
+**VM name:** `SOC-Vuln-OpenVAS` · **Zone:** Management · **IP:** `10.10.10.12` · **Specs:** 6GB RAM / 2 vCPU / 100GB disk (current allocation)
 
 This guide covers building the OpenVAS/Greenbone vulnerability scanning VM from your Ubuntu 24.04 LTS template, as part of [Phase 3 — Implementation](phase-3-implementation.md). Docker install steps were verified against Docker's current official documentation. The Greenbone stack itself is deliberately **not vendored** as a static compose file in this repo — see [`configs/docker-compose/openvas/README.md`](https://github.com/PePeLePuu0610/soc-home-lab/blob/main/configs/docker-compose/openvas/README.md) for why — this guide fetches Greenbone's live official file at build time instead.
 
 ## Before you start
 
-**RAM check.** With Pod A (pfSense + Windows victim + Wazuh, ~10GB) plus ELK (**4GB actual**) and Splunk (6GB) already running, you're at ~20GB. Adding OpenVAS (**6GB actual**) brings you to ~26GB, leaving ~6GB for the Windows host itself — better headroom than originally planned, since ELK ended up needing less RAM than expected even though OpenVAS needed more. Still, if the host feels sluggish while OpenVAS's first-run feed download is chewing through CPU/disk (see 3.8.4), it's fine to temporarily power off ELK or Splunk until the build is done. Neither is doing active work for this step.
+**RAM check:** Pod A uses 12GB. Add only the tool needed for this session: ELK 8GB, Splunk 6GB, or OpenVAS 6GB. Both SIEMs with Pod A total 26GB; adding OpenVAS would consume the full 32GB before the host OS. Other tool VMs stay off unless required.
 
 ## 3.8.1 — Clone the VM
 

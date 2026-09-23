@@ -13,7 +13,9 @@ A Security Operations Center (SOC) home lab built end-to-end on a single Windows
 
 pfSense/Suricata, both victim machines, Wazuh, and OpenVAS are built and running. **Both SIEMs are now receiving logs**: Wazuh alerts, pfSense firewall logs, and Suricata IDS detections are verified end-to-end in ELK and Splunk, using deterministic tests rather than incidental traffic. OpenVAS has completed a scan of the Windows victim with the report reviewed.
 
-SOAR (Shuffle) is next and unblocked. Two additive ingestion paths remain open — OpenVAS results into ELK, and raw Windows Event Logs via Winlogbeat — neither of which blocks SOAR.
+Shuffle Step 3.9 is validated: a controlled Windows event triggers Wazuh forwarding, a Shuffle condition, and a marker-file response on agent `001`. A separate manual Shuffle workflow reverses the response. Positive and negative condition tests and execution after a VM reboot passed. See [Shuffle Deployment and Response Validation](docs/build-shuffle.md). TheHive and Cortex remain deferred.
+
+OpenVAS results into ELK and raw Windows Event Logs via Winlogbeat remain additive follow-ups. Phase 4 attack simulation, network isolation, and production hardening are not signed off by this controlled marker test.
 
 Full evidence-backed record: [Integration and Validation](https://pepelepuu0610.github.io/soc-home-lab/integration-validation/) · [Current Status table](https://pepelepuu0610.github.io/soc-home-lab/#current-status).
 
@@ -44,7 +46,7 @@ soc-home-lab/
 │   ├── suricata/                # Custom Suricata rule files
 │   └── docker-compose/
 │       ├── openvas/             # Greenbone/OpenVAS starter stack
-│       └── thehive/              # TheHive + Cortex (SOAR) starter stack
+│       └── thehive/              # TheHive + Cortex starter (deferred, not deployed)
 ├── screenshots/                  # Portfolio evidence: dashboards, alerts, playbook runs
 ├── mkdocs.yml                    # Docs site configuration
 ├── requirements.txt               # Python deps for building the docs site

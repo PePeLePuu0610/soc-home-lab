@@ -13,7 +13,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 ### Step 3.2 — pfSense (build this first — everything else depends on it)
 
 1. Download pfSense CE ISO (free) from the official pfSense site.
-2. Create VM: 2GB RAM, 2 vCPU, 20GB thin-provisioned disk, 4 network adapters (WAN=NAT, LAN1=Mgmt, LAN2=Corp, LAN3=Attacker).
+2. Create VM: 2GB RAM, 2 vCPU, 80GB thin-provisioned disk, 4 network adapters (WAN=NAT, LAN1=Mgmt, LAN2=Corp, LAN3=Attacker).
 3. Install pfSense, assign interfaces to match Section 2.1.
 4. From a browser on the host, log into pfSense's web interface and set up firewall rules: allow Management zone to reach everything (you need visibility everywhere); restrict Attacker zone to only reach Corp zone (simulates an external attacker reaching internal systems, not admin tools).
 5. **Confirm:** ping between zones behaves as designed before moving on.
@@ -34,7 +34,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 ### Step 3.4 — Wazuh (HIDS/XDR)
 
-1. Build a Wazuh manager VM on Ubuntu 24.04 (4GB/2vCPU/40GB), using Wazuh's official install script. **Decision made:** the official Wazuh OVA was tried first and abandoned after integration difficulties (different base OS from the rest of the lab caused several build steps to assume the wrong package manager, and its bundled Filebeat conflicted with the log-forwarding setup) — see [Configure Log Forwarding](configure-log-forwarding.md) for the full story. Building from scratch on the same Ubuntu base as everything else removed that whole class of problem.
+1. Build a Wazuh manager VM on Ubuntu 24.04 (6GB/4vCPU/100GB), using Wazuh's official install script. **Decision made:** the official Wazuh OVA was tried first and abandoned after integration difficulties (different base OS from the rest of the lab caused several build steps to assume the wrong package manager, and its bundled Filebeat conflicted with the log-forwarding setup) — see [Configure Log Forwarding](configure-log-forwarding.md) for the full story. Building from scratch on the same Ubuntu base as everything else removed that whole class of problem.
 2. Install the Wazuh agent on the Windows victim VM and point it at the manager.
 3. **Confirm:** Wazuh dashboard shows the Windows agent as "active."
 
@@ -49,7 +49,7 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **Full step-by-step build guide: [Build Guide: ELK Stack VM](build-elk-stack.md)**
 
-1. Build ELK VM on Ubuntu 24.04 (**actual: 4GB RAM / 4 vCPU** — heavier on CPU, lighter on RAM than originally planned — 60GB disk), static IP `10.10.10.10`.
+1. Build ELK VM on Ubuntu 24.04 (**actual: 8GB RAM / 4 vCPU / 100GB disk**), static IP `10.10.10.10`.
 2. Install Elasticsearch, Kibana, and Logstash.
 3. **Configure Logstash/Beats to receive logs from Wazuh, pfSense, Suricata, OpenVAS, and Windows — see [ELK Ingestion Plan](elk-ingestion-plan.md)** for objectives/sequencing/exit gates, or jump straight to [Configure Log Forwarding](configure-log-forwarding.md) for the commands. Deliberately split out as its own step: it touches five separate VMs, not just this one, and is easy to defer until both SIEMs and OpenVAS exist and you can wire up everything at once.
 4. **Confirm:** logs appear in Kibana within a few minutes of test traffic.
@@ -58,40 +58,49 @@ Build one item at a time. Fully finish and confirm each step works before starti
 
 **Full step-by-step build guide: [Build Guide: Splunk Enterprise VM](build-splunk-enterprise.md)**
 
-1. Build Splunk VM (6GB/2vCPU/60GB), static IP `10.10.10.14`.
+1. Build Splunk VM (6GB/2vCPU/100GB), static IP `10.10.10.14`.
 2. Install Splunk Enterprise via the free trial license (fine for a lab, not for production).
 3. **Configure the same log sources as ELK — see [Configure Log Forwarding](configure-log-forwarding.md)**, so you can compare how each SIEM presents the same data — this is a genuinely useful comparison exercise for interviews.
-4. **RAM note:** with Pod A (pfSense + Windows victim + Wazuh) running, ELK and Splunk together fit comfortably within your 32GB budget (~20GB total, even less than originally planned since ELK ended up using less RAM than expected) — both can stay built and running side by side rather than swapping one in at a time, provided OpenVAS/SOAR/Kali stay off in the same session.
+4. **RAM note:** Pod A is 12GB; adding ELK and Splunk totals 26GB. Power receivers on as needed and leave Shuffle/OpenVAS off for dual-SIEM sessions.
 
 ### Step 3.8 — OpenVAS (Vulnerability Management)
 
 **Full step-by-step build guide: [Build Guide: OpenVAS (Greenbone Community Edition)](build-openvas.md)**
 
-1. Build OpenVAS/Greenbone VM on Ubuntu 24.04 (**actual: 6GB RAM** / 2vCPU / 40GB), static IP `10.10.10.12` — Docker-based install, using Greenbone's official Community Edition container stack.
+1. Build OpenVAS/Greenbone VM on Ubuntu 24.04 (**actual: 6GB RAM** / 2vCPU / 100GB), static IP `10.10.10.12` — Docker-based install, using Greenbone's official Community Edition container stack.
 2. Point a scan at the Windows victim VM's IP.
 3. **Confirm:** a vulnerability report generates.
 4. **RAM note:** this is the tightest fit yet with two SIEMs already running — see the guide's "Before you start" section.
 
 ### Step 3.9 — SOAR
 
-**Status: unblocked and next up.** Prerequisite met — Wazuh, pfSense, and Suricata alerts are verified flowing into both SIEMs; see [Integration and Validation](integration-validation.md) and the [ELK Ingestion Plan](elk-ingestion-plan.md) exit gates.
+**Status: complete for the agreed controlled response and manual reversal scope, September 22, 2026.**
 
-**Decision made:** Shuffle (VM role `soc-soar-shuffle`, planned at `10.10.10.13`), rather than TheHive + Cortex. Shuffle's drag-and-drop workflow builder is the lighter starting point, and given how much of this build has been spent on integration debugging, the simpler option is the better use of time here.
+As-built record: [Shuffle Deployment and Response Validation](build-shuffle.md).
 
-1. Build SOAR VM on Ubuntu 24.04 (4GB/2vCPU/40GB), static IP `10.10.10.13`.
-2. Connect it to your SIEM so alerts can trigger a case/playbook. Wazuh alerts are the realistic trigger source — they're already parsed into structured fields on the ELK side.
-3. Build one simple playbook (e.g., "on brute-force alert, disable the targeted AD account").
+1. Deployed Shuffle on `soc-soar-shfl`, `10.10.10.13`, Ubuntu 24.04.5 LTS, 8GB RAM / 4 vCPU / approximately 100GB disk.
+2. Verified Docker, Compose, admin login, workflow execution, and a successful workflow run after reboot.
+3. Configured Wazuh's native Shuffle integration for JSON alerts at level 7 or higher; retained both syslog outputs and Indexer.
+4. Validated Windows rule `60602` (level 9), matching payload IDs across Wazuh and Shuffle.
+5. Tested positive and negative marker conditions between app actions.
+6. Created API account `shuffle_lab`, linked to role `shuffle_lab_operator` and policy `shuffle_lab_response`, scoped to agent `001`.
+7. Automatically created a marker file via the Wazuh API and confirmed its contents on Windows.
+8. Removed that marker via a separate manual Shuffle reversal workflow and confirmed `Test-Path` returned `False`.
+
+TheHive/Cortex remain deferred. This is a marker-file demonstration, not host isolation, AD account disabling, or completion of Phase 4's attack tests.
 
 ### Step 3.10 — Kali (Attacker)
 
-1. Build Kali VM (4GB/2vCPU/40GB) on the Attacker Zone network only.
-2. This is built **last**, deliberately — you don't want a live attack machine active while you're still wiring up detection tools.
+1. Kali is built (4GB/4vCPU/40GB); keep it on the Attacker Zone network only.
+2. Power it on only for the selected attack exercise after checking the network rules.
 
 ### Exit Criteria for Phase 3
 
 - [ ] Every VM listed above is built and powered on successfully at least once
 - [ ] pfSense routes and filters traffic between all zones as designed
-- [ ] Wazuh shows an active agent
-- [ ] At least one SIEM is receiving logs
-- [ ] OpenVAS has completed one scan
-- [ ] SOAR has one working playbook
+- [x] Wazuh shows an active agent
+- [x] At least one SIEM is receiving logs
+- [x] OpenVAS has completed one scan
+- [x] SOAR has one working playbook
+
+Phase 3 has not been blanket-signed off: confirm the inventory-wide power-on checklist and network filtering separately. Step 3.9 does not close the Phase 4 attack matrix.

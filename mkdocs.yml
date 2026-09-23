@@ -26,6 +26,7 @@ nav:
   - Build Guide - ELK Stack: build-elk-stack.md
   - Build Guide - Splunk Enterprise: build-splunk-enterprise.md
   - Build Guide - OpenVAS: build-openvas.md
+  - Shuffle Deployment and Response Validation: build-shuffle.md
   - ELK Ingestion Plan: elk-ingestion-plan.md
   - Configure Log Forwarding: configure-log-forwarding.md
   - Integration and Validation: integration-validation.md

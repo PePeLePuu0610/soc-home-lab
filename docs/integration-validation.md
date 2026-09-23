@@ -1,6 +1,6 @@
-# SOC Lab Integration and Validation — Steps 3.6–3.8
+# SOC Lab Integration and Validation — Steps 3.6–3.9
 
-> **What this document is:** the as-built validation record for log ingestion and vulnerability scanning — what was actually configured, what evidence proved it, and what remains open. Where this document and the build guides disagree, **this document is authoritative**: it records the running lab, the guides record the intended procedure. The guides have been reconciled to match.
+> **What this document is:** the as-built validation record for log ingestion, vulnerability scanning, and controlled SOAR response — what was actually configured, what evidence proved it, and what remains open. Where this document and the build guides disagree, **this document is authoritative**: it records the running lab, the guides record the intended procedure. The guides have been reconciled to match.
 
 ## Outcome
 
@@ -236,6 +236,12 @@ Informational results covered traceroute, OS detection, an unidentified service,
 
 **Result:** Step 3.8's basic scan/report requirement met. This limited network scan does not establish that Windows has no vulnerabilities or provide a comprehensive authenticated assessment.
 
+## 7. Verified Shuffle deployment, filtering, response, and reversal
+
+On September 21–22, 2026, deployed Shuffle at `10.10.10.13`, verified execution after reboot, integrated Wazuh JSON webhooks, and tested both outcomes of the marker condition. A dedicated API account scoped to agent `001` enabled automatic marker creation on Windows. A separate manually started workflow removed it; endpoint checks confirmed both effects.
+
+The full configuration, evidence IDs, troubleshooting, and limitations are recorded in [Shuffle Deployment and Response Validation](build-shuffle.md). This path is directly Wazuh → Shuffle → Wazuh API → Windows; the SIEMs are parallel consumers.
+
 ## Completion status
 
 | Milestone | Status |
@@ -243,7 +249,7 @@ Informational results covered traceroute, OS detection, an unidentified service,
 | Step 3.6 — ELK receives all three required sources | Verified |
 | Step 3.7 — Splunk receives all three required sources | Verified |
 | Step 3.8 — Windows victim scan and report | Verified with coverage limitations |
-| Step 3.9 — SOAR | Not started |
+| Step 3.9 — Shuffle | Verified: automatic marker response and separate manual reversal |
 
 An operator-created snapshot and backup were confirmed earlier in the integration work. A post-completion backup has not yet been recorded.
 
@@ -266,6 +272,8 @@ An operator-created snapshot and backup were confirmed earlier in the integratio
 
 - Retain screenshots and the OpenVAS XML as validation evidence.
 - Record a new snapshot/backup of the completed baseline.
-- Proceed to Shuffle planning and Step 3.9 after documenting these outcomes.
+- Archive sanitized Shuffle workflow exports and capture installed image digests / upstream commit for reproducibility.
+- Complete the remaining Phase 3 checklist and plan Phase 4 attack tests.
+- Replace Wazuh API TLS verification bypass and review Shuffle HTTP access / published ports before wider exposure.
 
-Controlled ping alerts proved detection and forwarding. They do not constitute completion of the later attack-simulation or automated-response success criteria.
+Controlled ping alerts proved IDS detection and forwarding. The later marker test proved automated response plumbing and manual reversal. Neither proves completion of the Phase 4 attack-simulation criteria.

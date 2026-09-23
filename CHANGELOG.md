@@ -4,7 +4,15 @@ All notable changes to this project are logged here. Format loosely follows [Kee
 
 ## [Unreleased]
 
+### Reconciled — 2026-09-23
+
+- Recorded Shuffle deployment, reboot execution, Wazuh webhooks, condition tests, scoped API account, automatic Windows marker response, and manual Shuffle reversal.
+- Corrected current VM allocations, external SSD assumptions, pod memory budgets, and direct Wazuh-to-Shuffle response architecture.
+- Updated Step 3.9 and evidence-backed checklist items while retaining Phase 4 attack tests and hardening as pending.
+- Added sanitized marker scripts and a reproducibility/evidence checklist; no live credentials or workflow tokens are included.
+
 ### Added
+
 - Initial repository scaffold: MkDocs documentation site, CI/CD pipeline (lint + link check + GitHub Pages deploy), configs/ and screenshots/ directories.
 - Phase 1–6 Waterfall project plan documented under `docs/`.
 - Docker Compose starters for OpenVAS/Greenbone and TheHive + Cortex under `configs/docker-compose/`.

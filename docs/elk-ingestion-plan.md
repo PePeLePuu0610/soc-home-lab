@@ -1,6 +1,6 @@
 # ELK Log Ingestion Plan
 
-**Goal:** get all five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, before moving on to SOAR (Step 3.9). Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
+**Goal:** get all five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, with Gates 1–3 used as the initial prerequisite for SOAR (Step 3.9) and Gates 4–5 retained as follow-ups. Full step-by-step commands for every objective live in [Configure Log Forwarding](configure-log-forwarding.md); this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.
 
 This scope is deliberately **ELK-only for now**. Splunk already receives Wazuh and pfSense/Suricata (Parts 1-4 of the forwarding guide cover both destinations at once), but OpenVAS→Splunk and Windows→Splunk are follow-up work once the ELK side is proven out — no sense building the same thing twice before confirming it once.
 
@@ -71,7 +71,7 @@ This gate covers the *different* capability of shipping **raw Windows Event Logs
 
 ### Is SOAR unblocked?
 
-**Yes, for the purpose of building it.** SOAR's dependency is *alerts flowing into a SIEM* — Gates 1–3 satisfy that, and Wazuh alerts (the realistic trigger source for automated response playbooks) are confirmed present in both SIEMs with parsed fields.
+**Step 3.9 is now validated.** The implemented workflow receives JSON directly from Wazuh and calls the Wazuh API for endpoint response. ELK and Splunk remain parallel log destinations, not dependencies of that execution path. See [Shuffle validation](build-shuffle.md).
 
 Gates 4 and 5 are **additive coverage, not blockers**: OpenVAS results are periodic scan findings rather than real-time alerts, and raw Windows event logs duplicate a path Wazuh already covers in curated form. Treat them as follow-up work that can proceed in parallel with, or after, Step 3.9 — see [Phase 3 Implementation](phase-3-implementation.md#step-39-soar).
 

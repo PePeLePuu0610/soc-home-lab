@@ -25,24 +25,24 @@ This is the authoritative, as-built reference — kept in sync with actual build
 
 | VM Name | Role | RAM | vCPU | Disk | IP Address | OS |
 |---|---|---|---|---|---|---|
-| SOC-FW-pfSense | Firewall/router | 2GB | 2 | 20GB | WAN: reserved DHCP lease (`10.10.40.101`) · Mgmt: `10.10.10.5/24` · Corp: `10.10.20.5/24` · Attacker: `10.10.30.5/24` | FreeBSD |
-| SOC-atk-Kali | Attacker | 2GB | 2 | 40GB | `10.10.30.10/24` | Kali 2026-1 |
+| SOC-FW-pfSense | Firewall/router | 2GB | 2 | 80GB | WAN: reserved DHCP lease (`10.10.40.101`) · Mgmt: `10.10.10.5/24` · Corp: `10.10.20.5/24` · Attacker: `10.10.30.5/24` | FreeBSD |
+| SOC-atk-Kali | Attacker | 4GB | 4 | 40GB | `10.10.30.10/24` | Kali 2026.2 |
 | SOC-Vict-Win10 | Corp victim | 4GB | 2 | 60GB | `10.10.20.20/24` | Windows 10 |
 | SOC-ADSRV-Win19 | Domain Controller | 4GB | 2 | 60GB | `10.10.20.10/24` | Windows Server 2019 Standard (not activated) |
-| SOC-SIEM-ELK | SIEM #1 | 4GB | 4 | 60GB | `10.10.10.10/24` | Ubuntu 24.04 |
-| SOC-SIEM-Splunk | SIEM #2 | 6GB | 2 | 60GB | `10.10.10.14/24` | Ubuntu 24.04 |
-| SOC-XDR-Wazuh | HIDS/XDR | 4GB | 2 | 40GB | `10.10.10.11/24` | Ubuntu 24.04 |
-| SOC-Vuln-OpenVAS | Vulnerability scanner | 6GB | 2 | 40GB | `10.10.10.12/24` | Ubuntu 24.04 |
-| *SOC-SOAR-Shuffle (planned)* | SOAR | 4GB (planned) | 2 (planned) | 40GB (planned) | `10.10.10.13/24` | Ubuntu 24.04 (planned) |
+| SOC-SIEM-ELK | SIEM #1 | 8GB | 4 | 100GB | `10.10.10.10/24` | Ubuntu 24.04 |
+| SOC-SIEM-Splunk | SIEM #2 | 6GB | 2 | 100GB | `10.10.10.14/24` | Ubuntu 24.04 |
+| SOC-XDR-Wazuh | HIDS/XDR | 6GB | 4 | 100GB | `10.10.10.11/24` | Ubuntu 24.04 |
+| SOC-Vuln-OpenVAS | Vulnerability scanner | 6GB | 2 | 100GB | `10.10.10.12/24` | Ubuntu 24.04 |
+| soc-soar-shfl | SOAR | 8GB | 4 | ~100GB | `10.10.10.13/24` | Ubuntu 24.04.5 LTS |
 | *Management Endpoint (planned)* | Analyst workstation | — | — | — | `10.10.10.15/24` | KDE Linux (planned) |
 
-> **Notes on deviations from the original plan:** pfSense's WAN is a **reserved DHCP lease** (`10.10.40.101`), not a plain dynamic address — worth knowing if it ever needs to be reconfirmed after a host reboot. ELK ended up built with **more vCPU, less RAM** than originally planned (4 vCPU / 4GB vs. the planned 2 vCPU / 8GB) — running without errors as-is. OpenVAS ended up with **more RAM** than planned (6GB vs. 4GB). pfSense's LAN interface addresses were changed from `.1` to `.5` on each subnet — every VM's default gateway and DNS server should point at the `.5` address on its zone. **SIEM ELK and Splunk both run permanently side by side** rather than swapping in one at a time, since the pod strategy in Phase 1 assumed only one would run at once — see that phase's updated RAM math. **Wazuh was rebuilt from scratch on Ubuntu 24.04**, replacing an earlier build on Wazuh's official OVA (Amazon Linux 2023) that was abandoned after integration difficulties — different base OS from the rest of the lab caused build steps to assume the wrong package manager, and the OVA's bundled Filebeat conflicted with the log-forwarding setup. See [Configure Log Forwarding](configure-log-forwarding.md) for the full story. Wazuh now matches every other Linux VM in the lab (Ubuntu 24.04), removing that whole class of problem going forward.
+> **As-built notes:** LAN gateways remain `.5`. Wazuh was rebuilt on Ubuntu 24.04 and includes its Indexer; the internal indexing path was retained. The actual Shuffle hostname is `soc-soar-shfl`. Disk values are configured capacities, not consumed SSD space. Only Pod A is routinely powered on; other VMs are enabled for each task. See [hardware budget](phase-1-requirements.md#13-critical-constraint-your-hardware-budget). The management endpoint remains planned.
 
 ### 2.3 Data Flow Design
 
 Attack traffic path: **Kali (10.10.30.10) → pfSense → Windows victim (10.10.20.20)**
 Detection path: **Windows victim (Wazuh agent) + pfSense (IDS) → logs forwarded → SIEM (10.10.10.10)**
-Response path: **SIEM alert → SOAR → automated action back on Windows Server/victim**
+Validated response path: **Windows Application event → Wazuh manager → Shuffle webhook → marker condition → Wazuh API → agent 001 → marker file**. Reversal is a separate manually started Shuffle workflow. ELK and Splunk remain parallel ingestion destinations; neither SIEM triggers this playbook.
 
 ### 2.4 Naming Convention
 
