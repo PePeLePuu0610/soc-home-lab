@@ -1,0 +1,1131 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/integration-validation/">
+      
+      
+        <link rel="prev" href="../configure-log-forwarding/">
+      
+      
+        <link rel="next" href="../phase-4-testing/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Integration and Validation - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#soc-lab-integration-and-validation-steps-3639" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integration and Validation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#outcome" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outcome
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verified-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      Verified environment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-cleaned-up-logstash-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Cleaned up Logstash configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-verified-pfsense-elk" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Verified pfSense → ELK
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-integrated-wazuh-elk" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Integrated Wazuh → ELK
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-verified-suricata-elk" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Verified Suricata → ELK
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-configured-and-verified-splunk-ingestion" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Configured and verified Splunk ingestion
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Configured and verified Splunk ingestion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#wazuh-troubleshooting-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wazuh troubleshooting and validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pfsense-troubleshooting-and-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      pfSense troubleshooting and validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actual-source-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Actual source verification
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-verified-openvas-scanning-and-report-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Verified OpenVAS scanning and report generation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-verified-shuffle-deployment-filtering-response-and-reversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Verified Shuffle deployment, filtering, response, and reversal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#completion-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      Completion status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remaining-actions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remaining actions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Remaining actions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#security-and-correctness-debt" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security and correctness debt
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open-technical-follow-ups" class="md-nav__link">
+    <span class="md-ellipsis">
+      Open technical follow-ups
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#housekeeping" class="md-nav__link">
+    <span class="md-ellipsis">
+      Housekeeping
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="soc-lab-integration-and-validation-steps-3639">SOC Lab Integration and Validation — Steps 3.6–3.9<a class="headerlink" href="#soc-lab-integration-and-validation-steps-3639" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>What this document is:</strong> the as-built validation record for log ingestion, vulnerability scanning, and controlled SOAR response — what was actually configured, what evidence proved it, and what remains open. Where this document and the build guides disagree, <strong>this document is authoritative</strong>: it records the running lab, the guides record the intended procedure. The guides have been reconciled to match.</p>
+</blockquote>
+<h2 id="outcome">Outcome<a class="headerlink" href="#outcome" title="Permanent link">&para;</a></h2>
+<p>Verified pfSense firewall logs, Suricata IDS alerts, and Wazuh alerts in both ELK and Splunk. Wazuh validation included events from the Windows victim. Completed an OpenVAS scan of the victim and reviewed the exported report.</p>
+<p>Testing used the pod power-on strategy: Pod A remained running, with ELK, Splunk, or OpenVAS powered on as needed.</p>
+<h2 id="verified-environment">Verified environment<a class="headerlink" href="#verified-environment" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Address</th>
+<th>Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense with Suricata package</td>
+<td>Management: <code>10.10.10.5</code>; Corporate: <code>10.10.20.5</code>; Attacker: <code>10.10.30.5</code></td>
+<td>pfSense CE 2.8.1</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td><code>10.10.10.10</code></td>
+<td>Elasticsearch, Logstash, Kibana 9.5.2</td>
+</tr>
+<tr>
+<td>Wazuh</td>
+<td><code>10.10.10.11</code></td>
+<td>4.14.7; Ubuntu 24.04 LTS; Wazuh Indexer installed</td>
+</tr>
+<tr>
+<td>OpenVAS</td>
+<td><code>10.10.10.12</code></td>
+<td>Report identifies scanner 23.50.20</td>
+</tr>
+<tr>
+<td>Splunk</td>
+<td><code>10.10.10.14</code></td>
+<td>Reported version 10.2</td>
+</tr>
+<tr>
+<td>Windows victim</td>
+<td><code>10.10.20.20</code></td>
+<td>Windows 10; Wazuh agent <code>001</code></td>
+</tr>
+</tbody>
+</table>
+<p>Existing <code>.5</code> gateway addresses were retained.</p>
+<h2 id="1-cleaned-up-logstash-configuration">1. Cleaned up Logstash configuration<a class="headerlink" href="#1-cleaned-up-logstash-configuration" title="Permanent link">&para;</a></h2>
+<p>Inspection established that <code>pipelines.yml</code> loaded <code>/etc/logstash/conf.d/*.conf</code> into one <code>main</code> pipeline. Configuration filenames did not isolate event processing.</p>
+<p>Problems identified:</p>
+<ul>
+<li><code>logstash.conf</code> duplicated the Beats listener on TCP 5044.</li>
+<li>Its unconditional Elasticsearch output lacked explicit HTTPS and credentials.</li>
+<li><code>beats-to-es.conf</code> also had an unconditional output, allowing pfSense events to reach multiple Elasticsearch outputs.</li>
+<li><code>10-pfsense.conf</code> initially lacked Elasticsearch credentials.</li>
+<li>During editing, escaped underscores, a Markdown-formatted URL, and an extra closing brace caused configuration problems.</li>
+</ul>
+<p>Cleanup established:</p>
+<ul>
+<li>Removed the redundant configuration from the intended active set.</li>
+<li>Retained UDP 5514 for pfSense.</li>
+<li>Guarded generic filters and output with <code>if [type] != "pfsense"</code>.</li>
+<li>Guarded the pfSense output with <code>if [type] == "pfsense"</code>.</li>
+<li>Used HTTPS Elasticsearch at <code>10.10.10.10:9200</code>.</li>
+<li>Configured daily <code>pfsense-%{+yyyy.MM.dd}</code> indices.</li>
+<li>Disabled ILM and data streams for these daily-index outputs.</li>
+<li>Corrected formatting and brace errors.</li>
+<li>Removed temporary <code>stdout { codec =&gt; rubydebug }</code> after testing.</li>
+</ul>
+<p>Created and authenticated <code>logstash_internal</code>, assigned the <code>logstash_writer</code> role:</p>
+<ul>
+<li>Cluster privileges: <code>monitor</code>, <code>manage_index_templates</code>.</li>
+<li>Index privileges: <code>write</code>, <code>create</code>, <code>create_index</code>.</li>
+<li>Index patterns: <code>pfsense-*</code>, <code>logstash-*</code>, <code>wazuh-alerts-*</code>, <code>openvas-scans-*</code>, <code>windows-events-*</code>, and <code>soc-lab-other-*</code>.</li>
+</ul>
+<p>The documented secret reference was <code>${PFSENSE_ES_PASSWORD}</code>. Passwords and keystore contents are excluded from repository documentation.</p>
+<p>Validation used:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>-u<span class="w"> </span>logstash<span class="w"> </span>/usr/share/logstash/bin/logstash<span class="w"> </span>--path.settings<span class="w"> </span>/etc/logstash<span class="w"> </span>-t
+sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>logstash
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>logstash<span class="w"> </span>--no-pager
+sudo<span class="w"> </span>ss<span class="w"> </span>-lunp<span class="w"> </span><span class="s1">'sport = :5514'</span>
+</code></pre></div>
+<p>Restarts followed successful configuration validation.</p>
+<h2 id="2-verified-pfsense-elk">2. Verified pfSense → ELK<a class="headerlink" href="#2-verified-pfsense-elk" title="Permanent link">&para;</a></h2>
+<p>Configured pfSense remote logging to:</p>
+<ul>
+<li>ELK: <code>10.10.10.10:5514/UDP</code></li>
+<li>Splunk: <code>10.10.10.14:5140/UDP</code></li>
+</ul>
+<p>Enabled remote categories included System, Firewall, DNS, DHCP, General Authentication, and Captive Portal events.</p>
+<p>Validation:</p>
+<ol>
+<li>Sent a local UDP test to Logstash.</li>
+<li>Confirmed the marker appeared in Kibana under <code>pfsense-*</code>.</li>
+<li>Generated real firewall traffic and confirmed corresponding pfSense events.</li>
+<li>Removed debug output, validated the configuration, restarted, and confirmed continued ingestion.</li>
+</ol>
+<p><strong>Result:</strong> pfSense firewall → Logstash → Elasticsearch → Kibana verified.</p>
+<h2 id="3-integrated-wazuh-elk">3. Integrated Wazuh → ELK<a class="headerlink" href="#3-integrated-wazuh-elk" title="Permanent link">&para;</a></h2>
+<p>Confirmed:</p>
+<ul>
+<li><code>wazuh-manager</code> was active.</li>
+<li><code>wazuh-csyslogd</code> was running.</li>
+<li><code>&lt;jsonout_output&gt;yes&lt;/jsonout_output&gt;</code> was enabled.</li>
+<li>Existing forwarding destinations were ELK UDP 5141 and Splunk UDP 5515.</li>
+</ul>
+<p>Added JSON formatting to the existing ELK forwarding block:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;syslog_output&gt;</span>
+<span class="w">  </span><span class="nt">&lt;server&gt;</span>10.10.10.10<span class="nt">&lt;/server&gt;</span>
+<span class="w">  </span><span class="nt">&lt;port&gt;</span>5141<span class="nt">&lt;/port&gt;</span>
+<span class="w">  </span><span class="nt">&lt;format&gt;</span>json<span class="nt">&lt;/format&gt;</span>
+<span class="nt">&lt;/syslog_output&gt;</span>
+</code></pre></div>
+<p>Restarted Wazuh successfully and confirmed Logstash listened on UDP 5141.</p>
+<p>Kibana evidence included:</p>
+<ul>
+<li>Manager alert: agent <code>000</code>, rule <code>5502</code>, "PAM: Login session closed."</li>
+<li>Windows alert: agent <code>001</code>, <code>soc-vict-win10</code>, IP <code>10.10.20.20</code>.</li>
+<li>Windows rule <code>60602</code>, "Windows application error event," severity 9.</li>
+<li>Structured fields including <code>agent</code>, <code>rule</code>, and event data.</li>
+<li>No JSON or syslog parsing-failure tags in the reviewed documents.</li>
+</ul>
+<p><strong>Result:</strong> Windows endpoint → Wazuh → ELK verified. Wazuh's existing Indexer configuration was retained.</p>
+<h2 id="4-verified-suricata-elk">4. Verified Suricata → ELK<a class="headerlink" href="#4-verified-suricata-elk" title="Permanent link">&para;</a></h2>
+<p>Suricata runs inside pfSense. Corporate interface <code>OPT1CORPVMNET2 (em2)</code> had:</p>
+<ul>
+<li>Send Alerts to System Log: enabled.</li>
+<li>Facility: <code>LOCAL1</code>.</li>
+<li>Priority: <code>NOTICE</code>.</li>
+<li>Blocking: disabled during validation.</li>
+</ul>
+<p>Service start/stop messages were not accepted as proof of IDS detection. A temporary rule generated a deterministic alert:</p>
+<div class="highlight"><pre><span></span><code>alert icmp 10.10.20.20 any -&gt; 10.10.20.5 any (msg:"SOC LAB Suricata forwarding test"; itype:8; sid:1000001; rev:1;)
+</code></pre></div>
+<p>After applying the rule and restarting the Corporate instance, ran on Windows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ping</span> <span class="n">-n</span> <span class="n">4</span> <span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">20</span><span class="p">.</span><span class="n">5</span>
+</code></pre></div>
+<p>Confirmed the test alert in Kibana, including SID <code>1000001</code>, source <code>10.10.20.20</code>, and destination <code>10.10.20.5</code>.</p>
+<p>Suricata messages use the existing UDP 5514 receiver and enter <code>pfsense-*</code>; they are not automatically separated into <code>pfsense-suricata-*</code>.</p>
+<p><strong>Result:</strong> Suricata detection → pfSense syslog → ELK verified.</p>
+<h2 id="5-configured-and-verified-splunk-ingestion">5. Configured and verified Splunk ingestion<a class="headerlink" href="#5-configured-and-verified-splunk-ingestion" title="Permanent link">&para;</a></h2>
+<p>Created two UDP inputs:</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th style="text-align: right;">Port</th>
+<th>Index</th>
+<th>Sourcetype</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense / Suricata</td>
+<td style="text-align: right;">5140</td>
+<td><code>main</code></td>
+<td><code>syslog</code></td>
+</tr>
+<tr>
+<td>Wazuh</td>
+<td style="text-align: right;">5515</td>
+<td><code>main</code></td>
+<td><code>syslog</code></td>
+</tr>
+</tbody>
+</table>
+<p>Confirmed both listeners belonged to <code>splunkd</code>:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>ss<span class="w"> </span>-lunp<span class="w"> </span><span class="s1">'( sport = :5140 or sport = :5515 )'</span>
+</code></pre></div>
+<h3 id="wazuh-troubleshooting-and-validation">Wazuh troubleshooting and validation<a class="headerlink" href="#wazuh-troubleshooting-and-validation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>A local <code>logger</code> test proved Splunk indexing on UDP 5140.</li>
+<li>A direct test from Wazuh proved network delivery and ingestion on UDP 5515.</li>
+<li>Packet capture confirmed traffic from <code>10.10.10.11</code> to <code>10.10.10.14:5515</code>.</li>
+<li>Wazuh logs showed earlier syslog send errors to Splunk.</li>
+<li>Restarting Wazuh after Splunk receivers were active restored observed alert forwarding.</li>
+</ol>
+<p>Splunk then displayed 21 events, including rules <code>5501</code>, <code>5402</code>, and Windows endpoint rule <code>60602</code>.</p>
+<p>The Splunk forwarding block retained its default text format. Structured field extraction remains follow-up work.</p>
+<h3 id="pfsense-troubleshooting-and-validation">pfSense troubleshooting and validation<a class="headerlink" href="#pfsense-troubleshooting-and-validation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>A direct pfSense <code>logger</code> test reached Splunk, proving the network and receiver worked.</li>
+<li>Inspected generated pfSense syslog configuration and confirmed destination <code>10.10.10.14:5140</code>.</li>
+<li>Re-saved pfSense logging settings through the GUI.</li>
+<li>A subsequent normal syslog test appeared in both pfSense's local log and Splunk.</li>
+</ol>
+<p>This established recovery after reapplying settings; the underlying cause was not conclusively established.</p>
+<h3 id="actual-source-verification">Actual source verification<a class="headerlink" href="#actual-source-verification" title="Permanent link">&para;</a></h3>
+<p>Firewall search returned 246 events:</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5140" "filterlog"
+| table _time host _raw
+</code></pre></div>
+<p>The controlled Suricata test returned 16 matching events:</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5140" "SOC LAB Suricata forwarding test"
+</code></pre></div>
+<p>These counts are observations from the validation session, not expected event totals.</p>
+<p><strong>Result:</strong> Wazuh endpoint alerts, pfSense firewall logs, and Suricata detections verified in Splunk.</p>
+<h2 id="6-verified-openvas-scanning-and-report-generation">6. Verified OpenVAS scanning and report generation<a class="headerlink" href="#6-verified-openvas-scanning-and-report-generation" title="Permanent link">&para;</a></h2>
+<p>The initial host export contained asset metadata only. The initial task report showed Done but zero hosts/results, which was insufficient evidence of a meaningful scan.</p>
+<p>Diagnostics established:</p>
+<ul>
+<li>OpenVAS routed toward <code>10.10.20.20</code> through <code>10.10.10.5</code>.</li>
+<li>OpenVAS received no ping replies from Windows.</li>
+<li>Windows could ping OpenVAS.</li>
+<li>The exact filtering point was not established.</li>
+</ul>
+<p>Created a dedicated single-host target:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hosts</td>
+<td><code>10.10.20.20</code></td>
+</tr>
+<tr>
+<td>Port list</td>
+<td>All IANA assigned TCP</td>
+</tr>
+<tr>
+<td>Alive Test</td>
+<td>Consider Hosts as Alive</td>
+</tr>
+</tbody>
+</table>
+<p>Created and ran the linked task <code>Windows victim - discovery bypass test</code>.</p>
+<p>Reviewed report <code>13a42160-b4b9-4c4a-a5ae-39030a1c977d</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Status</td>
+<td>Done</td>
+</tr>
+<tr>
+<td>Hosts scanned</td>
+<td>1 — <code>10.10.20.20</code></td>
+</tr>
+<tr>
+<td>Scan start</td>
+<td>September 20, 2026, 17:01:23 UTC</td>
+</tr>
+<tr>
+<td>Scan end</td>
+<td>September 20, 2026, 18:53:52 UTC</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td>1 hour, 52 minutes, 29 seconds</td>
+</tr>
+<tr>
+<td>Open port</td>
+<td>7680/TCP</td>
+</tr>
+<tr>
+<td>Results</td>
+<td>4 informational results</td>
+</tr>
+<tr>
+<td>Reported vulnerabilities</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Reported scanner errors</td>
+<td>0</td>
+</tr>
+<tr>
+<td>OS identification</td>
+<td>Unsuccessful</td>
+</tr>
+<tr>
+<td>Feed version</td>
+<td><code>202608211559</code></td>
+</tr>
+</tbody>
+</table>
+<p>Informational results covered traceroute, OS detection, an unidentified service, and hostname determination. The service name <code>pando-pub</code> was explicitly a guess.</p>
+<p><strong>Result:</strong> Step 3.8's basic scan/report requirement met. This limited network scan does not establish that Windows has no vulnerabilities or provide a comprehensive authenticated assessment.</p>
+<h2 id="7-verified-shuffle-deployment-filtering-response-and-reversal">7. Verified Shuffle deployment, filtering, response, and reversal<a class="headerlink" href="#7-verified-shuffle-deployment-filtering-response-and-reversal" title="Permanent link">&para;</a></h2>
+<p>On September 21–22, 2026, deployed Shuffle at <code>10.10.10.13</code>, verified execution after reboot, integrated Wazuh JSON webhooks, and tested both outcomes of the marker condition. A dedicated API account scoped to agent <code>001</code> enabled automatic marker creation on Windows. A separate manually started workflow removed it; endpoint checks confirmed both effects.</p>
+<p>The full configuration, evidence IDs, troubleshooting, and limitations are recorded in <a href="../build-shuffle/">Shuffle Deployment and Response Validation</a>. This path is directly Wazuh → Shuffle → Wazuh API → Windows; the SIEMs are parallel consumers.</p>
+<h2 id="completion-status">Completion status<a class="headerlink" href="#completion-status" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Step 3.6 — ELK receives all three required sources</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td>Step 3.7 — Splunk receives all three required sources</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td>Step 3.8 — Windows victim scan and report</td>
+<td>Verified with coverage limitations</td>
+</tr>
+<tr>
+<td>Step 3.9 — Shuffle</td>
+<td>Verified: automatic marker response and separate manual reversal</td>
+</tr>
+</tbody>
+</table>
+<p>An operator-created snapshot and backup were confirmed earlier in the integration work. A post-completion backup has not yet been recorded.</p>
+<h2 id="remaining-actions">Remaining actions<a class="headerlink" href="#remaining-actions" title="Permanent link">&para;</a></h2>
+<h3 id="security-and-correctness-debt">Security and correctness debt<a class="headerlink" href="#security-and-correctness-debt" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Replace Elasticsearch certificate-verification bypass with trusted CA verification.</li>
+<li>Confirm removal of temporary Suricata SID <code>1000001</code>; apply and restart the affected instance.</li>
+<li>Define Elasticsearch retention.</li>
+</ul>
+<h3 id="open-technical-follow-ups">Open technical follow-ups<a class="headerlink" href="#open-technical-follow-ups" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Investigate the observed one-hour pfSense/Splunk timestamp discrepancy. Most likely timezone handling rather than clock drift: pfSense syslog emits local time with no UTC offset and Splunk applies its own assumption. Compare pfSense <strong>System → General → Timezone</strong> against the Splunk host's, then either set pfSense to UTC or pin <code>TZ</code> in a Splunk <code>props.conf</code> stanza for that sourcetype.</li>
+<li>Configure structured Splunk field extraction.</li>
+<li>Verify OpenVAS feed synchronization and plan an authenticated Windows scan.</li>
+<li>Document receiver startup and forwarding checks for pod switching; historical UDP delivery while a receiver is off was not validated.</li>
+</ul>
+<h3 id="housekeeping">Housekeeping<a class="headerlink" href="#housekeeping" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Retain screenshots and the OpenVAS XML as validation evidence.</li>
+<li>Record a new snapshot/backup of the completed baseline.</li>
+<li>Archive sanitized Shuffle workflow exports and capture installed image digests / upstream commit for reproducibility.</li>
+<li>Complete the remaining Phase 3 checklist and plan Phase 4 attack tests.</li>
+<li>Replace Wazuh API TLS verification bypass and review Shuffle HTTP access / published ports before wider exposure.</li>
+</ul>
+<p>Controlled ping alerts proved IDS detection and forwarding. The later marker test proved automated response plumbing and manual reversal. Neither proves completion of the Phase 4 attack-simulation criteria.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,830 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/elk-ingestion-plan/">
+      
+      
+        <link rel="prev" href="../build-shuffle/">
+      
+      
+        <link rel="next" href="../configure-log-forwarding/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>ELK Ingestion Plan - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#elk-log-ingestion-plan" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ELK Ingestion Plan
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#objectives" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objectives
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sequencing-easiest-and-most-ready-first-riskiest-last" class="md-nav__link">
+    <span class="md-ellipsis">
+      Sequencing — easiest and most-ready first, riskiest last
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exit-gate-per-objective" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit Gate per Objective
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exit Gate per Objective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gate-1-wazuh-elk-passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate 1 — Wazuh → ELK ✅ PASSED
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-2-pfsense-elk-passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate 2 — pfSense → ELK ✅ PASSED
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-3-suricata-elk-passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate 3 — Suricata → ELK ✅ PASSED
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-4-openvas-elk-not-started" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate 4 — OpenVAS → ELK ⏸ NOT STARTED
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-5-windows-elk-not-started-partially-satisfied-by-another-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate 5 — Windows → ELK ⏸ NOT STARTED (partially satisfied by another path)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#overall-phase-exit-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overall Phase Exit Gate
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overall Phase Exit Gate">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#is-soar-unblocked" class="md-nav__link">
+    <span class="md-ellipsis">
+      Is SOAR unblocked?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#whats-deliberately-out-of-scope-here" class="md-nav__link">
+    <span class="md-ellipsis">
+      What's deliberately out of scope here
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="elk-log-ingestion-plan">ELK Log Ingestion Plan<a class="headerlink" href="#elk-log-ingestion-plan" title="Permanent link">&para;</a></h1>
+<p><strong>Goal:</strong> get all five log sources — Wazuh, pfSense, Suricata, OpenVAS, and Windows — flowing into ELK, with a clear pass/fail gate per source, with Gates 1–3 used as the initial prerequisite for SOAR (Step 3.9) and Gates 4–5 retained as follow-ups. Full step-by-step commands for every objective live in <a href="../configure-log-forwarding/">Configure Log Forwarding</a>; this document is the plan and sign-off layer that sits above it — what to do, in what order, and how you'll know each one is actually done.</p>
+<p>This scope is deliberately <strong>ELK-only for now</strong>. Splunk already receives Wazuh and pfSense/Suricata (Parts 1-4 of the forwarding guide cover both destinations at once), but OpenVAS→Splunk and Windows→Splunk are follow-up work once the ELK side is proven out — no sense building the same thing twice before confirming it once.</p>
+<h2 id="objectives">Objectives<a class="headerlink" href="#objectives" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Source</th>
+<th>Destination index</th>
+<th>Method</th>
+<th>Guide section</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Wazuh</td>
+<td><code>wazuh-alerts-*</code></td>
+<td>Native <code>syslog_output</code></td>
+<td><a href="../configure-log-forwarding/#part-1-wazuh-both-siems-native-syslog_output">Part 1</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td>pfSense</td>
+<td><code>pfsense-*</code></td>
+<td>Built-in remote syslog (UDP 5514)</td>
+<td><a href="../configure-log-forwarding/#22-configure-pfsenses-remote-syslog-forwarding">Part 2.2</a></td>
+</tr>
+<tr>
+<td>3</td>
+<td>Suricata</td>
+<td><code>pfsense-*</code> (shares pfSense's receiver and index — not separated)</td>
+<td>"Send Alerts to System Log" + pfSense's syslog forwarding</td>
+<td><a href="../configure-log-forwarding/#21-enable-suricata-alerts-to-the-system-log">Part 2.1</a></td>
+</tr>
+<tr>
+<td>4</td>
+<td>OpenVAS</td>
+<td><code>openvas-scans-*</code></td>
+<td>Custom <code>python-gvm</code> export script + Filebeat</td>
+<td><a href="../configure-log-forwarding/#part-5-openvas-elk">Part 5</a></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Windows (victim + AD)</td>
+<td><code>windows-events-*</code></td>
+<td>Winlogbeat</td>
+<td><a href="../configure-log-forwarding/#part-6-windows-elk-via-winlogbeat">Part 6</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="sequencing-easiest-and-most-ready-first-riskiest-last">Sequencing — easiest and most-ready first, riskiest last<a class="headerlink" href="#sequencing-easiest-and-most-ready-first-riskiest-last" title="Permanent link">&para;</a></h2>
+<p>This isn't arbitrary ordering — it's a deliberate risk-management call, same principle as building pfSense before Kali back in Phase 3:</p>
+<ol>
+<li><strong>Wazuh</strong> — the <code>syslog_output</code> config was already worked out before the Wazuh rebuild; this is mostly re-running steps already known to work on the new Ubuntu 24.04 box.</li>
+<li><strong>pfSense + Suricata</strong> — fully documented already, straightforward UI configuration, no new technology introduced.</li>
+<li><strong>Windows (Winlogbeat)</strong> — new to this lab, but Winlogbeat is Elastic's own stable, long-established shipper. Low risk despite being new.</li>
+<li><strong>OpenVAS</strong> — saved for last on purpose. No native export mechanism exists, the ready-made community tools have known reliability problems, and the approach in this guide (a custom script against Greenbone's GMP API) is the least-trodden path of the five. Expect this one to take longer and possibly need real debugging — better to hit that after the other four are already confirmed working and out of the way.</li>
+</ol>
+<h2 id="exit-gate-per-objective">Exit Gate per Objective<a class="headerlink" href="#exit-gate-per-objective" title="Permanent link">&para;</a></h2>
+<p>Each gate is a specific, checkable pass/fail condition — not "it should be working," an actual thing you can point at.</p>
+<h3 id="gate-1-wazuh-elk-passed">Gate 1 — Wazuh → ELK ✅ PASSED<a class="headerlink" href="#gate-1-wazuh-elk-passed" title="Permanent link">&para;</a></h3>
+<p><strong>Pass condition:</strong> generate a test alert (a few failed SSH/RDP logins against the Windows victim), and within 2 minutes it appears in Kibana's <code>wazuh-alerts-*</code> data view with parsed fields (not one giant unparsed string).</p>
+<p><strong>Evidence:</strong> manager alert (agent <code>000</code>, rule <code>5502</code>) and Windows endpoint alert (agent <code>001</code>, <code>soc-vict-win10</code>, rule <code>60602</code>) both confirmed in Kibana with structured <code>agent</code>/<code>rule</code> fields and no parse-failure tags. Required adding <code>&lt;format&gt;json&lt;/format&gt;</code> to the ELK <code>syslog_output</code> block. See <a href="../integration-validation/#3-integrated-wazuh-elk">Integration and Validation §3</a>.</p>
+<h3 id="gate-2-pfsense-elk-passed">Gate 2 — pfSense → ELK ✅ PASSED<a class="headerlink" href="#gate-2-pfsense-elk-passed" title="Permanent link">&para;</a></h3>
+<p><strong>Pass condition:</strong> any normal firewall log line (e.g. a blocked connection attempt) appears in Kibana's <code>pfsense-*</code> data view within 2 minutes of it happening.</p>
+<p><strong>Evidence:</strong> UDP marker test confirmed in Kibana, then real firewall traffic confirmed, then re-confirmed after debug output was removed and the service restarted. See <a href="../integration-validation/#2-verified-pfsense-elk">Integration and Validation §2</a>.</p>
+<h3 id="gate-3-suricata-elk-passed">Gate 3 — Suricata → ELK ✅ PASSED<a class="headerlink" href="#gate-3-suricata-elk-passed" title="Permanent link">&para;</a></h3>
+<p><strong>Pass condition:</strong> a deliberately triggered IDS detection appears in the <code>pfsense-*</code> data view within 2 minutes.</p>
+<p><strong>Evidence:</strong> service start/stop messages were explicitly rejected as insufficient proof of detection. A temporary rule (SID <code>1000001</code>, ICMP echo from <code>10.10.20.20</code> to <code>10.10.20.5</code>) was added to produce a deterministic alert, triggered with <code>ping -n 4</code> from the Windows victim, and confirmed in Kibana with matching SID, source, and destination. <strong>Open item:</strong> remove SID <code>1000001</code> and restart the Corporate interface instance. See <a href="../integration-validation/#4-verified-suricata-elk">Integration and Validation §4</a>.</p>
+<h3 id="gate-4-openvas-elk-not-started">Gate 4 — OpenVAS → ELK ⏸ NOT STARTED<a class="headerlink" href="#gate-4-openvas-elk-not-started" title="Permanent link">&para;</a></h3>
+<p>Note that Step 3.8's own requirement (run a scan, produce a report) <strong>is</strong> met — a completed scan of <code>10.10.20.20</code> was reviewed in Greenbone's own UI, documented in <a href="../integration-validation/#6-verified-openvas-scanning-and-report-generation">Integration and Validation §6</a>. What remains open is <em>shipping those results into ELK</em>, which is this gate's separate concern.</p>
+<p><strong>Pass condition:</strong> after manually running <code>gvm-export.py</code> following a completed scan, at least one result document appears in Kibana's <code>openvas-scans-*</code> data view with recognizable fields (<code>name</code>, <code>host</code>, <code>severity</code>, <code>threat</code>). The cron schedule running unattended for at least one full cycle without manual intervention is the secondary, "actually done" condition — the manual run proves the mechanism works, the unattended cycle proves it's actually production-ready for this lab.</p>
+<h3 id="gate-5-windows-elk-not-started-partially-satisfied-by-another-path">Gate 5 — Windows → ELK ⏸ NOT STARTED (partially satisfied by another path)<a class="headerlink" href="#gate-5-windows-elk-not-started-partially-satisfied-by-another-path" title="Permanent link">&para;</a></h3>
+<p><strong>Judgment call worth making deliberately:</strong> Windows telemetry <em>does</em> already reach ELK — via the Wazuh agent on <code>soc-vict-win10</code> (agent <code>001</code>), confirmed under Gate 1 with Windows rule <code>60602</code> visible in Kibana. If the objective is "Windows security events are visible in ELK," that's arguably already met.</p>
+<p>This gate covers the <em>different</em> capability of shipping <strong>raw Windows Event Logs</strong> via Winlogbeat — Wazuh sends curated, rule-matched alerts; Winlogbeat sends everything. For a portfolio, having both is worth something: it demonstrates curated SIEM alerting and raw log-hunting side by side. It is not required for SOAR to function.</p>
+<p><strong>Pass condition:</strong> both the Windows victim and the AD server show events in Kibana's <code>windows-events-*</code> data view, distinguishable from each other via the <code>winlog.computer_name</code> field — not just one of the two machines reporting.</p>
+<h2 id="overall-phase-exit-gate">Overall Phase Exit Gate<a class="headerlink" href="#overall-phase-exit-gate" title="Permanent link">&para;</a></h2>
+<p><strong>Status: Gates 1–3 passed. Gates 4–5 open.</strong></p>
+<ul>
+<li>[x] Wazuh, pfSense, and Suricata verified in ELK with freshly-generated traffic</li>
+<li>[x] Same three sources additionally verified in Splunk (see <a href="../integration-validation/#5-configured-and-verified-splunk-ingestion">Integration and Validation §5</a>)</li>
+<li>[ ] OpenVAS results shipping into <code>openvas-scans-*</code></li>
+<li>[ ] Winlogbeat shipping raw Windows events into <code>windows-events-*</code></li>
+<li>[ ] Security debt cleared: remove temporary Suricata SID <code>1000001</code>; replace the Elasticsearch certificate-verification bypass with trusted CA verification; define index retention</li>
+</ul>
+<h3 id="is-soar-unblocked">Is SOAR unblocked?<a class="headerlink" href="#is-soar-unblocked" title="Permanent link">&para;</a></h3>
+<p><strong>Step 3.9 is now validated.</strong> The implemented workflow receives JSON directly from Wazuh and calls the Wazuh API for endpoint response. ELK and Splunk remain parallel log destinations, not dependencies of that execution path. See <a href="../build-shuffle/">Shuffle validation</a>.</p>
+<p>Gates 4 and 5 are <strong>additive coverage, not blockers</strong>: OpenVAS results are periodic scan findings rather than real-time alerts, and raw Windows event logs duplicate a path Wazuh already covers in curated form. Treat them as follow-up work that can proceed in parallel with, or after, Step 3.9 — see <a href="../phase-3-implementation/#step-39-soar">Phase 3 Implementation</a>.</p>
+<p>The security-debt items above are the ones genuinely worth clearing sooner rather than later, since a leftover test IDS rule will generate noise that muddies Phase 4's attack-simulation testing.</p>
+<h2 id="whats-deliberately-out-of-scope-here">What's deliberately out of scope here<a class="headerlink" href="#whats-deliberately-out-of-scope-here" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Splunk ingestion for OpenVAS and Windows</strong> — noted as follow-up work in the forwarding guide, not blocking this phase gate.</li>
+<li><strong>Full EVE JSON from Suricata</strong> — this plan uses the simpler, confirmed-working alert-summary method (see the forwarding guide's "Before you start" section for why); richer packet-level detail via the community pfELK project is a possible later enhancement, not a requirement here.</li>
+<li><strong>Kibana dashboards/visualizations</strong> — getting data <em>into</em> the five indices is this phase's job; building dashboards on top of it is naturally Phase 4 (Testing) territory, once there's real data to visualize.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

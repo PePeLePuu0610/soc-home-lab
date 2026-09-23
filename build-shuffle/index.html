@@ -1,0 +1,949 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/build-shuffle/">
+      
+      
+        <link rel="prev" href="../build-openvas/">
+      
+      
+        <link rel="next" href="../elk-ingestion-plan/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Shuffle Deployment and Response Validation - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#shuffle-deployment-and-response-validation-step-39" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Shuffle Deployment and Response Validation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#outcome-and-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Outcome and scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#as-built-deployment" class="md-nav__link">
+    <span class="md-ellipsis">
+      As-built deployment
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wazuh-alert-forwarding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Wazuh alert forwarding
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#automatic-response-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic response workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Automatic response workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api-identity-and-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      API identity and authentication
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#endpoint-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      Endpoint response
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#separate-manual-reversal" class="md-nav__link">
+    <span class="md-ellipsis">
+      Separate manual reversal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting-lessons-retained" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting lessons retained
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-and-remaining-work" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence and remaining work
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="shuffle-deployment-and-response-validation-step-39">Shuffle Deployment and Response Validation — Step 3.9<a class="headerlink" href="#shuffle-deployment-and-response-validation-step-39" title="Permanent link">&para;</a></h1>
+<h2 id="outcome-and-scope">Outcome and scope<a class="headerlink" href="#outcome-and-scope" title="Permanent link">&para;</a></h2>
+<p>Validated on September 21–22, 2026 from operator terminal output and workflow screenshots. Shuffle receives a controlled Windows Application error through Wazuh, filters on an exact marker, authenticates to the Wazuh API, and creates a marker file on Windows agent <code>001</code>. A separate manually started workflow removes the file. This demonstrates orchestration and reversible endpoint execution; it does not demonstrate isolation, malicious-process termination, or AD account disabling.</p>
+<p>TheHive and Cortex are deferred. Both SIEM integrations and the limited OpenVAS scan were already recorded in <a href="../integration-validation/">Integration and Validation</a>.</p>
+<h2 id="as-built-deployment">As-built deployment<a class="headerlink" href="#as-built-deployment" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Observed value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hostname / address</td>
+<td><code>soc-soar-shfl</code> / <code>10.10.10.13/24</code></td>
+</tr>
+<tr>
+<td>Gateway / network</td>
+<td><code>10.10.10.5</code> / Management VMnet1</td>
+</tr>
+<tr>
+<td>OS / resources</td>
+<td>Ubuntu 24.04.5 LTS; 4 vCPU; about 7.7GiB RAM visible; 98GB root filesystem</td>
+</tr>
+<tr>
+<td>Docker / Compose</td>
+<td>Engine 29.8.1; Compose v5.5.1</td>
+</tr>
+<tr>
+<td>Checkout</td>
+<td><code>/home/seclabadmin/Shuffle</code>, upstream <code>Shuffle/Shuffle</code></td>
+</tr>
+<tr>
+<td>Core services observed running</td>
+<td>frontend, backend, orborus, opensearch</td>
+</tr>
+<tr>
+<td>Database</td>
+<td>OpenSearch 3.2.0; about 3.45GiB memory in the observed idle snapshot</td>
+</tr>
+<tr>
+<td>Published ports observed</td>
+<td>frontend 3001/3443; backend 5001; OpenSearch 9200</td>
+</tr>
+<tr>
+<td>Scope</td>
+<td>Shuffle only; optional <code>shuffle-security</code> service was not explicitly started</td>
+</tr>
+</tbody>
+</table>
+<p>Verified gateway ping, DNS resolution, package update, Docker hello-world, Compose configuration validation, container status, admin login, and a local workflow. Created <code>shuffle-apps</code>, <code>shuffle-files</code>, and <code>shuffle-database</code>; set database ownership to UID/GID 1000. The <code>.env</code> file was restricted to mode 600. Orborus also created worker/app containers; do not treat that dynamic list as a fixed Compose service manifest.</p>
+<p>Recorded non-secret configuration: <code>OUTER_HOSTNAME=10.10.10.13</code>, <code>SSO_REDIRECT_URL=http://10.10.10.13:3001</code>, <code>TZ=America/Denver</code>, <code>SHUFFLE_ORBORUS_EXECUTION_CONCURRENCY=1</code>, <code>SHUFFLE_APP_REPLICAS=1</code>, <code>DB_LOCATION=/home/seclabadmin/Shuffle/shuffle-database</code>, and <code>DOCKER_API_VERSION=1.44</code>. Database passwords and encryption modifier are intentionally omitted. Their live values must be backed up privately; changing the encryption modifier can affect saved credentials.</p>
+<p><code>SOC Lab - Execution Validation</code> ran <code>repeat_back_to_me</code> with <code>SOC_SHUFFLE_EXECUTION_TEST</code>. It finished before reboot and again after reboot. This verifies observed recovery and persistence; the exact restart-policy configuration and deployment commit/image digests were not captured in this record. The alert/response chain itself has not been retested after a later reboot.</p>
+<h2 id="wazuh-alert-forwarding">Wazuh alert forwarding<a class="headerlink" href="#wazuh-alert-forwarding" title="Permanent link">&para;</a></h2>
+<p>Bundled scripts <code>/var/ossec/integrations/shuffle</code> and <code>shuffle.py</code> were present with executable permissions and <code>root:wazuh</code> ownership. Added this integration inside an existing <code>ossec_config</code> block on the manager, preserving existing SIEM forwarding and Indexer settings:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;integration&gt;</span>
+<span class="w">  </span><span class="nt">&lt;name&gt;</span>shuffle<span class="nt">&lt;/name&gt;</span>
+<span class="w">  </span><span class="nt">&lt;hook_url&gt;</span>REPLACE_WITH_PRIVATE_SHUFFLE_WEBHOOK_URL<span class="nt">&lt;/hook_url&gt;</span>
+<span class="w">  </span><span class="nt">&lt;level&gt;</span>7<span class="nt">&lt;/level&gt;</span>
+<span class="w">  </span><span class="nt">&lt;alert_format&gt;</span>json<span class="nt">&lt;/alert_format&gt;</span>
+<span class="nt">&lt;/integration&gt;</span>
+</code></pre></div>
+<p>The placeholder is not deployable as written. Copy the actual webhook URL privately from the running on-prem trigger. Restarted the manager and verified <code>wazuh-integratord</code> running with Shuffle enabled. A manual JSON POST first established network transport and execution; that synthetic payload alone did not prove Windows collection.</p>
+<p>The actual Windows test, run in Administrator PowerShell:</p>
+<div class="highlight"><pre><span></span><code><span class="n">eventcreate</span> <span class="p">/</span><span class="n">T</span> <span class="n">ERROR</span> <span class="p">/</span><span class="n">ID</span> <span class="n">100</span> <span class="p">/</span><span class="n">L</span> <span class="n">APPLICATION</span> <span class="p">/</span><span class="n">SO</span> <span class="n">SOC-Lab</span> <span class="p">/</span><span class="n">D</span> <span class="s2">"SOC_WAZUH_SHUFFLE_AUTO_TEST"</span>
+</code></pre></div>
+<p>Wazuh generated rule <code>60602</code>, level 9, for agent <code>001</code> (<code>soc-vict-win10</code>, <code>10.10.20.20</code>). Alert <code>1790050233.205249</code> matched across <code>alerts.json</code> and Shuffle. Wazuh's integration wraps the original alert under <code>all_fields</code>; its top-level <code>severity: 3</code> is an integration mapping, not the original Wazuh level 9.</p>
+<h2 id="automatic-response-workflow">Automatic response workflow<a class="headerlink" href="#automatic-response-workflow" title="Permanent link">&para;</a></h2>
+<p>Workflow: <strong>SOC Lab - Wazuh Alert Response</strong>.</p>
+<div class="highlight"><pre><span></span><code>Webhook 1 -&gt; Show Wazuh Alert -&gt; [marker equals condition]
+          -&gt; Matched Test Alert -&gt; Wazuh API Login -&gt; Create Lab Marker
+</code></pre></div>
+<p>Both Tools actions use <code>repeat_back_to_me</code> with Call <code>$exec</code>. <code>Show Wazuh Alert</code> remains the starting app action. Put the condition between the two Tools actions, not on the webhook-to-start connection:</p>
+<table>
+<thead>
+<tr>
+<th>Condition field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Source</td>
+<td><code>$exec.all_fields.data.win.eventdata.data</code></td>
+</tr>
+<tr>
+<td>Comparison</td>
+<td>equals</td>
+</tr>
+<tr>
+<td>Destination</td>
+<td><code>SOC_WAZUH_SHUFFLE_AUTO_TEST</code></td>
+</tr>
+</tbody>
+</table>
+<p>Negative test: create the same Windows event with description <code>SOC_WAZUH_SHUFFLE_NEGATIVE_TEST</code>. The webhook and first action still run; <code>Matched Test Alert</code> is <strong>SKIPPED</strong>. Enable <strong>Show skipped actions</strong> in execution details to see it. Alert <code>1790054440.281556</code>, run starting 23:20:42 on September 21, supplied the negative evidence. A subsequent positive webhook run at 23:34:13 completed both Tools actions. Later validation added the API login and response nodes; a full negative test including those new nodes remains a useful regression check.</p>
+<h3 id="api-identity-and-authentication">API identity and authentication<a class="headerlink" href="#api-identity-and-authentication" title="Permanent link">&para;</a></h3>
+<p>Created policy <code>shuffle_lab_response</code>: allow <code>agent:read</code> and <code>active-response:command</code> on <code>agent:id:001</code>. Role <code>shuffle_lab_operator</code> had ID 100; API user <code>shuffle_lab</code> also had ID 100 in this installation and was assigned that role. IDs are installation-specific. This limits the target agent, not the specific active-response script that the account may invoke.</p>
+<p>The initial unauthenticated API check returned 401 as expected. A documented <code>wazuh-wui</code> password failed; comparison with the dashboard's working API credential resolved authentication without resetting the shared account. The new dedicated user's first lookup returned 401, but fresh authentication and the same permissions subsequently returned 200 with agent <code>001</code> active. The transient cause was not established.</p>
+<table>
+<thead>
+<tr>
+<th>Login node setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name / HTTP action</td>
+<td>Wazuh API Login / POST</td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>https://10.10.10.11:55000/security/user/authenticate</code></td>
+</tr>
+<tr>
+<td>Basic-auth username</td>
+<td><code>shuffle_lab</code></td>
+</tr>
+<tr>
+<td>Password</td>
+<td>Private dedicated credential</td>
+</tr>
+<tr>
+<td>Header / body</td>
+<td><code>Content-Type: application/json</code> / <code>{}</code></td>
+</tr>
+<tr>
+<td>Verify</td>
+<td><code>false</code> during this lab validation</td>
+</tr>
+</tbody>
+</table>
+<p>The HTTP app returns the JSON under <code>body</code>; the next node references <code>$wazuh_api_login.body.data.token</code>. Obtain a fresh token per execution rather than pasting an expiring token. Screenshots/exports of login results and request headers can expose tokens and must be redacted.</p>
+<h3 id="endpoint-response">Endpoint response<a class="headerlink" href="#endpoint-response" title="Permanent link">&para;</a></h3>
+<p>Installed two fixed-purpose batch scripts in <code>C:\Program Files (x86)\ossec-agent\active-response\bin</code>: <code>soc-marker-create.cmd</code> and <code>soc-marker-remove.cmd</code>. Sanitized copies are in <code>configs/wazuh/active-response/</code> in the repository. They read one input line; they do not evaluate alert content as a command. Creation writes only <code>C:\ProgramData\SOC-Lab\shuffle-response-marker.txt</code>; removal checks for the expected content before deleting that file. They are a stateless lab demonstration, not a general-purpose incident response implementation.</p>
+<p>Local tests proved creation and removal before testing the API. Custom script requests use the <code>!</code> prefix; no new manager command/active-response blocks were added for this direct API route. The agent service <code>WazuhSvc</code> was running.</p>
+<table>
+<thead>
+<tr>
+<th>Create node setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name / action</td>
+<td>Create Lab Marker / PUT</td>
+</tr>
+<tr>
+<td>URL</td>
+<td><code>https://10.10.10.11:55000/active-response?agents_list=001</code></td>
+</tr>
+<tr>
+<td>Basic-auth fields</td>
+<td>Empty</td>
+</tr>
+<tr>
+<td>Verify</td>
+<td><code>false</code></td>
+</tr>
+</tbody>
+</table>
+<p>Headers (Authorization is one logical line):</p>
+<div class="highlight"><pre><span></span><code>Content-Type: application/json
+Authorization: Bearer $wazuh_api_login.body.data.token
+</code></pre></div>
+<p>Body:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"command"</span><span class="p">:</span><span class="s2">"!soc-marker-create.cmd"</span><span class="p">,</span><span class="nt">"arguments"</span><span class="p">:[]}</span>
+</code></pre></div>
+<p>The saved workflow was triggered by a fresh matching Windows event. <code>Create Lab Marker</code> returned HTTP 200, affected agent <code>001</code>, and zero failures. Windows <code>Get-Content</code> returned <code>SOC_SHUFFLE_RESPONSE_TEST</code>, proving execution beyond API acceptance.</p>
+<h2 id="separate-manual-reversal">Separate manual reversal<a class="headerlink" href="#separate-manual-reversal" title="Permanent link">&para;</a></h2>
+<p>Workflow: <strong>SOC Lab - Response Reversal</strong>.</p>
+<div class="highlight"><pre><span></span><code>Start Reversal -&gt; Wazuh API Login -&gt; Remove Lab Marker
+</code></pre></div>
+<p><code>Start Reversal</code> uses <code>repeat_back_to_me</code> with <code>SOC_SHUFFLE_REVERSAL_TEST</code>. There is no webhook; the operator starts the saved workflow with Play. Login and PUT settings match the automatic workflow, with this replacement body:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="nt">"command"</span><span class="p">:</span><span class="s2">"!soc-marker-remove.cmd"</span><span class="p">,</span><span class="nt">"arguments"</span><span class="p">:[]}</span>
+</code></pre></div>
+<p>The manual Shuffle removal node returned HTTP 200. On Windows:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Test-Path</span> <span class="s1">'C:\ProgramData\SOC-Lab\shuffle-response-marker.txt'</span>
+</code></pre></div>
+<p>returned <code>False</code>. An earlier direct API removal test independently reported agent <code>001</code> and zero failures. The final cropped Shuffle reversal screenshot shows 200 but not its expanded per-agent counts; endpoint absence provides the execution evidence. Reversal is manual, not a timed automatic rollback.</p>
+<h2 id="troubleshooting-lessons-retained">Troubleshooting lessons retained<a class="headerlink" href="#troubleshooting-lessons-retained" title="Permanent link">&para;</a></h2>
+<ul>
+<li>A shell wildcard expands before <code>sudo</code>; use privileged <code>find</code> to inspect restricted integration directories.</li>
+<li>Distinguish synthetic curl payloads from real Wazuh alerts by marker and alert ID, not just latest-run time.</li>
+<li>Version History contains saved workflow edits; Debug contains executions. Green runtime status is not run completion.</li>
+<li>Conditions on the starting trigger connection did not gate the first action in this test. Moving the condition between app actions and inspecting SKIPPED resolved validation.</li>
+<li>Condition counts could remain stale until Save and browser refresh. Confirm actual saved conditions and arrow direction.</li>
+<li>Select POST or PUT before looking for the HTTP Body field; GET did not expose it.</li>
+<li>API 200 means the command was sent, not that the endpoint effect occurred. Always check the marker on Windows.</li>
+<li>JSON API bodies belong inside the request configuration/script, not directly at a Bash prompt (<code>!</code> caused history expansion).</li>
+</ul>
+<h2 id="evidence-and-remaining-work">Evidence and remaining work<a class="headerlink" href="#evidence-and-remaining-work" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker / Compose / admin login</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Execution before and after VM reboot</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Real Wazuh alert delivered with matching ID</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Positive condition</td>
+<td>Downstream Tools action succeeded</td>
+</tr>
+<tr>
+<td>Negative condition</td>
+<td>Downstream Tools action skipped</td>
+</tr>
+<tr>
+<td>Dedicated API account read / response on 001</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Automatic workflow creates endpoint marker</td>
+<td>Passed</td>
+</tr>
+<tr>
+<td>Separate manual Shuffle workflow removes marker</td>
+<td>Passed</td>
+</tr>
+</tbody>
+</table>
+<p>Evidence was reviewed in this conversation. The repository contains untracked operator screenshots, but they have not been bulk-published or fully reviewed for secrets. Curate redacted images for deployment/reboot, positive/negative action statuses, response HTTP result plus file contents, and reversal HTTP result plus <code>False</code>. Sanitized workflow JSON exports have not been supplied; documentation is not an importable workflow backup.</p>
+<p>Before wider use: replace API certificate-verification bypass with trusted CA validation; review HTTP frontend access and published backend/database ports; move credentials to the platform's managed authentication/secret facilities where supported; pin/capture upstream commit and image digests; back up configuration, encryption modifier, and database privately. Record a post-completion snapshot and run the full response/reversal chain after reboot. Keep the existing SIEM retention, timestamp, parser, temporary Suricata rule, and OpenVAS coverage follow-ups open.</p>
+<p>Phase 4 attack simulation and network segmentation remain separate acceptance work. The controlled marker validates Step 3.9's agreed scope only.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>
