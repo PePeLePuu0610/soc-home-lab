@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="590" viewBox="0 0 1160 590" role="img" aria-labelledby="title desc">
+<title id="title">Validated SOC home lab telemetry paths</title><desc id="desc">Windows sends alerts through Wazuh and raw logs directly to Splunk. pfSense sends firewall syslog to Splunk. Historical coverage and Suricata limitations remain.</desc>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#334155"/></marker></defs>
+<rect width="1160" height="590" fill="#fff"/>
+<g font-family="Segoe UI,Arial,sans-serif" fill="#14243a">
+<text x="40" y="42" font-size="25" font-weight="700">Validated telemetry paths</text><text x="1120" y="40" text-anchor="end" font-size="16" font-weight="700">TLP:CLEAR</text>
+<text x="40" y="73" font-size="16">SOC-HUNT-2026-001 · Validation through October 3 2026</text>
+<g fill="#eef3f8" stroke="#a6b8ca" stroke-width="1.5">
+<rect x="40" y="180" width="270" height="145" rx="8"/><rect x="435" y="110" width="275" height="115" rx="8"/><rect x="845" y="175" width="275" height="155" rx="8"/><rect x="435" y="360" width="275" height="110" rx="8"/>
+</g>
+<text x="62" y="215" font-size="20" font-weight="700">Windows victim</text><text x="62" y="244" font-size="16">10.10.20.20</text><text x="62" y="272" font-size="16">Security and System logs</text><text x="62" y="299" font-size="16">Local CI and task history</text>
+<text x="456" y="142" font-size="20" font-weight="700">Wazuh manager</text><text x="456" y="171" font-size="16">10.10.10.11 · Alert subset</text><text x="456" y="200" font-size="16">Not a complete raw-event archive</text>
+<text x="866" y="209" font-size="20" font-weight="700">Splunk Enterprise</text><text x="866" y="239" font-size="16">10.10.10.14 · index main</text><text x="866" y="268" font-size="16">UDP 5515 and UDP 5140</text><text x="866" y="298" font-size="16">TCP 9997 receiver restored</text>
+<text x="456" y="394" font-size="20" font-weight="700">pfSense</text><text x="456" y="424" font-size="16">Firewall and system syslog</text><text x="456" y="451" font-size="16">Fresh timestamps now align</text>
+<g fill="none" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"><path d="M310 205 L435 165"/><path d="M710 165 L845 205"/><path d="M310 286 L845 286"/><path d="M710 415 L805 415 L805 315 L845 315"/></g>
+<text x="337" y="153" font-size="14">TCP 1514</text><text x="729" y="150" font-size="14">UDP 5515</text>
+<rect x="422" y="259" width="280" height="20" fill="#fff"/><text x="435" y="275" font-size="15">Universal Forwarder · TCP 9997</text><text x="729" y="400" font-size="14">UDP 5140</text>
+<text x="40" y="517" font-size="17" font-weight="700">Limits to retain in future hunts</text>
+<text x="40" y="546" font-size="16">Earlier collection gaps remain · Service and task auditing enabled but generation test pending</text>
+<text x="40" y="572" font-size="16">Current Suricata coverage unverified · Segmentation incomplete · No confirmed compromise</text>
+</g></svg>

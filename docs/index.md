@@ -52,3 +52,7 @@ soc-home-lab/
 ├── screenshots/       # Portfolio evidence — dashboards, alerts, playbook runs
 └── .github/workflows/  # CI/CD: docs linting, link checking, GitHub Pages deploy
 ```
+
+## Threat Hunt Portfolio
+
+[Volt Typhoon-informed SOC home lab hunt](hunts/volt-typhoon-informed-2026/README.md) documents the investigation, telemetry repairs, commands, evidence, ATT&CK coverage, and lessons learned. Published as TLP:CLEAR for teaching and portfolio use; no confirmed compromise or actor attribution was established.
