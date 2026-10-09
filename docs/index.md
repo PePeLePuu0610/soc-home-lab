@@ -55,4 +55,24 @@ soc-home-lab/
 
 ## Threat Hunt Portfolio
 
+## SOC operations and validation records
+
+- [Post-reboot validation and evening handoff](post-reboot-validation-2026-10-08.md)
+- [Firewall policy and aliases](firewall-policy-and-aliases.md)
+- [Operations query register](operations-query-register.md)
+- [Windows endpoint authenticated scan readiness](build-windows-endpoint-scan-readiness.md)
+- [OpenVAS assessment](openvas-assessment-2026-10-08.md)
+- [Defender telemetry validation](defender-telemetry-validation-2026-10-08.md)
+- [Recovery runbook reference](recovery-runbook-reference.md)
+- [SOC baseline](soc-baseline-2026-10-08.md)
+- [Change register](change-register-2026-10.md)
+- [Project working agreement](project-working-agreement.md)
+- [Learning and notebook plan](learning-and-notebook-plan.md)
+- [Completed learning register](completed-learning-register.md)
+
+The authoritative local checkout is `E:\PePesLab-SOC 2.0\soc-home-lab`.
+Historical records retain their original validation scope; the post-reboot record contains the latest operational evidence. Public publication remains pending.
+
+### Threat hunt case study
+
 [Volt Typhoon-informed SOC home lab hunt](hunts/volt-typhoon-informed-2026/README.md) documents the investigation, telemetry repairs, commands, evidence, ATT&CK coverage, and lessons learned. Published as TLP:CLEAR for teaching and portfolio use; no confirmed compromise or actor attribution was established.
