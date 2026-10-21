@@ -1,0 +1,883 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/post-reboot-validation-2026-10-08/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Post-reboot readiness and telemetry validation - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#post-reboot-readiness-and-telemetry-validation" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Post-reboot readiness and telemetry validation
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/technical-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/command-query-log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="post-reboot-readiness-and-telemetry-validation">Post-reboot readiness and telemetry validation<a class="headerlink" href="#post-reboot-readiness-and-telemetry-validation" title="Permanent link">&para;</a></h1>
+<h2 id="evidence-and-status">Evidence and status<a class="headerlink" href="#evidence-and-status" title="Permanent link">&para;</a></h2>
+<p>Joey reports all VMs were powered off before snapshots. The snapshot label is
+<code>Pre-victim authenticated scan — SMB rule and RemoteRegistry enabled 10/6/26</code>.
+The label date differs from this session's 2026-10-08 date; actual snapshot creation time is not verified. Snapshots are rollback points, not independent backups.</p>
+<p>Reported startup order: pfSense, DC, victim, OpenVAS, Wazuh, ELK.
+Console and security web GUI access were reported successful. Splunk remains powered off.</p>
+<p>Screenshots confirm:</p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Observed result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Victim <code>soc-vict-win10</code> RemoteRegistry</td>
+<td>Running / Manual</td>
+</tr>
+<tr>
+<td>DC <code>soc-adsrv-win19</code> RemoteRegistry</td>
+<td>Running / Automatic</td>
+</tr>
+<tr>
+<td>OpenVAS to victim TCP 445</td>
+<td><code>nc -vz -w 3 10.10.20.20 445</code> succeeded</td>
+</tr>
+<tr>
+<td>Direct SMB authentication</td>
+<td><code>SOCHOMELAB\secadmin</code> listed victim <code>ADMIN$</code> using smbclient</td>
+</tr>
+<tr>
+<td>pfSense syslogd</td>
+<td>Running; remote delivery still needs fresh-event validation</td>
+</tr>
+<tr>
+<td>Wazuh agent 001</td>
+<td>Active, victim 10.10.20.20</td>
+</tr>
+<tr>
+<td>Wazuh agent 002</td>
+<td>Active, DC 10.10.20.10</td>
+</tr>
+</tbody>
+</table>
+<p>Active agents establish connectivity, not fresh alert forwarding. Direct SMB authentication does not establish Greenbone saved-credential authentication or registry/WMI coverage. Subsequent screenshots confirm Domain Credentials is assigned to the victim-only target.</p>
+<h2 id="elk-checks-pending-execution">ELK checks pending execution<a class="headerlink" href="#elk-checks-pending-execution" title="Permanent link">&para;</a></h2>
+<p>Subsequent <code>console_export.txt</code> from Kibana Dev Tools confirms populated <code>wazuh-alerts-*</code> and <code>pfsense-*</code> indices exist. The data-view selector did not show a Wazuh view. This establishes indexed data, not current post-reboot delivery. Wazuh indices include 2026.10.08 (26,478 documents) and 2026.10.09 (5,932 documents); pfSense indices include 2026.10.08 (1,094,337 documents) and 2026.10.09 (256,023 documents). Index date suffixes alone do not establish event time or clock correctness. Create a Kibana data view matching <code>wazuh-alerts-*</code>, using <code>@timestamp</code> if available, then execute the fresh-event checks below. Snapshot label date 10/6/26 was confirmed by Joey to be a typo; actual snapshot timestamp remains unverified.</p>
+<p>Use Kibana Discover, KQL mode, Last 15 minutes, and refresh every 10 seconds during validation. Sort newest first. This interval and a two-minute arrival goal are proposed lab acceptance criteria, not measured outcomes.</p>
+<p>The existing <a href="../elk-ingestion-plan/">ingestion plan</a> documents Windows alerts via Wazuh in <code>wazuh-alerts-*</code>. Direct Winlogbeat ingestion remains unverified. Use Wazuh fields for this path rather than assuming ECS host fields.</p>
+<p>Select <code>wazuh-alerts-*</code> and query:</p>
+<div class="highlight"><pre><span></span><code><span class="n">agent</span><span class="p">.</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s">"001"</span><span class="w"> </span><span class="n">OR</span><span class="w"> </span><span class="n">agent</span><span class="p">.</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s">"002"</span>
+</code></pre></div>
+<p>Review each agent separately and add <code>@timestamp</code>, <code>agent.id</code>, <code>agent.name</code>, <code>rule.id</code>, <code>rule.description</code>, and <code>data.win.system.eventID</code> where available.</p>
+<div class="highlight"><pre><span></span><code><span class="n">agent</span><span class="p">.</span><span class="n">id</span><span class="p">:</span><span class="w"> </span><span class="s">"001"</span><span class="w"> </span><span class="n">AND</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">win</span><span class="p">.</span><span class="n">system</span><span class="p">.</span><span class="n">channel</span><span class="p">:</span><span class="w"> </span><span class="s">"Microsoft-Windows-Windows Defender/Operational"</span>
+</code></pre></div>
+<p>For DC, substitute agent <code>002</code>. Defender alerts are event driven; an empty short window does not prove forwarding failure.</p>
+<p>In <code>pfsense-*</code>, start with <code>*</code>, inspect the latest document, then use <code>message: "filterlog"</code> only if the raw syslog text is indexed in <code>message</code>. Compare a newly generated, locally logged firewall event with its ELK counterpart by time, source/destination, and port. Running syslogd alone does not validate this path.</p>
+<p>Pass each source only after a known fresh event reaches ELK with the correct identity, sensible event time, and no parsing-failure tags. Widen the time range and inspect timestamps before concluding no ingestion.</p>
+<h2 id="next-scan-gate">Next scan gate<a class="headerlink" href="#next-scan-gate" title="Permanent link">&para;</a></h2>
+<h2 id="elk-endpoint-export-validation-result">ELK endpoint export validation result<a class="headerlink" href="#elk-endpoint-export-validation-result" title="Permanent link">&para;</a></h2>
+<p>Joey created the Wazuh Alerts data view and exported the Last 15 minutes query for agents 001 or 002. <code>ELK Stack Refresh Results.csv</code> contains 348 rows: victim 001 has 277 and DC 002 has 71. All rows have structured agent, rule, event ID, and channel columns. Displayed timestamps range from Oct 8, 2026 22:44:40 to 22:59:11; the CSV omits timezone offsets, so these are retained as displayed rather than converted to UTC or Mountain time.</p>
+<p>Channels: Security 342, System 5, Defender Operational 1. Event IDs: 4634 (132), 4624 (113), 4672 (88), 4688 (7), 36874 (5), 4769 (2), 1150 (1). The Defender event is from DC agent 002 at displayed 22:48:34, rule 62128, reporting the antimalware platform running in a healthy state. There are no 1116 or 1117 events in this export.</p>
+<p><strong>Result:</strong> post-reboot endpoint alerts visible in separate ELK for both Windows hosts, with structured selected fields. Export plus operator's recent-window screenshot supports current ingestion. Exact forwarding latency, timezone correctness, parsing-failure tags (not exported), victim Defender collection, and fresh pfSense delivery are not validated by this file. Authentication failures or attack attribution cannot be inferred from these event counts alone.</p>
+<p>Evidence SHA256: <code>42272A3617AC536D0D29145DF99100BCA9EEB712E19E234F717E4D75EC6A7DB4</code>. Raw CSV remains in the private Downloads folder and is not added to Git.</p>
+<h2 id="victim-scan-in-progress">Victim scan in progress<a class="headerlink" href="#victim-scan-in-progress" title="Permanent link">&para;</a></h2>
+<h2 id="pfsense-export-fresh-delivery-still-open">pfSense export: fresh delivery still open<a class="headerlink" href="#pfsense-export-fresh-delivery-still-open" title="Permanent link">&para;</a></h2>
+<p>The later <code>Untitled Discover session (4).csv</code> export contains 10,000 selected records from the <code>pfsense</code> data view, whereas the screenshot shows 549,966 matching documents. This is a subset, not the complete 24-hour result set. The newest exported record is displayed Oct 8 at 22:13:49.038, a pfSense GUI login from 10.10.40.1, with host.ip 10.10.10.5. Its raw syslog message time is 22:13:48. The screenshot search ends at 23:18:25.062, leaving approximately 65 minutes between the newest visible record and the search endpoint.</p>
+<p>The subset contains repeated <code>syslogd: sendto: Host is down</code> messages. These do not identify which remote destination failed; Splunk was intentionally powered off, so an ELK failure cannot be inferred from this message alone. Historical firewall and system logs exist in ELK, but current continuous pfSense forwarding and the specific OpenVAS SMB connections remain unverified. Next diagnostic: create a unique local pfSense system-log marker, verify it locally, and search the same marker in Kibana without changing services. If absent, inspect configured remote destinations/categories and the ELK UDP 5514 receiver.</p>
+<h3 id="subsequent-recovery-system-log-forwarding-passed">Subsequent recovery: system-log forwarding passed<a class="headerlink" href="#subsequent-recovery-system-log-forwarding-passed" title="Permanent link">&para;</a></h3>
+<p>Joey observed syslogd stopped on pfSense and restarted it. The stop time and cause are unknown. After rerunning logger with <code>PEPESLAB-ELK-REFRESH-02</code>, screenshot evidence shows one matching document in Kibana, host.ip 10.10.10.5, displayed @timestamp Oct 8, 2026 23:27:37.227. The raw message reads <code>&lt;13&gt;Oct 8 23:27:36 SOC-VALIDATION[69101]: PEPESLAB-ELK-REFRESH-02</code>. These displayed timestamps lack an explicit timezone. Their approximate one-second difference is not an independently measured end-to-end forwarding latency.</p>
+<p><strong>Validated:</strong> a fresh pfSense system-log marker reached separate ELK after the operator restarted syslogd. <strong>Still open:</strong> fresh firewall-category event delivery, syslogd remaining active, and root cause of the service stop. Capture a newly logged OpenVAS-to-victim TCP 445 connection and match its source port, rule tracker 1791410049, addresses, and timestamps in ELK. Recheck syslogd after this test; do not infer stability from a single delivered marker.</p>
+<h3 id="subsequent-firewall-delivery-passed">Subsequent firewall delivery passed<a class="headerlink" href="#subsequent-firewall-delivery-passed" title="Permanent link">&para;</a></h3>
+<h3 id="syslogd-process-and-destination-investigation">syslogd process and destination investigation<a class="headerlink" href="#syslogd-process-and-destination-investigation" title="Permanent link">&para;</a></h3>
+<p>Operator console at Oct 8 23:42:12 MDT shows main syslogd PID 25667 with <code>-f /etc/syslog.conf</code>, plus helper processes. Joey clarified the earlier service-stop observation was a red X in pfSense Services followed by using the start button; subsequent green status and processes confirm current operation, not the earlier stop cause.</p>
+<p><code>/etc/syslog.conf</code> is a generated include wrapper for <code>/var/etc/syslog.d</code>. The initial search of that wrapper returned no destinations. The suggested <code>/etc/syslog.log.conf</code> path was an assistant misreading and does not exist; it is not a valid troubleshooting step. Read-only <code>grep -Rn '@' /var/etc/syslog.d</code> shows forwarding directives in <code>/var/etc/syslog.d/pfSense.conf</code> for ELK <code>10.10.10.10:5514</code> and Splunk <code>10.10.10.14:5140</code>. Splunk is intentionally powered off. Sending to that unavailable receiver is a plausible explanation for send errors, but the error text does not identify the receiver and does not prove the daemon's earlier stop cause. No forwarding changes have been executed. Recommended pod-aware configuration: when Splunk is paused, retain only ELK as the GUI-configured remote receiver; restore the Splunk destination when its pod resumes. Record and preserve both addresses before changing settings; do not edit generated configuration files.</p>
+<p>Later screenshot of the <code>message: "filterlog"</code> search shows fresh records through displayed Oct 8 23:34:22.685. At 23:34:16.678, raw filterlog shows tracker 1791410049, interface em1, pass/in, TCP SYN, source 10.10.10.12:35034 to victim 10.10.20.20:135. host.ip is 10.10.10.5. This validates current pfSense firewall-category delivery to ELK and permitted scanner-to-victim traffic; the displayed event is TCP 135, not the separate TCP 445 nc test. RPC authentication and dynamic-port reachability are not established by a passed SYN.</p>
+<p>The earlier <code>message: "10.10.10.12"</code> screenshot returned 458 documents with newest displayed result at 19:06:01.212, showing historical Suricata records. The filterlog search later returned 274,637 documents with fresh firewall entries. Do not infer a field-mapping defect from these separate screenshots taken at different times. Current forwarding is restored; service stability and stop root cause remain open. Preserve the successful simple filterlog query as the baseline validation search.</p>
+<p>Joey reports the new scan is running. The task screenshot shows 0% and one report; no scan outcome or authenticated coverage is established yet.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Recorded value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Credential name</td>
+<td>Domain Credentials (renamed by Joey)</td>
+</tr>
+<tr>
+<td>Credential login</td>
+<td>sochomelab\secadmin</td>
+</tr>
+<tr>
+<td>Target</td>
+<td>Victim authenticated validation</td>
+</tr>
+<tr>
+<td>Host count / address</td>
+<td>1 / 10.10.20.20</td>
+</tr>
+<tr>
+<td>Alive test</td>
+<td>Consider Alive (operator reported)</td>
+</tr>
+<tr>
+<td>Port list</td>
+<td>All IANA assigned TCP and UDP (screenshot confirmed)</td>
+</tr>
+<tr>
+<td>SMB (NTLM) credential</td>
+<td>Domain Credentials (target screenshot confirmed)</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>Victim authentication validation</td>
+</tr>
+<tr>
+<td>Scanner</td>
+<td>OpenVAS Default</td>
+</tr>
+<tr>
+<td>Scan configuration</td>
+<td>Full and fast</td>
+</tr>
+<tr>
+<td>Maximum concurrent NVTs per host</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Task minimum QoD</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Add results to Assets / Apply Overrides</td>
+<td>Yes / Yes</td>
+</tr>
+<tr>
+<td>Report retention</td>
+<td>Do not automatically delete reports</td>
+</tr>
+</tbody>
+</table>
+<p>The pictured port list includes UDP; an earlier corporate-target screenshot showed All IANA assigned TCP only. This is a recorded difference, not proof that the current corporate target differs. Scan duration is not directly comparable without checking actual port coverage and errors.</p>
+<p>Keep Defender enabled. The completed report must independently establish SMB login and registry/WMI authenticated coverage. Export CSV and XML with the report filter explicitly set to minimum QoD 0 and all severities including Log; the task's minimum QoD setting is separate from report filtering. Review any applied overrides before interpreting severity. Record start/end timestamps, host count, scan errors, and coverage limitations. Repository reconciliation and public publication remain outstanding separate tasks.</p>
+<h2 id="applied-change-pause-pfsense-forwarding-to-splunk">Applied change: pause pfSense forwarding to Splunk<a class="headerlink" href="#applied-change-pause-pfsense-forwarding-to-splunk" title="Permanent link">&para;</a></h2>
+<p>Joey reports the remote logging change was saved and applied. Screenshot confirms only <code>10.10.10.10:5514</code> remains in Remote log servers; the other two fields are empty. Selected contents remain System, Firewall, DNS, DHCP, General Authentication, and Captive Portal events. This removes the configured Splunk receiver while that VM is intentionally powered off.</p>
+<p>Rollback: when Splunk is powered on and its UDP 5140 receiver is ready, restore <code>10.10.10.14:5140</code> in the second Remote log servers field through the GUI, save/apply, and validate delivery to both destinations. Do not restore solely to reproduce the prior configuration while Splunk remains off.</p>
+<p>Post-change validation pending: confirm syslogd running, send unique marker <code>PEPESLAB-ELK-REFRESH-03</code> and find it in ELK, and check newly generated system-log entries for continued send errors. A successful marker proves current system-log delivery; daemon stability and stop root cause require separate evidence. No claim that this change fixes the earlier service stop is made.</p>
+<p>Subsequent screenshot confirms <strong>post-change marker delivery passed</strong>: one document for <code>PEPESLAB-ELK-REFRESH-03</code>, host.ip <code>10.10.10.5</code>, displayed @timestamp Oct 8, 2026 23:53:09.544, raw syslog time Oct 8 23:53:09, tag <code>SOC-VALIDATION[22423]</code>. ELK forwarding remains functional after removing the paused Splunk destination. Absence of new send errors, sustained daemon health, and cause of the earlier stop are not established by this screenshot. No additional restart is required on the evidence provided.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://www.elastic.co/docs/reference/query-languages/kql">Elastic KQL syntax</a></li>
+<li><a href="https://www.elastic.co/docs/explore-analyze/discover/discover-get-started">Elastic Discover</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

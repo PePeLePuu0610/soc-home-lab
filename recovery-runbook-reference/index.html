@@ -1,0 +1,1071 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/recovery-runbook-reference/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Recovery runbook — reference v1.0 - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#recovery-runbook-reference-v10" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Recovery runbook — reference v1.0
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/technical-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/command-query-log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="recovery-runbook-reference-v10">Recovery runbook — reference v1.0<a class="headerlink" href="#recovery-runbook-reference-v10" title="Permanent link">&para;</a></h1>
+<p>Owner: Joey. Reviewed October 8, 2026. Document complete for reference; operational validation and identified risks remain open.</p>
+<p>Legend: OBSERVED: supplied evidence; REPORTED: operator account; RECOMMENDED: future procedure; SAMPLE: illustrative, not executed.</p>
+<h2 id="incident-record">Incident record<a class="headerlink" href="#incident-record" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Your entry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Failure date/time and timezone</td>
+<td>OBSERVED: October 8, 2026. Exact failure time/timezone not recorded.</td>
+</tr>
+<tr>
+<td>What happened / symptoms</td>
+<td>Host system Stopped responding, then rebooted spontaneously</td>
+</tr>
+<tr>
+<td>Systems affected</td>
+<td>HOST: PePeslab<br>VMz: soc-fw-pfsense, soc-xdr-wazuh, soc-siem-elk, soc-victim-win10, soc-adsrv-win19 &amp; soc-vuln-openvas</td>
+</tr>
+<tr>
+<td>Recovery start and finish</td>
+<td>REPORTED: 10/08/2026 09:39:15 AM; whether this is start or finish and its timezone are unconfirmed. Availability recovery estimated at 30 minutes.</td>
+</tr>
+<tr>
+<td>Impact / data loss</td>
+<td>OBSERVED: feed synchronization interrupted. Data loss not assessed; do not infer none.</td>
+</tr>
+<tr>
+<td>Recovery objective</td>
+<td>Restore essential lab services and verify control operation.</td>
+</tr>
+<tr>
+<td>Evidence location</td>
+<td>KNOWN: supplied screenshots and Downloads/openvas-validation-status.txt; DC Defender EventID 1116.txt/1117.txt and Wazuh screenshots. RECOMMENDED: keep an evidence manifest linking original private files. SAMPLE location (not created): <private-evidence-root>/2026-10-08-recovery.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="actual-startup-order">Actual startup order<a class="headerlink" href="#actual-startup-order" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Order</th>
+<th>VM / service</th>
+<th>Action you performed</th>
+<th>Dependency / wait condition</th>
+<th>Result and evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Soc-fw-pfsense</td>
+<td>Started VM via Workstation MGR</td>
+<td>RECOMMENDED: host storage and VMware networking ready; verify firewall interfaces and routing.</td>
+<td>Logged on to interface with out error. Manually start syslog daemon</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Soc-adsrv-win19</td>
+<td>Started VM via Workstation MGR</td>
+<td>OBSERVED: no explicit readiness wait documented. RECOMMENDED: verify VM boot, required network/DNS paths and service readiness before dependent checks.</td>
+<td>Logged on to interface with out error.</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Soc-victim-win10</td>
+<td>Started VM via Workstation MGR</td>
+<td>OBSERVED: no explicit readiness wait documented. RECOMMENDED: verify VM boot, required network/DNS paths and service readiness before dependent checks.</td>
+<td>Logged on to interface with out error.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Soc-xdr-wazuh</td>
+<td>Started VM via Workstation MGR</td>
+<td>OBSERVED: no explicit readiness wait documented. RECOMMENDED: verify VM boot, required network/DNS paths and service readiness before dependent checks.</td>
+<td>Logged on to interface with out error.</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Soc-SIEM-ELK</td>
+<td>Started VM via Workstation MGR</td>
+<td>OBSERVED: no explicit readiness wait documented. RECOMMENDED: verify VM boot, required network/DNS paths and service readiness before dependent checks.</td>
+<td>Logged on to interface with out error.</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Soc-vuln-openvas</td>
+<td>Started VM via Workstation MGR</td>
+<td>OBSERVED: no explicit readiness wait documented. RECOMMENDED: verify VM boot, required network/DNS paths and service readiness before dependent checks.</td>
+<td>Logged on to interface with out error</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Intentionally paused services</td>
+<td>REPORTED: not started</td>
+<td>RECOMMENDED: retain intentionally paused state.</td>
+<td>Not part of essential recovery acceptance.</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Future additions — SAMPLE</td>
+<td>SAMPLE: record another VM here if scope expands.</td>
+<td>SAMPLE: list actual dependencies.</td>
+<td>SAMPLE only; no additional VM recovery claimed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="availability-and-functional-checks">Availability and functional checks<a class="headerlink" href="#availability-and-functional-checks" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Check performed</th>
+<th>Expected result</th>
+<th>Actual result / status</th>
+<th>Evidence / time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense</td>
+<td>REPORTED: GUI login, services check, external ping; manual syslog start.</td>
+<td>GUI and connectivity available; policy enforcement checked separately.</td>
+<td>Availability reported passed; segmentation not tested after reboot.</td>
+<td>Operator observation; specific log references pending.</td>
+</tr>
+<tr>
+<td>DC / DNS</td>
+<td>OBSERVED: local login; WMI, SMB, RemoteRegistry and WazuhSvc running.</td>
+<td>Domain login and services work; explicit DNS query succeeds.</td>
+<td>Login/service checks passed; DNS functional check not documented.</td>
+<td>DC service screenshots; DNS evidence pending.</td>
+</tr>
+<tr>
+<td>Windows victim</td>
+<td>REPORTED: local login.</td>
+<td>Login works; agent 001 sends recent events.</td>
+<td>Login passed; recent agent 001 evidence not supplied in this review.</td>
+<td>Operator observation; agent status/event capture pending.</td>
+</tr>
+<tr>
+<td>Wazuh</td>
+<td>OBSERVED: dashboard displays DC agent 002 Defender alerts.</td>
+<td>Manager processes and indexes events from both endpoints.</td>
+<td>DC Defender path passed; both-agent acceptance still needs evidence.</td>
+<td>docs/defender-telemetry-validation-2026-10-08.md; rules 62123/62124.</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td>REPORTED: web GUI login.</td>
+<td>GUI available; new expected logs searchable.</td>
+<td>GUI passed; post-reboot ingestion not documented.</td>
+<td>Operator observation; recent log query evidence pending.</td>
+</tr>
+<tr>
+<td>OpenVAS</td>
+<td>OBSERVED: current feeds, cleared sync banner, running service containers and scan.</td>
+<td>Services ready; approved task executes; final report assessed.</td>
+<td>Readiness passed; scan reported 83% during review; final assessment pending.</td>
+<td>openvas-validation-status.txt; feed/task screenshots. Empty log export provides no diagnostic proof.</td>
+</tr>
+<tr>
+<td>Other VMs / services</td>
+<td>REPORTED: intentionally paused.</td>
+<td>Paused services remain outside essential recovery scope.</td>
+<td>Not applicable to essential recovery.</td>
+<td>Record exact paused VM names on next inventory review.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="backup-inventory">Backup inventory<a class="headerlink" href="#backup-inventory" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Backup</th>
+<th>Location / filename</th>
+<th>Backup date</th>
+<th>Protection / access</th>
+<th>Restore tested? / evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense configuration XML</td>
+<td>Private backup directory (location retained in private OneNote)</td>
+<td>10/07/2026</td>
+<td>REPORTED access: Joey. Encryption/ACL/off-host copy not verified; XML contains sensitive data.</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Wazuh agent configuration backup</td>
+<td>PREVIOUSLY OBSERVED: C:\Program Files (x86)\ossec-agent\ossec.conf.before-defender.bak on DC; current existence unverified.</td>
+<td>Historical rollback during Defender setup; exact backup time unknown.</td>
+<td>RECOMMENDED: restrict access and preserve a protected copy.</td>
+<td>Historical configuration rollback succeeded; current restore readiness not tested.</td>
+</tr>
+<tr>
+<td>VM snapshots / independent backup</td>
+<td>REPORTED: powered-off snapshots dated 10/06/2026. Independent VM backup copy not documented.</td>
+<td>10/06/2026 (reported)</td>
+<td>File-system access reported; off-host protection unverified.</td>
+<td>Not tested. Snapshots are rollback points; independent backup validation remains open.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="manual-interventions">Manual interventions<a class="headerlink" href="#manual-interventions" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>System / step</th>
+<th>Command or action used</th>
+<th>Why needed</th>
+<th>Result</th>
+<th>Required after every restart?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DC RemoteRegistry</td>
+<td>Start-Service -Name RemoteRegistry</td>
+<td>Observed stopped during post-reboot scan preparation.</td>
+<td>Joey supplied screenshot showing Running.</td>
+<td>Unknown</td>
+</tr>
+<tr>
+<td>Other intervention</td>
+<td>Start syslog deamon on pfsense</td>
+<td>Wasn't started. Root cause unknown</td>
+<td>REPORTED: service manually started; logging recovery not independently verified.</td>
+<td>Observed once in this recovery; recurrence unconfirmed.</td>
+</tr>
+<tr>
+<td>Future intervention — SAMPLE</td>
+<td>SAMPLE: record exact command/service action.</td>
+<td>SAMPLE: symptom and supporting evidence.</td>
+<td>SAMPLE: observed result and timestamp.</td>
+<td>Unknown until tested; no intervention claimed.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="open-risks">Open risks<a class="headerlink" href="#open-risks" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Problem / risk</th>
+<th>Observed evidence</th>
+<th>Resolution or proposed action</th>
+<th>Owner</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense syslog startup</td>
+<td>Joey reports stopped service and manual start.</td>
+<td>RECOMMENDED: identify exact service, inspect startup/log errors and verify a new firewall log reaches its destination.</td>
+<td>Joey / Niko</td>
+<td>Open; no service change during active scan.</td>
+</tr>
+<tr>
+<td>Backup resilience / restore confidence</td>
+<td>XML exists per report; snapshots reported; independent VM copy not documented.</td>
+<td>RECOMMENDED: inventory protected copies, verify Wazuh configuration backup, plan isolated restore validation.</td>
+<td>Joey / Niko</td>
+<td>Open; restore test requires separately planned scope.</td>
+</tr>
+<tr>
+<td>Post-reboot functional validation</td>
+<td>Segmentation not tested; DNS, ELK ingestion and victim agent evidence incomplete.</td>
+<td>RECOMMENDED: run bounded read-only checks and retain results after scan.</td>
+<td>Joey / Niko</td>
+<td>Open.</td>
+</tr>
+<tr>
+<td>Host failure cause</td>
+<td>Host froze and rebooted spontaneously; root cause unknown.</td>
+<td>RECOMMENDED: inspect host reliability/system events before attributing to memory or hardware.</td>
+<td>Joey / Niko</td>
+<td>Open; investigation pending.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="acceptance-and-timing">Acceptance and timing<a class="headerlink" href="#acceptance-and-timing" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Criterion / metric</th>
+<th>Result</th>
+<th>Evidence / remaining work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Essential VMs and services available</td>
+<td>REPORTED pass for GUI/local availability.</td>
+<td>Operator observations; not full functional acceptance.</td>
+</tr>
+<tr>
+<td>Both Wazuh corporate agents active and reporting</td>
+<td>DC verified; victim verification pending.</td>
+<td>DC Defender evidence confirmed; capture active status and recent events for agent 001.</td>
+</tr>
+<tr>
+<td>DC Defender events visible in Wazuh</td>
+<td>Verified for observed October 8 event pairs.</td>
+<td>Events 1116/1117 matched rules 62123/62124; see Git validation record.</td>
+</tr>
+<tr>
+<td>OpenVAS feed readiness and completed scan review</td>
+<td>Scan review pending.</td>
+<td>Current feeds and scan startup verified; latest user progress 83%. Final XML/CSV review pending.</td>
+</tr>
+<tr>
+<td>Selected allowed/blocked traffic tests after reboot</td>
+<td>Not tested</td>
+<td>Testing procedures to be created by Niko</td>
+</tr>
+<tr>
+<td>Backup restore validation</td>
+<td>Not tested</td>
+<td>Open risk; plan an isolated restore exercise separately.</td>
+</tr>
+<tr>
+<td>Time to restore essential availability</td>
+<td>Approximately 30 minutes — OPERATOR ESTIMATE.</td>
+<td>No measured start/end interval established.</td>
+</tr>
+<tr>
+<td>Time to complete functional validation</td>
+<td>Pending</td>
+<td>Scan review and functional tests remain open; do not claim a completed duration.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="next-actions">Next actions<a class="headerlink" href="#next-actions" title="Permanent link">&para;</a></h2>
+<p>Next three actions: (1) Joey: export final OpenVAS XML/CSV once Done; Niko: assess both-target authentication, errors and findings. (2) Joey/Niko: capture agent 001 reporting, DNS and ELK ingestion evidence, then execute selected segmentation checks. (3) Joey/Niko: verify backup inventory and syslog startup behavior; completion requires source-linked results and a separately planned restore test.</p>
+<h2 id="evidence-convention">Evidence convention<a class="headerlink" href="#evidence-convention" title="Permanent link">&para;</a></h2>
+<p>Recommended naming: YYYY-MM-DD_HHMMSS_timezone_system_check.ext. SAMPLE filename: 2026-10-08_180000_MDT_wazuh_agent-status.png (illustrative only). Maintain capture time, source system, check, expected result, observed result, and original private file location. Existing source references are filenames, not newly collected or copied evidence.</p>
+<h2 id="suggested-future-startup-checks">Suggested future startup checks<a class="headerlink" href="#suggested-future-startup-checks" title="Permanent link">&para;</a></h2>
+<p>Recommended, not executed as a drill: host storage and VMware networks ready; pfSense interfaces/routing ready; DC domain/DNS services ready; monitoring platforms ready; endpoint agents connected; scanner feeds and services ready. Start monitoring before planned test traffic where practical. Preserve actual startup order separately from this recommendation. If a check fails, capture the error and investigate; do not blindly restore or reset configuration.</p>
+<p>Snapshot guidance: https://blogs.vmware.com/cloudprovider/2021/10/disaster-recovery-journal-or-delta.html</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

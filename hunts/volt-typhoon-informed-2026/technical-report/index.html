@@ -1,0 +1,1687 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/hunts/volt-typhoon-informed-2026/technical-report/">
+      
+      
+        <link rel="prev" href="../executive-summary/">
+      
+      
+        <link rel="next" href="../command-query-log/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Technical Report - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#volt-typhoon-informed-soc-home-lab-threat-hunt-technical-report" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Technical Report
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executive Summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methodology-and-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      Methodology and Scope
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methodology and Scope">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#objective-and-intelligence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Objective and intelligence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#time-periods" class="md-nav__link">
+    <span class="md-ellipsis">
+      Time periods
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#systems-and-data-sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Systems and data sources
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-and-analytic-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence and analytic method
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#confidence-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      Confidence model
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-findings-and-iocs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Findings and IOCs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Findings and IOCs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#findings-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Findings register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#indicator-and-observable-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Indicator and observable register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#attck-coverage-and-interpretation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ATT&amp;CK coverage and interpretation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#detailed-analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detailed Analysis
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Detailed Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-1-visibility-baseline-and-process-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 1 Visibility baseline and process validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-2-session-and-logon-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 2 Session and logon review
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-3-current-persistence-and-binary-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 3 Current persistence and binary checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-4-live-connections-and-firewall-telemetry" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 4 Live connections and firewall telemetry
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-5-firewall-export-and-direct-forwarder-repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 5 Firewall export and direct forwarder repair
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-6-direct-security-process-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 6 Direct Security process review
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-7-defender-integrity-candidate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 7 Defender integrity candidate
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#phase-8-service-and-scheduled-task-history" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 8 Service and scheduled task history
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-and-remediation-ledger" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration and remediation ledger
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recommendations-and-lessons-learned" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recommendations and Lessons Learned
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Recommendations and Lessons Learned">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prioritized-action-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prioritized action register
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detection-proposals" class="md-nav__link">
+    <span class="md-ellipsis">
+      Detection proposals
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-worked" class="md-nav__link">
+    <span class="md-ellipsis">
+      What worked
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-needs-improvement" class="md-nav__link">
+    <span class="md-ellipsis">
+      What needs improvement
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion-and-closure-criteria" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion and closure criteria
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../command-query-log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="volt-typhoon-informed-soc-home-lab-threat-hunt-technical-report">Volt Typhoon informed SOC home lab threat hunt technical report<a class="headerlink" href="#volt-typhoon-informed-soc-home-lab-threat-hunt-technical-report" title="Permanent link">&para;</a></h1>
+<p><strong>TLP:CLEAR</strong></p>
+<p>Case ID: SOC-HUNT-2026-001<br />
+Version: 1.1<br />
+Report date: October 3, 2026<br />
+Evidence owner and operator: lab owner, identified in this chat as jpigg<br />
+Analysis: collaborative review of user-supplied commands, screenshots, text, and CSV exports<br />
+Audience: SOC analysts, incident responders, and lab administrators<br />
+Disposition: hunt pass complete with follow-up actions; no confirmed compromise</p>
+<h2 id="executive-summary">Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">&para;</a></h2>
+<p>The hunt examined whether unauthorized use of legitimate administration tools, accounts, and persistence mechanisms was present in the SOC home lab, using behavior described in public Volt Typhoon guidance. No confirmed compromise was identified in the reviewed evidence, so the hypothesis was not supported; it was not conclusively disproved because earlier activity was incompletely recorded. The observed activity was consistent with recognized user actions, security-agent checks, and software maintenance, with one Defender validation issue requiring operational follow-up. The investigation repaired missing log delivery and incorrect firewall timestamps, enabled additional auditing, and disabled a broad firewall rule that overrode more specific rules. The remaining priorities are to finish network segmentation, validate the new auditing, and improve historical evidence coverage before treating future empty searches as assurance.</p>
+<h2 id="methodology-and-scope">Methodology and Scope<a class="headerlink" href="#methodology-and-scope" title="Permanent link">&para;</a></h2>
+<h3 id="objective-and-intelligence">Objective and intelligence<a class="headerlink" href="#objective-and-intelligence" title="Permanent link">&para;</a></h3>
+<p>Hypothesis H1: unauthorized actors may use valid accounts and built-in administration tools to perform discovery, establish persistence, or access credentials while blending into normal administration. Public CISA advisory AA24-038A informed the behaviors selected for review. That advisory describes living-off-the-land behavior and use of valid accounts; it does not make the presence of <code>net.exe</code>, PowerShell, or other tools an actor-specific indicator. This home lab is not asserted to be a Volt Typhoon target or a critical-infrastructure environment. <a href="https://www.cisa.gov/sites/default/files/2024-03/aa24-038a_csa_prc_state_sponsored_actors_compromise_us_critical_infrastructure_3.pdf">CISA AA24-038A</a></p>
+<p>Hypothesis H2: the lab's telemetry is sufficient to observe and distinguish those behaviors. H2 was initially disproved for several sources: process auditing was disabled, Splunk was unavailable for earlier events, the TCP receiver was absent, firewall pass logging was ineffective on the intended rule, and service/task auditing was disabled. The fixes improved current visibility, but end-to-end service/task event generation remains pending validation.</p>
+<h3 id="time-periods">Time periods<a class="headerlink" href="#time-periods" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Period</th>
+<th>Coverage and qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>September 24–25, 2026</td>
+<td>Initial endpoint hunt, process-audit enablement, Wazuh/Splunk correlation, local persistence review, firewall validation and remediation</td>
+</tr>
+<tr>
+<td>September 26 and October 3, 2026</td>
+<td>Splunk TCP receiver diagnosis and restoration, direct Security event review, Defender analysis, service/task auditing and task-history review</td>
+</tr>
+<tr>
+<td>September 19–20, 2026</td>
+<td>Older service-installation and logon records reviewed as supporting context, not continuous coverage</td>
+</tr>
+<tr>
+<td>September 25 20:39:32–21:09:31 MDT</td>
+<td>Exact firewall CSV window: 7,846 logged records; contains events before and after timestamp repair and rule transition</td>
+</tr>
+<tr>
+<td>October 3 01:54:30.192–02:20:59.161 MDT</td>
+<td>Exact process export: 626 records; a 24-hour search returned this shorter observed span</td>
+</tr>
+<tr>
+<td>October 3 01:54:32.609–02:25:15.208 MDT</td>
+<td>Exact logon export: 19 records</td>
+</tr>
+<tr>
+<td>September 27 17:23:12–October 3 02:36:48</td>
+<td>Task-history export within a rolling seven-day query: 212 records; no continuous operation is assumed</td>
+</tr>
+</tbody>
+</table>
+<p>Unless marked otherwise, times are displayed in America/Denver, UTC−06:00 for these dates. Windows XML timestamps ending in <code>Z</code> are UTC; <code>07:58:47Z</code> corresponds to <code>01:58:47 MDT</code>. pfSense initially used fixed MST, and its long-running filter logger retained timestamps one hour behind the corrected clock until reboot. Old embedded firewall timestamps must not be interpreted as MDT without that qualification. Splunk <code>_time</code> and <code>_indextime</code> are different concepts: the former is event time, the latter index receipt time. Numeric export filenames are evidence identifiers, not a basis for inferring execution time.</p>
+<h3 id="systems-and-data-sources">Systems and data sources<a class="headerlink" href="#systems-and-data-sources" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>System</th>
+<th>Address or identity</th>
+<th>Role and analysis coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows victim</td>
+<td><code>10.10.20.20</code>; <code>soc-vict-win10.sochomelab.local</code>; Wazuh agent 001</td>
+<td>Primary endpoint; Security, System, Code Integrity, Task Scheduler, processes, services, tasks, signatures, live TCP connections</td>
+</tr>
+<tr>
+<td>pfSense CE 2.8.1</td>
+<td>Management <code>10.10.10.5</code>; Corporate <code>10.10.20.5</code>; attacker network <code>10.10.30.5</code>; WAN DHCP observed <code>10.10.40.101</code></td>
+<td>Rules, active ruleset, remote syslog, local firewall logs, time configuration</td>
+</tr>
+<tr>
+<td>Wazuh 4.14.7</td>
+<td><code>10.10.10.11</code>; <code>soc-xdr-wazuh</code></td>
+<td>Alert JSON and default syslog forwarding; source of Security-alert subset</td>
+</tr>
+<tr>
+<td>Splunk Enterprise 10.2</td>
+<td><code>10.10.10.14</code>; <code>soc-siem-splunk</code></td>
+<td>Search and exports; UDP 5515 Wazuh, UDP 5140 pfSense, TCP 9997 direct forwarder</td>
+</tr>
+<tr>
+<td>Windows Universal Forwarder</td>
+<td>Service <code>SplunkForwarder</code>; process <code>splunkd</code></td>
+<td>Direct Windows event and performance-metric delivery; TCP 8089 management and TCP 9997 receiving</td>
+</tr>
+<tr>
+<td>AD VM</td>
+<td><code>10.10.20.10</code></td>
+<td>Architecture context only; domain-controller logs and credential stores not analyzed</td>
+</tr>
+<tr>
+<td>Kali</td>
+<td><code>10.10.30.10</code></td>
+<td>Architecture context only; no attacker execution or adversary emulation performed</td>
+</tr>
+<tr>
+<td>ELK, Shuffle, OpenVAS</td>
+<td><code>10.10.10.10</code>, <code>.13</code>, <code>.12</code></td>
+<td>Existing lab context; not additional validated hunt data sources</td>
+</tr>
+<tr>
+<td>Suricata</td>
+<td>Prior lab validation exists</td>
+<td>Current hunt-period alert/flow coverage not revalidated; no claim of full network inspection</td>
+</tr>
+</tbody>
+</table>
+<p>Lab interfaces: <code>em1</code> management/VMnet1, <code>em2</code> Corporate/VMnet2, <code>em3</code> attacker/VMnet3, and <code>em0</code> WAN/VMnet8. Host resources require running a subset of lab VMs. VM uptime and source availability must be treated as intermittent unless verified.</p>
+<p><img alt="Telemetry paths and limitations" src="../telemetry-flow.svg" /></p>
+<h3 id="evidence-and-analytic-method">Evidence and analytic method<a class="headerlink" href="#evidence-and-analytic-method" title="Permanent link">&para;</a></h3>
+<p>The operator executed commands on the VMs and supplied outputs. Analysis compared local Windows records, Wazuh alerts, Splunk exports, firewall logs, signatures, and user recognition of activity. Benign commands were generated to test process visibility and firewall logging. Investigation correlated record IDs, logon IDs, process names and parents, command arguments, addresses, ports, rule tracker IDs, and Code Integrity ActivityIDs. File signatures were checked on the endpoint; no memory acquisition, disk imaging, malware detonation, packet-payload analysis, or full binary provenance assessment was performed.</p>
+<p>The <a href="../command-query-log/">command log</a> distinguishes commands visible in the record from reconstructed repeatable procedures. Commands reconstructed from described work are not represented as exact historical keystrokes. Failed copy/paste attempts and incorrect analytic suggestions are retained as lessons and do not count as completed checks. CSV attachments were parsed from the complete files; terminal-output truncation did not define the analytic dataset. Original available evidence is copied and checksummed in the <a href="../evidence-register/">evidence register</a>.</p>
+<h3 id="confidence-model">Confidence model<a class="headerlink" href="#confidence-model" title="Permanent link">&para;</a></h3>
+<p><strong>High</strong> means directly supported by captured output and, where applicable, an independent corroborating source. <strong>Moderate</strong> means a supported interpretation with unresolved context or incomplete historic coverage. <strong>Low</strong> means a candidate or architectural inference requiring further evidence. Confidence applies to the stated finding, not automatically to maliciousness. A valid signature confirms the current verification result, not absence of all malicious use. A successful TCP connection proves connectivity, not event ingestion. A process-name match identifies a candidate, not a compromise.</p>
+<h2 id="key-findings-and-iocs">Key Findings and IOCs<a class="headerlink" href="#key-findings-and-iocs" title="Permanent link">&para;</a></h2>
+<h3 id="findings-register">Findings register<a class="headerlink" href="#findings-register" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Finding and affected system</th>
+<th>Confidence</th>
+<th>Status and implication</th>
+<th>ATT&amp;CK relevance</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F01</td>
+<td>No confirmed malicious activity in reviewed victim evidence</td>
+<td>Moderate, bounded</td>
+<td>H1 not supported; incomplete history prevents definitive disproof</td>
+<td>Coverage across execution, discovery, valid accounts and persistence</td>
+</tr>
+<tr>
+<td>F02</td>
+<td>Process auditing initially absent; command-line capture enabled September 24</td>
+<td>High</td>
+<td>Remediated for current observation; past process events not recovered</td>
+<td>T1059.001, T1059.003 and discovery techniques</td>
+</tr>
+<tr>
+<td>F03</td>
+<td>Splunk unavailable for earlier Wazuh events; tasklist record 43513 unlocated in Splunk</td>
+<td>High for observed gap; low for loss mechanism</td>
+<td>Historical availability gap and one unresolved delivery candidate; UDP loss not proven</td>
+<td>Monitoring limitation, not an observed ATT&amp;CK action</td>
+</tr>
+<tr>
+<td>F04</td>
+<td>Quick floating IPv4 any-to-any rule handled traffic before interface rules</td>
+<td>High</td>
+<td>Disabled; new connection matched Corporate tracker 1786792812</td>
+<td>Configuration exposure; not evidence of adversarial firewall modification</td>
+</tr>
+<tr>
+<td>F05</td>
+<td>Firewall embedded timestamps one hour behind MDT</td>
+<td>High</td>
+<td>Reboot replaced filterlog PID 5400 with 52199; fresh timestamps align</td>
+<td>Timeline reliability issue</td>
+</tr>
+<tr>
+<td>F06</td>
+<td>TCP 9997 receiver absent; forwarder repeatedly sent SYNs</td>
+<td>High</td>
+<td>Receiver enabled, listener and established connection verified, direct events received</td>
+<td>Collection-health issue; not command-and-control evidence</td>
+</tr>
+<tr>
+<td>F07</td>
+<td>DefenderSessionHelper protected-process signature validation failed</td>
+<td>High for correlation and error; moderate for operational classification</td>
+<td>Valid current Microsoft signature; PPL requirement mismatch; root cause/recurrence unresolved</td>
+<td>Integrity candidate; no technique asserted</td>
+</tr>
+<tr>
+<td>F08</td>
+<td>Latest local service-installation query returned no entries; task history showed maintenance-pattern updates</td>
+<td>Moderate</td>
+<td>No confirmed persistence in reviewed records; historical task actions not captured</td>
+<td>T1543.003 and T1053.005 hunt coverage</td>
+</tr>
+<tr>
+<td>F09</td>
+<td>Service/task Security auditing disabled</td>
+<td>High</td>
+<td>Success auditing enabled and verified; event generation/delivery test pending</td>
+<td>T1543.003 and T1053.005 visibility</td>
+</tr>
+<tr>
+<td>F10</td>
+<td>Local anonymous network logon lacked source context</td>
+<td>High for event; low for explanation</td>
+<td>Earlier type 3 session remains unexplained; no correlated malicious activity established</td>
+<td>T1078/T1021 coverage only, not attribution</td>
+</tr>
+<tr>
+<td>F11</td>
+<td>Administrator OneDrive task lacks returned profile/signature evidence</td>
+<td>High for unverified state</td>
+<td>Possibly stale; untouched; task ownership/action verification pending</td>
+<td>T1053.005 candidate review</td>
+</tr>
+<tr>
+<td>F12</td>
+<td>Public destinations and full inter-network segmentation remain unverified</td>
+<td>High for limitation</td>
+<td>Prioritize process/DNS correlation and restricted access plan</td>
+<td>T1071.001/T1090.001 candidates; no C2/proxy abuse confirmed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="indicator-and-observable-register">Indicator and observable register<a class="headerlink" href="#indicator-and-observable-register" title="Permanent link">&para;</a></h3>
+<p><strong>No confirmed malicious IOC was established.</strong> The following are evidence pivots, lab identities, test destinations, or unresolved observables. They must not be promoted to blocklists merely because they appear in this report.</p>
+<table>
+<thead>
+<tr>
+<th>Observable</th>
+<th>Affected system or context</th>
+<th>Classification and confidence</th>
+<th>ATT&amp;CK context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>soc-vict-win10.sochomelab.local</code>, <code>10.10.20.20</code></td>
+<td>Victim endpoint</td>
+<td>Lab identity, high</td>
+<td>Scope only</td>
+</tr>
+<tr>
+<td><code>10.10.10.14:9997</code> and <code>:8089</code></td>
+<td>Victim → Splunk</td>
+<td>Known telemetry destination, high; current owner <code>splunkd</code> PID 3596</td>
+<td>No malicious technique asserted</td>
+</tr>
+<tr>
+<td><code>10.10.10.11:1514</code></td>
+<td>Victim → Wazuh</td>
+<td>Known agent destination, high</td>
+<td>Scope only</td>
+</tr>
+<tr>
+<td><code>10.10.20.5:53</code></td>
+<td>Victim DNS</td>
+<td>Known gateway resolver, high</td>
+<td>DNS visibility pivot</td>
+</tr>
+<tr>
+<td><code>1.1.1.1:80/443</code>, <code>1.0.0.1:80/443</code></td>
+<td>Operator tests</td>
+<td>Benign test destinations, high</td>
+<td>Validation only</td>
+</tr>
+<tr>
+<td><code>52.123.248.83:443</code></td>
+<td>Live connection owned by Defender core service</td>
+<td>Provisionally expected process context, moderate; payload/hostname not verified</td>
+<td>T1071.001 coverage only</td>
+</tr>
+<tr>
+<td><code>20.59.87.225:443</code></td>
+<td>Live <code>svchost</code> PID 3552 mapped to WpnService</td>
+<td>Provisionally expected process context, moderate; destination purpose not independently proved</td>
+<td>T1071.001 coverage only</td>
+</tr>
+<tr>
+<td>Public destinations in firewall table below</td>
+<td>Victim HTTP/HTTPS</td>
+<td>Unclassified, low confidence of maliciousness; no ownership/reputation conclusion</td>
+<td>T1071.001 candidate coverage</td>
+</tr>
+<tr>
+<td><code>DefenderSessionHelper.exe</code> under Defender platform 4.18.26080.4-0</td>
+<td>Windows victim</td>
+<td>Microsoft signature currently valid, high; PPL verification error 12, high</td>
+<td>Integrity investigation only</td>
+</tr>
+<tr>
+<td><code>44FDDDE59B4233F7AF8114285A028B36CF585754FF794C834346E7AAAF56740E</code></td>
+<td>Code Integrity 3089 image-hash field</td>
+<td>Investigative hash from event, high provenance to supplied XML; not independently computed whole-file SHA-256, not malicious IOC</td>
+<td>Integrity pivot only</td>
+</tr>
+<tr>
+<td><code>0x7a169</code>, record 42807</td>
+<td>September 24 seclabadmin local type 2 session</td>
+<td>Expected interactive session context, high</td>
+<td>T1078 coverage only</td>
+</tr>
+<tr>
+<td><code>0x2b3bc</code>, record 42761</td>
+<td>Earlier ANONYMOUS LOGON type 3</td>
+<td>Unexplained local record, high; origin and maliciousness unknown</td>
+<td>T1078/T1021 candidate coverage</td>
+</tr>
+<tr>
+<td><code>0x1B0AC16</code> and <code>0x1B0AB73</code></td>
+<td>October 3 seclabadmin logon pair</td>
+<td>Operator-confirmed local sign-in, high</td>
+<td>T1078 coverage only</td>
+</tr>
+<tr>
+<td>Tracker <code>1786962198</code></td>
+<td>pfSense floating rule</td>
+<td>Confirmed broad allow rule, high; disabled</td>
+<td>Configuration finding</td>
+</tr>
+</tbody>
+</table>
+<p>Certificate TBS hashes from 3089 identify signing certificates, not file hashes or malware IOCs. They are preserved in the XML evidence. No malicious domain or whole-file malware hash was validated.</p>
+<h3 id="attck-coverage-and-interpretation">ATT&amp;CK coverage and interpretation<a class="headerlink" href="#attck-coverage-and-interpretation" title="Permanent link">&para;</a></h3>
+<p>Mappings describe what the hunt examined, not a detected intrusion chain. Relevant technique definitions are linked in the references.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Techniques used to organize the hunt</th>
+<th>Evidence and disposition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Initial access and valid accounts</td>
+<td>T1078 Valid Accounts; T1021.001 Remote Desktop Protocol</td>
+<td>Local 4624/4648 review; no type 10 in reviewed exports; entry method not established</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059.001 PowerShell; T1059.003 Windows Command Shell</td>
+<td>Command/parent review; Wazuh assessment commands and VMware resume script provide expected context</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1033 System Owner/User Discovery; T1082 System Information Discovery; T1016 System Network Configuration Discovery; T1057 Process Discovery; T1087.001 Local Account</td>
+<td>Explicit benign commands validated visibility; no actor attribution from executable names</td>
+</tr>
+<tr>
+<td>Persistence and privilege</td>
+<td>T1053.005 Scheduled Task; T1543.003 Windows Service</td>
+<td>Current task/service review, history, audit-policy checks; no confirmed malicious persistence</td>
+</tr>
+<tr>
+<td>Credential access</td>
+<td>T1003.003 NTDS; T1003.001 LSASS Memory</td>
+<td>Tool candidates examined; no credential dumping established; AD/DC credential stores not assessed</td>
+</tr>
+<tr>
+<td>Defense evasion</td>
+<td>T1070.001 Clear Windows Event Logs; T1112 Modify Registry; T1218.011 Rundll32</td>
+<td>Query versus modification and manifest registration versus clearing distinguished; no malicious action established</td>
+</tr>
+<tr>
+<td>Lateral movement and proxying</td>
+<td>T1021 Remote Services; T1090.001 Internal Proxy</td>
+<td>Network logons and <code>netsh interface portproxy show all</code>; no entries returned; historical configuration unknown</td>
+</tr>
+<tr>
+<td>Command and control or actions on objectives</td>
+<td>T1071.001 Web Protocols</td>
+<td>Public HTTP/HTTPS remains unclassified; no C2, exfiltration, collection, impact, or disruption demonstrated</td>
+</tr>
+</tbody>
+</table>
+<h2 id="detailed-analysis">Detailed Analysis<a class="headerlink" href="#detailed-analysis" title="Permanent link">&para;</a></h2>
+<h3 id="phase-1-visibility-baseline-and-process-validation">Phase 1 Visibility baseline and process validation<a class="headerlink" href="#phase-1-visibility-baseline-and-process-validation" title="Permanent link">&para;</a></h3>
+<p>WazuhSvc was running, but Windows Audit Process Creation initially showed No Auditing and the command-line audit registry value was absent. Success auditing and <code>ProcessCreationIncludeCmdLine_Enabled=1</code> were enabled. A benign <code>cmd.exe</code> marker produced local Security 4688 record 42962 at September 24 19:30:42; Wazuh received it at 19:30:45.988−0600 under rule 67027, level 3. This verified local generation and manager detection, not complete forwarding history.</p>
+<p>The original Splunk search did not locate the first marker. Subsequent tests labeled TEST_02 returned records 43496 and 43497 at 20:36:03 and 20:36:08. These are distinct process executions, not evidence of duplicate ingestion. Manager alert forwarding had no restrictive level filter, and a packet capture at the receiver showed datagrams. No filter change was needed merely because no explicit minimum level was present. Wazuh alerts are a subset of Windows event records, not a raw-event archive. <a href="https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/syslog-output.html">Wazuh syslog output</a></p>
+<p>The discovery test generated <code>whoami /all</code>, <code>hostname</code>, <code>ipconfig /all</code>, <code>net user</code>, and <code>tasklist</code>. Splunk returned records 43509, 43511, 43512, 43514 and 43515; <code>net1.exe</code> was a child of <code>net.exe</code>, while the other visible commands had PowerShell parents. Tasklist record 43513 existed locally at 20:40:44 and in Wazuh at 20:40:47.068 but was not located in Splunk. Repeated filtered tasklist executions arrived as records 43538 and 43539. The missing original record remains a collection anomaly; the investigation did not prove UDP truncation, packet loss, or an attacker action.</p>
+<p>Process searches initially used a candidate-name list without extracting <code>process_name</code> after a login-query edit. The complete 4688 extraction and basename normalization corrected that query. A zero from the incomplete query was not a meaningful negative finding. Benign higher-risk-tool checks generated <code>netsh interface portproxy show all</code> (record 43612, 21:10:45) and <code>sc query WazuhSvc</code> (43613, 21:11:14). Both matched seclabadmin with PowerShell parents. Portproxy returned no entries in current configuration; the service query checked rather than changed Wazuh.</p>
+<h3 id="phase-2-session-and-logon-review">Phase 2 Session and logon review<a class="headerlink" href="#phase-2-session-and-logon-review" title="Permanent link">&para;</a></h3>
+<p>Local record 42807 identified September 24 19:26:15 session <code>0x7a169</code>, local <code>SOC-VICT-WIN10\seclabadmin</code>, type 2, source 127.0.0.1, Negotiate. Wazuh rule 60118 recorded it at 19:26:18.877−0600. Splunk did not contain it; the operator confirmed Splunk started later. This is a receiver-availability limitation rather than a field-extraction explanation.</p>
+<p>Four received type 2 records represented later sessions: 43484/43485 at September 24 20:35:48, and 40321/40322 at September 20 01:16:10. All concerned seclabadmin and localhost. The preserved CSV reports raw lengths 4,026–4,028 characters and complete endings. Their session IDs differ from <code>0x7a169</code>, so they cannot be substituted as the discovery session's initial logon.</p>
+<p>An earlier local type 3 event, record 42761 at September 24 19:25:54, reported ANONYMOUS LOGON, SID S-1-5-7, session <code>0x2b3bc</code>, NtLmSsp, and absent IP/workstation/process information. A bounded correlation search returned only that original event. Process auditing had not yet been enabled, limiting correlation. The NTLM V1 text for anonymous logon does not alone prove NTLMv1 credential negotiation. The event is unexplained, not classified as malicious. <a href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/audit-domain-controller-ntlmv1">Microsoft anonymous NTLM guidance</a></p>
+<p>The October 3 direct-feed export contained 18 events 4624 and one 4648. Sixteen 4624 records were SYSTEM type 5 service logons initiated by services.exe. Two type 2 records at 02:04:34.508 were linked seclabadmin sessions (<code>0x1B0AC16</code>, <code>0x1B0AB73</code>) from 127.0.0.1 through svchost.exe. The simultaneous 4648 used that local account against localhost through the same process PID <code>0x6c4</code>. The operator confirmed signing in/unlocking at that time. No type 3 or type 10 occurred in that 19-record export; this is not a claim about all host history.</p>
+<h3 id="phase-3-current-persistence-and-binary-checks">Phase 3 Current persistence and binary checks<a class="headerlink" href="#phase-3-current-persistence-and-binary-checks" title="Permanent link">&para;</a></h3>
+<p>The initial non-Microsoft task inventory contained Brave and Edge update tasks, OneDrive reporting/update/startup tasks, and Firefox update/default-browser tasks. The operator recognized the Security Admin account. BraveUpdate, MicrosoftEdgeUpdate, Firefox and default-browser-agent signatures were valid with expected publishers. OneDrive updater copies for seclabadmin and Security Admin and the seclabadmin OneDriveLauncher signature were valid Microsoft signatures. No OneDrive directory under the SplunkForwarder service profile was expected evidence of compromise.</p>
+<p>The inventory also contained an Administrator SID−500 OneDrive task, but no corresponding Administrator profile was returned by the profile enumeration. That task was not verified or removed. Its stale-task explanation is a possibility, not a finding of legitimacy.</p>
+<p>Microsoft task candidates used rundll32, PowerShell and dsregcmd with maintenance-shaped arguments. The SMB client/server uninstall tasks referenced <code>DisableUnusedSmb1.ps1</code>; that script's current Microsoft Windows signature was valid. The <code>-ExecutionPolicy Unrestricted</code> and hidden-window arguments were evaluated in context rather than treated as proof of malicious PowerShell. Other task DLLs, definitions, owners and permissions were not all verified.</p>
+<p>The service inventory showed expected lab/browser/Defender/VMware programs and running Wazuh and SplunkForwarder services. The earlier seven-day System 7045 review returned KslD driver installation (September 19, record 3967), VMware SVGA Helper (September 20, 4106), and VMware Snapshot Provider (4115). KslD had a valid Microsoft Windows signature and product Microsoft Malware Protection. The operator recognized the VMware installation timing. Not every service binary was signature-verified. The later October 3 rolling seven-day 7045 query returned no entries; that narrower date range no longer included the September 19–20 installations.</p>
+<h3 id="phase-4-live-connections-and-firewall-telemetry">Phase 4 Live connections and firewall telemetry<a class="headerlink" href="#phase-4-live-connections-and-firewall-telemetry" title="Permanent link">&para;</a></h3>
+<p>Live connection ownership identified MpDefenderCoreService PID 3300 → 52.123.248.83:443, svchost PID 3552 → 20.59.87.225:443, and wazuh-agent PID 3520 → 10.10.10.11:1514. CIM service mapping associated the first two with MDCoreSvc and WpnService. Process ownership supported expected operational context, but destination hostnames, payloads and reputation were not independently validated.</p>
+<p>Splunk's non-Wazuh source inventory initially contained only 25 pfSense DHCP entries, renewing WAN address 10.10.40.101 via observed DHCP server 10.10.40.110 in five cycles. Remote syslog destinations and Firewall Events selection were configured, but local firewall results showed only blocked IPv6 multicast DNS. Protocol UDP in that list did not imply the victim generated only UDP traffic: the HTTPS tests were TCP and initially unlogged.</p>
+<p>Logging on the first Corporate allow rule remained checked, yet fresh successful connections to 1.1.1.1 and 1.0.0.1 did not match it. The loaded ruleset showed quick floating rule <code>@94</code> tracker 1786962198, pass IPv4 any-to-any, no logging at that stage. It had substantial packet/state counters, while the later Corporate rule's counters were zero. This explained why enabling logging on the later rule did not produce the test event. Floating quick rules are processed before interface rules. <a href="https://docs.netgate.com/pfsense/en/latest/firewall/floating-rules.html">Netgate floating rules</a></p>
+<p>Logging was temporarily enabled on the floating rule to validate the path. A test to 1.1.1.1:80 produced Corporate and WAN-side entries. WAN records had translated source 10.10.40.101; a Splunk query requiring 10.10.20.20 intentionally omitted those rows. Three endpoint rows versus six local interface rows did not prove ingestion loss. A timestamp mismatch was then isolated with the SOC_TIME_TEST syslog marker.</p>
+<p>The pfSense timezone was changed from fixed MST to America/Denver. Shell time read MDT−0600, and a system logger marker matched Splunk, while filterlog PID 5400 still emitted timestamps an hour behind. Calling <code>filter_pflog_start(true)</code> returned the requested echo but did not replace PID 5400. That echo was insufficient restart validation. After the operator rebooted pfSense, a fresh event at 20:57:48 showed filterlog PID 52199; embedded time, Splunk <code>_time</code>, and receipt time all agreed. Earlier records retained their original discrepancy.</p>
+<p>The operator confirmed management access at 10.10.10.5 before disabling the broad floating rule, since administration usually used WAN DHCP address 10.10.40.101 from host 10.10.40.1. The rule was disabled, saved and applied. At September 25 21:05:42, a fresh Corporate connection from 10.10.20.20:54926 to 1.0.0.1:80 matched tracker 1786792812, the temporary Corporate internet rule. Existing states were not globally cleared. The rule transition is verified for this new connection, not retroactively for every existing flow. Corporate still permits any destination; segmentation remains incomplete.</p>
+<h3 id="phase-5-firewall-export-and-direct-forwarder-repair">Phase 5 Firewall export and direct forwarder repair<a class="headerlink" href="#phase-5-firewall-export-and-direct-forwarder-repair" title="Permanent link">&para;</a></h3>
+<p>The complete 7,846-record firewall CSV was parsed. All records were IPv4 with victim source 10.10.20.20. There were 4,320 <code>em2</code> inbound and 3,526 <code>em1</code> outbound records. Counts describe log entries; repeat packets and multi-interface logging preclude interpreting them as unique connections.</p>
+<table>
+<thead>
+<tr>
+<th>Destination and port</th>
+<th>Protocol/action</th>
+<th style="text-align: right;">Records</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10.10.10.14:9997</td>
+<td>TCP/pass</td>
+<td style="text-align: right;">7,675</td>
+<td>All logged with SYN flag S; repeated forwarding attempts</td>
+</tr>
+<tr>
+<td>10.10.10.14:8089</td>
+<td>TCP/pass</td>
+<td style="text-align: right;">52</td>
+<td>Known Splunk management destination</td>
+</tr>
+<tr>
+<td>10.10.20.5:53</td>
+<td>UDP/pass</td>
+<td style="text-align: right;">65</td>
+<td>Gateway DNS</td>
+</tr>
+<tr>
+<td>10.10.10.11:1514</td>
+<td>TCP/pass</td>
+<td style="text-align: right;">2</td>
+<td>Wazuh</td>
+</tr>
+<tr>
+<td>1.0.0.1:80</td>
+<td>TCP/pass</td>
+<td style="text-align: right;">4</td>
+<td>Operator tests</td>
+</tr>
+<tr>
+<td>224.0.0.251:5353</td>
+<td>UDP/pass</td>
+<td style="text-align: right;">4</td>
+<td>Multicast DNS observable</td>
+</tr>
+<tr>
+<td>10.10.20.255:138</td>
+<td>UDP/pass</td>
+<td style="text-align: right;">3</td>
+<td>Local broadcast observable</td>
+</tr>
+<tr>
+<td>Public HTTP/HTTPS destinations</td>
+<td>TCP/pass or block</td>
+<td style="text-align: right;">41</td>
+<td>Not independently attributed or classified</td>
+</tr>
+</tbody>
+</table>
+<p>The complete destination matrix is in <code>derived/firewall-destinations.csv</code>. Public destinations include 150.171.28.12, 20.52.64.202, 92.223.96.6, 85.210.196.11, 72.153.5.135, 57.155.101.212, 48.200.63.27, 40.126.62.129, 23.216.145.6, 20.190.190.129, 23.11.33.159, 13.226.251.74, 20.89.1.11, 20.165.94.63, 20.59.87.225, 20.42.73.27, 20.42.73.25, 20.184.175.10 and 20.59.87.227. Some blocked records contained finish/reset flags after the reboot; these are not sufficient to infer attempted compromise or a broad egress policy change.</p>
+<p>Current victim connections showed PID 3596 splunkd with 8089 Established and 9997 SynSent. Server <code>ss</code> showed no 9997 listener, and <code>btool inputs list splunktcp://9997 --debug</code> returned no receiver stanza. The receiver was created through Splunk Web. The server then showed 0.0.0.0:9997 LISTEN, splunkd PID 1942; the victim showed one Established connection owned by 3596 plus TimeWait records. <a href="https://help.splunk.com/?resourceId=Splunk_InheritedDeployment_Ports">Splunk port roles</a></p>
+<p>An initial 15-minute source inventory returned 98 direct events: performance metrics plus Application and System. Security collection was enabled (<code>disabled=0</code>, <code>current_only=0</code>, <code>start_from=oldest</code>, index default), and a broader subsequent search returned 845 Security events in <code>main</code>. The suggestion that <code>index=default</code> implied an internal destination was incorrect and was corrected. These snapshots were taken at different times and cannot prove whether elapsed ingestion, the broader time window, or another condition caused the earlier absence. Security receipt in main is directly verified.</p>
+<p>The next event inventory returned 620 process events and 15 logons; later exports contained 626 and 18 respectively, because collection continued. Differences between successive snapshots are not treated as duplicates or anomalies. Collection success does not prove all historic records were backfilled; the available October 3 process export covers only the stated shorter span.</p>
+<h3 id="phase-6-direct-security-process-review">Phase 6 Direct Security process review<a class="headerlink" href="#phase-6-direct-security-process-review" title="Permanent link">&para;</a></h3>
+<p>All 626 records in the process export contained command lines. Frequent processes included conhost (112), .NET ngen (126 across architectures), auditpol (54), backgroundTaskHost (36), Splunk helper processes, browser updaters, and maintenance utilities. Seventeen ordinary PowerShell events had wazuh-agent.exe as parent and exported security policy before selecting password or lockout settings. Auditpol commands used <code>/get</code>; WMIC queried the Guest account's disabled status; net user enumerated accounts; registry commands queried legal notice values. That combination supports Wazuh configuration-assessment context rather than unauthorized policy changes.</p>
+<p>VMware vmtoolsd launched <code>resume-vm-default.bat</code> through cmd, followed by ipconfig /renew. Rundll32 arguments referenced previously inventoried maintenance tasks. Wevtutil installed/uninstalled application event manifests rather than clearing Security logs. The Splunk btool command matched the operator's check. OneDrive and browser installer activity was consistent with update activity, but the process names and paths alone did not authenticate every binary. No LSASS/NTDS dumping, encoded PowerShell download, malicious scheduled-task creation, log clearing, or portproxy addition was demonstrated in these records. This is a bounded assessment of the actual export.</p>
+<h3 id="phase-7-defender-integrity-candidate">Phase 7 Defender integrity candidate<a class="headerlink" href="#phase-7-defender-integrity-candidate" title="Permanent link">&para;</a></h3>
+<p>Security 5038 record 47412 at October 3 01:58:47.320 flagged DefenderSessionHelper.exe under platform 4.18.26080.4-0. The current Authenticode signature was Valid, publisher Microsoft Windows. Code Integrity Operational 3004 and 3089 had the same ActivityID <code>{c6bc20a0-4c8c-0000-0730-bfc68c4cdd01}</code>, process/thread 3508/10532, and timestamps differing by microseconds. Event 3004 identified MsMpEng.exe as requesting process, RequestedSigningLevel 7, SecureRequired 0x80000018. Event 3089 reported one signature, Windows publisher, Windows Production PCA 2023 issuer, ValidatedSigningLevel 12 and VerificationError 12.</p>
+<p>Microsoft defines verification error 12 as not valid for PPL. The correlated result supports a protected-process signature requirement failure even though ordinary current Authenticode verification succeeded. The generic 5038/3004 wording was refined using the correlated details; file modification was not proven. Classification: Defender signing/compatibility candidate, with underlying cause and recurrence unresolved. Do not disable protection, exclude the file, or lower signing policy on this evidence. <a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/event-tag-explanations">Microsoft event tags</a></p>
+<p>The hash field was supplied by Code Integrity and not recomputed as a whole-file hash. Certificate validity dates in the event spanned April 30, 2026 through April 29, 2027; the observation fell within those dates, but expiration alone is not the pertinent reported error.</p>
+<h3 id="phase-8-service-and-scheduled-task-history">Phase 8 Service and scheduled task history<a class="headerlink" href="#phase-8-service-and-scheduled-task-history" title="Permanent link">&para;</a></h3>
+<p>The direct Security search for 4697, 4698, 4702 and 1102 returned no results. Auditpol then showed Security System Extension and Other Object Access Events set to No Auditing. Therefore the negative service/task results were not evidence of absence. Both subcategories were enabled for Success and the effective output verified. The policy check did not test Security-log clearing coverage; the 1102 empty result is only an observed query result.</p>
+<p>The latest local System 7045 seven-day query returned no entries with errors suppressed. A channel-access or collection failure was not independently excluded by that empty output; confidence is limited accordingly. Task Scheduler Operational was enabled with RecordCount 17,448 and LastWriteTime October 3 02:37:19 at inspection. A seven-day export for IDs 106, 140 and 141 returned 212 events, all parsed successfully, across 20 unique task paths.</p>
+<p>There were 210 updates, one deletion and one registration. The deletion and registration both concerned the same seclabadmin SID−1002 OneDrive Standalone Update task at October 3 01:58:24. This aligns with OneDriveSetup execution in the process export. UpdateOrchestrator's Schedule Work, Schedule Wake To Work and Schedule Maintenance Work contributed 56 updates each; the other changes concerned Group Policy, Defender, .NET NGEN, Device Information, Edge, OneDrive, Flighting, PushToInstall and WindowsUpdate RUXIM. The names, user contexts and timing support maintenance, but history messages contain no task actions/XML and do not authenticate all task content. No unexplained task name was identified. Full current definitions and security descriptors remain outside this final history review.</p>
+<h2 id="configuration-and-remediation-ledger">Configuration and remediation ledger<a class="headerlink" href="#configuration-and-remediation-ledger" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Operator action</th>
+<th>Result and verification</th>
+<th>Remaining qualification</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Process audit</td>
+<td>Enable Process Creation success; registry command-line value 1</td>
+<td>Local and Wazuh 4688 markers; later direct 4688 commands</td>
+<td>Historical processes before enablement absent</td>
+</tr>
+<tr>
+<td>Firewall pass logging</td>
+<td>Log Corporate rule, then effective floating rule for diagnosis</td>
+<td>Local and Splunk test records</td>
+<td>Broad logging was diagnostic; choose targeted logging policy</td>
+</tr>
+<tr>
+<td>pfSense timezone</td>
+<td>Fixed MST → America/Denver</td>
+<td>Shell clock MDT; logger initially stale</td>
+<td>Old embedded timestamps unchanged</td>
+</tr>
+<tr>
+<td>Filter logger restart attempt</td>
+<td>PHP filter_pflog_start(true)</td>
+<td>Echo returned, PID unchanged</td>
+<td>Attempt ineffective in observed state</td>
+</tr>
+<tr>
+<td>pfSense reboot</td>
+<td>Operator rebooted</td>
+<td>New PID 52199 and aligned fresh timestamp</td>
+<td>Routing briefly interrupted</td>
+</tr>
+<tr>
+<td>Floating rule</td>
+<td>Disable tracker 1786962198 through management session</td>
+<td>New test matched tracker 1786792812</td>
+<td>Existing states not flushed; Corporate any destination persists</td>
+</tr>
+<tr>
+<td>Splunk receiver</td>
+<td>Enable TCP 9997 in Web</td>
+<td>LISTEN, Established, direct event receipt</td>
+<td>Secure/restrict receiver access and monitor health</td>
+</tr>
+<tr>
+<td>Service/task auditing</td>
+<td>Enable two Success subcategories</td>
+<td>Auditpol shows Success for both</td>
+<td>Controlled generated-event test pending; GPO persistence unverified</td>
+</tr>
+</tbody>
+</table>
+<h2 id="recommendations-and-lessons-learned">Recommendations and Lessons Learned<a class="headerlink" href="#recommendations-and-lessons-learned" title="Permanent link">&para;</a></h2>
+<h3 id="prioritized-action-register">Prioritized action register<a class="headerlink" href="#prioritized-action-register" title="Permanent link">&para;</a></h3>
+<p>Owners below are roles proposed for the lab; no external team assignment or deadline commitment is implied.</p>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>Owner role</th>
+<th>Completion criterion</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P1</td>
+<td>Replace Corporate/attacker broad allow rules with a documented access matrix</td>
+<td>Lab network administrator</td>
+<td>Fresh allow/deny tests from each segment; management and Wazuh/Splunk remain available; console rollback ready</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Validate service/task audit collection end to end</td>
+<td>Endpoint and SIEM administrator</td>
+<td>Harmless task creates 4698 and removal 4699; evidence visible in main; local policy remains after refresh</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P1</td>
+<td>Persist required audit settings through the applicable local/domain policy</td>
+<td>Endpoint administrator</td>
+<td>Effective policy confirmed after reboot and policy refresh</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Investigate Defender PPL mismatch and recurrence</td>
+<td>Endpoint administrator</td>
+<td>File/version, Defender health, update history and repeated CI events reviewed; root cause or accepted operational disposition recorded</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Add collection-health monitoring</td>
+<td>SIEM administrator</td>
+<td>Alert on source inactivity, forwarder connection/queue errors and timestamp offsets using a baseline</td>
+<td>Proposed</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Revisit missing tasklist record 43513 and start-time gaps</td>
+<td>SIEM administrator</td>
+<td>Exact source/receipt searches and forwarding logs documented; assess reliable transport and raw-event retention</td>
+<td>Open; loss mechanism unknown</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Correlate public destinations with process and DNS data</td>
+<td>SOC analyst</td>
+<td>Hostname/process/timing evidence attached; unclassified destinations resolved or explicitly retained as unknown</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Verify Administrator OneDrive task and historical anonymous session</td>
+<td>SOC analyst</td>
+<td>Task principal/action/profile state checked; bounded session review disposition maintained</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P2</td>
+<td>Validate current Suricata coverage</td>
+<td>Network/SOC administrator</td>
+<td>Safe alert test and sensor interface evidence; distinguish alerts from full flow visibility</td>
+<td>Open</td>
+</tr>
+<tr>
+<td>P3</td>
+<td>Store and maintain this case in the restricted knowledge base</td>
+<td>Lab owner</td>
+<td>Versioned package, checksums, ownership and follow-up updates retained</td>
+<td>Delivered locally; remote destination unspecified</td>
+</tr>
+</tbody>
+</table>
+<h3 id="detection-proposals">Detection proposals<a class="headerlink" href="#detection-proposals" title="Permanent link">&para;</a></h3>
+<p>The command appendix provides repeatable triage searches and a harmless task-validation procedure. Proposed analytics should cover sensitive process commands, service/task creation, log clearing, unexpected remote logons, collection failures and recurring Code Integrity failures. Require command arguments, parents, account context and sequence correlation rather than standalone executable-name alerts. Establish a narrow baseline for Wazuh assessment checks and Splunk helper processes; do not exclude all PowerShell or all Microsoft-signed files. No proposed rule has been deployed or regression-tested in this report.</p>
+<h3 id="what-worked">What worked<a class="headerlink" href="#what-worked" title="Permanent link">&para;</a></h3>
+<p>Local-to-manager-to-Splunk record comparison exposed source and forwarding gaps. Effective ruleset counters identified the actual matched firewall rule. Fresh connections distinguished new rules from retained state. Index receipt time and a labeled logger marker separated clock versus logging-process behavior. Direct Security events provided command lines and session details that the alert subset could miss. Operator recognition helped resolve the local sign-in without asserting attribution.</p>
+<h3 id="what-needs-improvement">What needs improvement<a class="headerlink" href="#what-needs-improvement" title="Permanent link">&para;</a></h3>
+<p>Verify collection before interpreting negative searches. Separate local clock, embedded logger timestamp, event time and ingestion time. Treat an echo saying restart requested as an attempt, not successful restart evidence. The report corrects the erroneous internal-index suggestion and retains the original snapshot limitations. Use single commands or assigned result variables to avoid merged paste pipelines; export large outputs to files instead of truncating chat. Audit settings must be validated with harmless generated events and policy persistence checks. Current snapshots and valid signatures cannot exclude past tampering or all persistence.</p>
+<h2 id="conclusion-and-closure-criteria">Conclusion and closure criteria<a class="headerlink" href="#conclusion-and-closure-criteria" title="Permanent link">&para;</a></h2>
+<p>H1 remains unproven: no confirmed malicious activity or Volt Typhoon attribution was established. This hunt pass is closed for the reviewed evidence, while remediation and coverage actions remain open. There is no empirical attack progression from reconnaissance to actions on objectives to reconstruct; the report instead documents checks at each phase and their negative or provisional findings. Reopen for an unexplained task/service action, unrecognized remote logon, credential-dumping behavior, process-correlated suspicious destination, repeated integrity failure with additional evidence, or material collection gap.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://www.first.org/tlp/">FIRST TLP version 2</a>: sharing label semantics.</li>
+<li><a href="https://www.cisa.gov/sites/default/files/2024-03/aa24-038a_csa_prc_state_sponsored_actors_compromise_us_critical_infrastructure_3.pdf">CISA AA24-038A</a>: intelligence basis.</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688">Microsoft 4688</a> and <a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624">4624</a>: process and logon semantics.</li>
+<li><a href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/windows-security/audit-domain-controller-ntlmv1">Microsoft anonymous NTLM guidance</a>.</li>
+<li><a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-5038">Microsoft 5038</a>, <a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-defender-application-control/event-tag-explanations">Code Integrity tags</a>, and <a href="https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/operations/appcontrol-debugging-and-troubleshooting">correlation guidance</a>.</li>
+<li><a href="https://learn.microsoft.com/en-us/windows/security/threat-protection/auditing/audit-security-system-extension">Security System Extension</a> and <a href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4698">4698</a>.</li>
+<li><a href="https://documentation.wazuh.com/current/user-manual/manager/event-logging.html">Wazuh event logging</a> and <a href="https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/syslog-output.html">syslog output</a>.</li>
+<li><a href="https://docs.netgate.com/pfsense/en/latest/firewall/floating-rules.html">Netgate floating rules</a>, <a href="https://docs.netgate.com/pfsense/en/latest/monitoring/logs/remote.html">remote logs</a>, and <a href="https://docs.netgate.com/pfsense/en/latest/diagnostics/command-prompt.html">command prompt</a>.</li>
+<li><a href="https://github.com/pfsense/pfsense/blob/master/src/etc/inc/filter.inc">pfSense filter logger implementation</a>: reference implementation, not proof of installed branch behavior.</li>
+<li><a href="https://help.splunk.com/en/splunk-enterprise/forward-and-process-data/forwarding-and-receiving-data/9.4/deploy-heavy-and-light-forwarders/enable-a-receiver">Splunk receiving</a> and <a href="https://help.splunk.com/?resourceId=Splunk_InheritedDeployment_Ports">port roles</a>.</li>
+<li>ATT&amp;CK coverage definitions: <a href="https://attack.mitre.org/techniques/T1078/">T1078</a>, <a href="https://attack.mitre.org/techniques/T1059/001/">T1059.001</a>, <a href="https://attack.mitre.org/techniques/T1059/003/">T1059.003</a>, <a href="https://attack.mitre.org/techniques/T1033/">T1033</a>, <a href="https://attack.mitre.org/techniques/T1082/">T1082</a>, <a href="https://attack.mitre.org/techniques/T1016/">T1016</a>, <a href="https://attack.mitre.org/techniques/T1057/">T1057</a>, <a href="https://attack.mitre.org/techniques/T1087/001/">T1087.001</a>, <a href="https://attack.mitre.org/techniques/T1053/005/">T1053.005</a>, <a href="https://attack.mitre.org/techniques/T1543/003/">T1543.003</a>, <a href="https://attack.mitre.org/techniques/T1003/001/">T1003.001</a>, <a href="https://attack.mitre.org/techniques/T1003/003/">T1003.003</a>, <a href="https://attack.mitre.org/techniques/T1070/001/">T1070.001</a>, <a href="https://attack.mitre.org/techniques/T1112/">T1112</a>, <a href="https://attack.mitre.org/techniques/T1218/011/">T1218.011</a>, <a href="https://attack.mitre.org/techniques/T1021/001/">T1021.001</a>, <a href="https://attack.mitre.org/techniques/T1090/001/">T1090.001</a>, <a href="https://attack.mitre.org/techniques/T1071/001/">T1071.001</a>.</li>
+</ul>
+<p><strong>TLP:CLEAR</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

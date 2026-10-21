@@ -1,0 +1,845 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/openvas-assessment-2026-10-08/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>OpenVAS completed scan assessment — 2026-10-08 - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#openvas-completed-scan-assessment-2026-10-08" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              OpenVAS completed scan assessment — 2026-10-08
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/technical-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/command-query-log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="openvas-completed-scan-assessment-2026-10-08">OpenVAS completed scan assessment — 2026-10-08<a class="headerlink" href="#openvas-completed-scan-assessment-2026-10-08" title="Permanent link">&para;</a></h1>
+<p>Report ID: 99e88a89-6f87-4156-b1a3-6233b5b839f5. Task ID: 4f2e170b-4324-449a-a6d9-7a93471e8ea6. Owner: Joey. Assessment: task execution complete; two-host authenticated coverage incomplete. No remediation applied by this assessment.</p>
+<h2 id="complete-export-reconciliation-supersedes-initial-filtered-counts">Complete export reconciliation — supersedes initial filtered counts<a class="headerlink" href="#complete-export-reconciliation-supersedes-initial-filtered-counts" title="Permanent link">&para;</a></h2>
+<p>Latest follow-up: direct SMB authentication and ADMIN$ directory listing succeeded from OpenVAS to the victim using the domain scan account, after the documented endpoint change. Current direct authentication passes; original scan coverage is unchanged. Greenbone's stored credential and registry/WMI LSC behavior still require scanner-side validation.</p>
+<p>Follow-up: victim TCP445 initially timed out; RemoteRegistry was Disabled, and inspected SMB inbound rules were disabled under the Private profile. After RemoteRegistry Manual/start and the scanner-only inbound SMB exception, TCP445 succeeded from OpenVAS. Remote authentication still needs verification. See <a href="../build-windows-endpoint-scan-readiness/">change, future endpoint build and rollback</a>.</p>
+<p>Replacement exports with filename suffix (1) explicitly set min_qod=0 and contain all 76 results in CSV and XML. Initial 72-result analysis below is historical context. Final totals: 3 High, 4 Medium, 3 Low, 66 Log; zero Critical. DC: 2 High, 3 Medium, 2 Low, 49 Log (56 total). Victim: 1 High, 1 Medium, 1 Low, 17 Log (20 total).</p>
+<p>Additional findings: D(HE)ater Diffie-Hellman key-exchange DoS on TCP3389 for each host (CVSS7.5, QoD30), and Relative IP Identification number change on each host (CVSS2.6, QoD1). D(HE)ater reports TLS1.2 accepting TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 and TLS_DHE_RSA_WITH_AES_256_GCM_SHA384. Reported cipher support is evidence; successful DoS exploitation was not tested. Keep applicability/exposure validation open. IPID findings remain unvalidated due to very low QoD.</p>
+<p>CSV SHA256: EE54443006BF41A573B5DA9E09CE3DE52826A0710B3DCF27AC3D3CE25917E652.
+XML SHA256: 287C4746538512A881605A98C762568199CFD577B3BE8CDA38EF75506A285D99.</p>
+<p>Export completeness passes. DC partial authenticated coverage and the victim authentication gap remain. Next: bounded victim SMB reachability and authentication checks, then finding validation. No full-scan rerun needed for export reconciliation.</p>
+<h2 id="initial-filtered-export-assessment-historical">Initial filtered-export assessment (historical)<a class="headerlink" href="#initial-filtered-export-assessment-historical" title="Permanent link">&para;</a></h2>
+<h3 id="execution-and-evidence">Execution and evidence<a class="headerlink" href="#execution-and-evidence" title="Permanent link">&para;</a></h3>
+<p>Status Done. Scan start 2026-10-08T21:53:50Z; end 2026-10-09T01:22:06Z. America/Denver (MDT): October 8, 15:53:50–19:22:06. Elapsed 3h28m16s.</p>
+<p>CSV contains 72 results. Anonymous XML reports 76 total, 72 filtered under min_qod=70. All severity levels including Log are represented. Four excluded results cannot be characterized from the supplied exports. Export again with min_qod=0; no scan rerun needed to recover existing report results.</p>
+<p>Anonymous XML addresses map to actual CSV IPs through matching result IDs: 127.0.0.2 → DC10.10.20.10 (54 results); 127.0.0.1 → victim10.10.20.20 (18 results). They are anonymization placeholders, not unexpected scan targets.</p>
+<p>Source filenames: report-99e88a89-6f87-4156-b1a3-6233b5b839f5.csv and .xml; retained privately in user Downloads, not copied to Git.
+SHA256 CSV: 9B50E57282833927D998476540D5D52A9636BA5B2D87018A5D13101787CE929D.
+SHA256 XML: 19FC9218B950379F436C7E88ACB6F5A7AB0AFD39DB001B96D5B02D93850C984C.</p>
+<h2 id="results">Results<a class="headerlink" href="#results" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Host</th>
+<th>High</th>
+<th>Medium</th>
+<th>Low</th>
+<th>Log</th>
+<th>Exported total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DC10.10.20.10</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+<td>49</td>
+<td>54</td>
+</tr>
+<tr>
+<td>Victim10.10.20.20</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>17</td>
+<td>18</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>1</td>
+<td>4</td>
+<td>1</td>
+<td>66</td>
+<td>72</td>
+</tr>
+</tbody>
+</table>
+<p>Zero Critical reported. These are scanner findings, not independent exploit confirmations; low finding counts do not establish host security.</p>
+<h2 id="authentication-and-coverage">Authentication and coverage<a class="headerlink" href="#authentication-and-coverage" title="Permanent link">&para;</a></h2>
+<p>DC: SMB NTLM login successful; registry and WMI access TRUE; missing registry permissions FALSE. Windows Server2019 Datacenter build17763 detected; successful local inventory/file-version checks present. Nevertheless, full build metadata remains unavailable and 28 checks timed out, so authentication success does not equal complete coverage.</p>
+<p>Victim: no successful SMB login or LSC consolidation result in supplied exports. Inventory is chiefly remote RDP/TLS detection, with OS inferred from network fingerprinting. Authenticated coverage not demonstrated; not enough evidence to label credentials invalid. Check victim port445/service/firewall/domain permissions and review QoD0 export before changing account privileges.</p>
+<h2 id="duration-and-errors">Duration and errors<a class="headerlink" href="#duration-and-errors" title="Permanent link">&para;</a></h2>
+<p>Victim host interval: 21:54:48Z–22:02:33Z, 7m45s.
+DC interval: 21:54:48Z–01:21:57Z, 3h27m09s.
+All 28 XML errors map to DC: 25 timed out at320s; three at900s (Log4j, Spring Boot, Spring Framework detection). Examples include WMI OS/file-share queries, Windows Services Start, Defender detection, application inventory, full build, and cleanup of a deprecated authenticated-scan support service.</p>
+<p>The DC dominated duration. Do not add timeout values as sequential runtime: checks may overlap. Defender detection/remediation during this scan is independently verified in Wazuh, consistent with potential command-check interference; a causal explanation for every timeout is not established.</p>
+<p>The cleanup-check timeout warrants a read-only review for residual scan support services or artifacts before any deletion. No artifacts are presumed to exist.</p>
+<h2 id="non-log-findings-and-disposition">Non-log findings and disposition<a class="headerlink" href="#non-log-findings-and-disposition" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Host</th>
+<th>Finding</th>
+<th>Scanner CVSS / QoD</th>
+<th>Assessment / next action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DC</td>
+<td>Windows IExpress untrusted search path; CVE-2018-0598</td>
+<td>7.8 /80</td>
+<td>Presence-based IEXPRESS.EXE check, not exploitation. Validate use/exposure and safe archive handling; do not delete Windows binaries from this finding.</td>
+</tr>
+<tr>
+<td>DC</td>
+<td>HID/USB code execution; CVE-2011-0638</td>
+<td>6.9 /80</td>
+<td>hidserv.dll presence check. Assess physical/USB passthrough exposure and device controls; not proof of remote compromise.</td>
+</tr>
+<tr>
+<td>DC</td>
+<td>DCE/RPC and MSRPC enumeration TCP135</td>
+<td>5.0 /80</td>
+<td>RPC endpoints enumerated. Review approved-source access; DC depends on RPC, so do not blanket-disable it.</td>
+</tr>
+<tr>
+<td>DC and victim</td>
+<td>Deprecated TLS1.0/1.1 on RDP TCP3389</td>
+<td>4.3 /98 each</td>
+<td>Direct protocol evidence. Plan controlled TLS hardening with RDP compatibility and rollback verification. Referenced CVEs do not independently prove every listed CVE applies.</td>
+</tr>
+<tr>
+<td>DC</td>
+<td>Snipping Tool information disclosure; CVE-2023-28303</td>
+<td>3.3 /80</td>
+<td>Version10.0.17763.1697 compared with11.2302.20.0. Validate product/OS applicability before applying a cross-version threshold or declaring true/false positive.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="actions-and-acceptance">Actions and acceptance<a class="headerlink" href="#actions-and-acceptance" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Re-export existing completed report at QoD0 and reconcile all76 results.</li>
+<li>Investigate victim SMB reachability/authentication with bounded read-only checks.</li>
+<li>Review DC timeout causes and possible cleanup remnants while preserving Defender.</li>
+<li>Validate finding applicability; prioritize controlled RDP TLS hardening after compatibility checks.</li>
+<li>Capture final report review and keep segmentation/recovery validation separately tracked.</li>
+</ol>
+<p>Success: complete exports reconciled; per-host authenticated status explicit; timeouts triaged; findings disposition documented; remediation verified with focused retests rather than repeated blind full scans.</p>
+<p>Related: <a href="../defender-telemetry-validation-2026-10-08/">Defender validation</a>, <a href="../firewall-policy-and-aliases/">firewall record</a>, <a href="../recovery-runbook-reference/">recovery reference</a>. NIST CSF: Identify/Protect/Detect; no compliance certification implied.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

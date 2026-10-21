@@ -1,0 +1,2096 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/hunts/volt-typhoon-informed-2026/command-query-log/">
+      
+      
+        <link rel="prev" href="../technical-report/">
+      
+      
+        <link rel="next" href="../evidence-register/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>Commands and Queries - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#command-and-query-log" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Commands and Queries
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../technical-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-endpoint-audit-baseline-and-enablement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 1 Endpoint audit baseline and enablement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1 Endpoint audit baseline and enablement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c01-process-audit-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      C01 Process audit baseline
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c02-enable-process-auditing-and-command-lines" class="md-nav__link">
+    <span class="md-ellipsis">
+      C02 Enable process auditing and command lines
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c03-benign-execution-marker-and-local-event-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      C03 Benign execution marker and local event review
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c04-wazuh-and-receiver-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      C04 Wazuh and receiver checks
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-2-discovery-and-process-candidate-searches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 2 Discovery and process candidate searches
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 2 Discovery and process candidate searches">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c05-benign-discovery-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      C05 Benign discovery tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q01-wazuh-json-process-extraction-and-discovery-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q01 Wazuh JSON process extraction and discovery query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c06-tasklist-delivery-re-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      C06 Tasklist delivery re-test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q02-missing-event-pivot" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q02 Missing event pivot
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q03-higher-risk-tool-candidate-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q03 Higher risk tool candidate query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c07-portproxy-and-service-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      C07 Portproxy and service queries
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-3-session-correlation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 3 Session correlation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 3 Session correlation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c08-original-local-session-lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      C08 Original local session lookup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c09-manager-record-lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      C09 Manager record lookup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q04-splunk-session-lookup" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q04 Splunk session lookup
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q05-raw-record-and-rule-availability-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q05 Raw record and rule availability checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q06-network-and-rdp-logon-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q06 Network and RDP logon query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c10-local-network-and-rdp-logons" class="md-nav__link">
+    <span class="md-ellipsis">
+      C10 Local network and RDP logons
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c11-inspect-anonymous-record-and-bounded-session-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      C11 Inspect anonymous record and bounded session context
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-4-task-service-and-signature-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 4 Task service and signature inventory
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 4 Task service and signature inventory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c12-non-microsoft-scheduled-tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      C12 Non-Microsoft scheduled tasks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c13-browser-file-signature-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      C13 Browser file signature checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c14-profile-and-onedrive-signature-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      C14 Profile and OneDrive signature checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c15-microsoft-task-candidate-review" class="md-nav__link">
+    <span class="md-ellipsis">
+      C15 Microsoft task candidate review
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c16-smb-maintenance-script-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      C16 SMB maintenance script signature
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c17-nonstandard-path-service-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      C17 Nonstandard-path service inventory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c18-historical-service-installs" class="md-nav__link">
+    <span class="md-ellipsis">
+      C18 Historical service installs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c19-ksld-driver-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      C19 KslD driver validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-5-network-and-firewall-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 5 Network and firewall checks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 5 Network and firewall checks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c20-live-connection-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      C20 Live connection ownership
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q07-source-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q07 Source inventory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c21-splunk-udp-input-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      C21 Splunk UDP input configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#u01-pfsense-remote-logging-and-effective-rule-inspection" class="md-nav__link">
+    <span class="md-ellipsis">
+      U01 pfSense remote logging and effective rule inspection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c22-fresh-connectivity-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      C22 Fresh connectivity tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#u02-effective-logging-and-timestamp-repair" class="md-nav__link">
+    <span class="md-ellipsis">
+      U02 Effective logging and timestamp repair
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c23-attempted-filter-logger-restart" class="md-nav__link">
+    <span class="md-ellipsis">
+      C23 Attempted filter logger restart
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q08-timestamp-searches" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q08 Timestamp searches
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#u03-disable-broad-floating-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      U03 Disable broad floating rule
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q09-firewall-hunt-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q09 Firewall hunt export
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-6-direct-forwarder-diagnosis" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 6 Direct forwarder diagnosis
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 6 Direct forwarder diagnosis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#c24-splunk-connection-ownership" class="md-nav__link">
+    <span class="md-ellipsis">
+      C24 Splunk connection ownership
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c25-receiver-checks" class="md-nav__link">
+    <span class="md-ellipsis">
+      C25 Receiver checks
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#u04-enable-receiver-and-verify-transport" class="md-nav__link">
+    <span class="md-ellipsis">
+      U04 Enable receiver and verify transport
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q10-direct-source-inventory" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q10 Direct source inventory
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c26-effective-security-collection-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      C26 Effective Security collection configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q11-broader-security-availability-query" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q11 Broader Security availability query
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q12-security-event-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q12 Security event coverage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q13-raw-process-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q13 Raw process export
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-7-defender-code-integrity" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 7 Defender Code Integrity
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 7 Defender Code Integrity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q14-integrity-candidate-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q14 Integrity candidate export
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c27-current-defender-file-signature" class="md-nav__link">
+    <span class="md-ellipsis">
+      C27 Current Defender file signature
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c28-nearby-code-integrity-events" class="md-nav__link">
+    <span class="md-ellipsis">
+      C28 Nearby Code Integrity events
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c29-signature-xml-and-correlation-xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      C29 Signature XML and correlation XML
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-8-logons-and-persistence-audit-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase 8 Logons and persistence audit coverage
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 8 Logons and persistence audit coverage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q15-local-logon-and-explicit-credential-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q15 Local logon and explicit credential export
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q16-security-persistence-and-clearing-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q16 Security persistence and clearing search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c30-audit-policy-checks-and-change" class="md-nav__link">
+    <span class="md-ellipsis">
+      C30 Audit policy checks and change
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c31-task-history-availability" class="md-nav__link">
+    <span class="md-ellipsis">
+      C31 Task history availability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c32-seven-day-task-change-export" class="md-nav__link">
+    <span class="md-ellipsis">
+      C32 Seven day task change export
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unexecuted-follow-up-validation-and-detection-queries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unexecuted follow-up validation and detection queries
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unexecuted follow-up validation and detection queries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#p01-harmless-scheduled-task-audit-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      P01 Harmless scheduled task audit test
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p02-security-sensitive-behavior-triage" class="md-nav__link">
+    <span class="md-ellipsis">
+      P02 Security sensitive behavior triage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#p03-historical-fixed-windows" class="md-nav__link">
+    <span class="md-ellipsis">
+      P03 Historical fixed windows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#failed-attempts-and-corrections-register" class="md-nav__link">
+    <span class="md-ellipsis">
+      Failed attempts and corrections register
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="command-and-query-log">Command and query log<a class="headerlink" href="#command-and-query-log" title="Permanent link">&para;</a></h1>
+<p><strong>TLP:CLEAR</strong></p>
+<p>Case SOC-HUNT-2026-001 | September 24–October 3, 2026</p>
+<p>This appendix documents the successful procedures, unsuccessful attempts, search logic, results and changes recorded in the investigation. Commands are grouped in execution phases, not presented as a timestamp-perfect shell transcript. <strong>Captured</strong> means the command or procedure is visible in supplied chat evidence; <strong>reconstructed</strong> means a repeatable equivalent assembled from the investigation context. Exact original syntax is unavailable for some initial checks and test markers; those are explicitly identified. Proposed commands are not executed evidence.</p>
+<p>Use Windows commands on the victim, Linux commands on the indicated server, SPL in Splunk Web, and pfSense commands only in the appropriate Diagnostics command area. Windows system-changing commands require elevated PowerShell. Times in examples are fixed historical evidence windows; rolling searches executed later will cover different data.</p>
+<h2 id="phase-1-endpoint-audit-baseline-and-enablement">Phase 1 Endpoint audit baseline and enablement<a class="headerlink" href="#phase-1-endpoint-audit-baseline-and-enablement" title="Permanent link">&para;</a></h2>
+<h3 id="c01-process-audit-baseline">C01 Process audit baseline<a class="headerlink" href="#c01-process-audit-baseline" title="Permanent link">&para;</a></h3>
+<p>Platform: victim. Status: reconstructed equivalent of initial check.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-Service</span> <span class="n">WazuhSvc</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Process Creation"</span>
+<span class="nb">Get-ItemProperty</span> <span class="n">-LiteralPath</span> <span class="s1">'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit'</span> <span class="n">-Name</span> <span class="n">ProcessCreationIncludeCmdLine_Enabled</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+</code></pre></div>
+<p>Result: WazuhSvc running; Process Creation No Auditing; command-line registry value absent. Absence of that registry property was not a malicious finding. Initial exact output is represented by the session account of the check rather than a standalone supplied text artifact.</p>
+<h3 id="c02-enable-process-auditing-and-command-lines">C02 Enable process auditing and command lines<a class="headerlink" href="#c02-enable-process-auditing-and-command-lines" title="Permanent link">&para;</a></h3>
+<p>Status: reconstructed from the recorded applied change.</p>
+<div class="highlight"><pre><span></span><code><span class="n">auditpol</span> <span class="p">/</span><span class="nb">set </span><span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Process Creation"</span> <span class="p">/</span><span class="n">success</span><span class="p">:</span><span class="n">enable</span>
+<span class="nv">$auditPath</span> <span class="p">=</span> <span class="s1">'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System\Audit'</span>
+<span class="nb">New-Item</span> <span class="n">-Path</span> <span class="nv">$auditPath</span> <span class="n">-Force</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="nb">New-ItemProperty</span> <span class="n">-Path</span> <span class="nv">$auditPath</span> <span class="n">-Name</span> <span class="n">ProcessCreationIncludeCmdLine_Enabled</span> <span class="n">-PropertyType</span> <span class="n">DWord</span> <span class="n">-Value</span> <span class="n">1</span> <span class="n">-Force</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Process Creation"</span>
+<span class="nb">Get-ItemProperty</span> <span class="n">-LiteralPath</span> <span class="nv">$auditPath</span> <span class="n">-Name</span> <span class="n">ProcessCreationIncludeCmdLine_Enabled</span>
+</code></pre></div>
+<p>Result: Success and value 1 verified. Historical processes before enablement were not recovered. Subsequent direct 4688 events contained command lines.</p>
+<h3 id="c03-benign-execution-marker-and-local-event-review">C03 Benign execution marker and local event review<a class="headerlink" href="#c03-benign-execution-marker-and-local-event-review" title="Permanent link">&para;</a></h3>
+<p>Status: recorded marker; repeatable local query reconstructed.</p>
+<div class="highlight"><pre><span></span><code><span class="n">cmd</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">c</span> <span class="s2">"echo SOC_VOLT_HUNT_VISIBILITY_TEST"</span>
+<span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'Security'</span><span class="p">;</span> <span class="n">Id</span><span class="p">=</span><span class="n">4688</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">20</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">RecordId</span><span class="p">,</span> <span class="n">Message</span>
+</code></pre></div>
+<p>Result: record 42962 at September 24 19:30:42, seclabadmin, logon ID 0x7a169, parent PowerShell. Wazuh rule 67027 level 3 at 19:30:45.988−0600. First Splunk marker unlocated. Later TEST_02 executions returned 43496 and 43497; the exact second marker command text was not preserved and is not invented here.</p>
+<h3 id="c04-wazuh-and-receiver-checks">C04 Wazuh and receiver checks<a class="headerlink" href="#c04-wazuh-and-receiver-checks" title="Permanent link">&para;</a></h3>
+<p>Status: exact filtering procedure reconstructed except the record-specific grep preserved below.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>grep<span class="w"> </span>-F<span class="w"> </span><span class="s1">'SOC_VOLT_HUNT_VISIBILITY_TEST'</span><span class="w"> </span>/var/ossec/logs/alerts/alerts.json
+</code></pre></div>
+<p>On Splunk server, a UDP capture was used to verify arrival; equivalent read-only command:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>tcpdump<span class="w"> </span>-ni<span class="w"> </span>any<span class="w"> </span>udp<span class="w"> </span>port<span class="w"> </span><span class="m">5515</span>
+</code></pre></div>
+<p>Result: manager alerts and incoming datagrams were observed. Effective manager forwarding had no restrictive level filter. Exact original tcpdump options and entire manager configuration dump are not preserved. Do not add a forwarding threshold to solve an unproven threshold issue.</p>
+<h2 id="phase-2-discovery-and-process-candidate-searches">Phase 2 Discovery and process candidate searches<a class="headerlink" href="#phase-2-discovery-and-process-candidate-searches" title="Permanent link">&para;</a></h2>
+<h3 id="c05-benign-discovery-tests">C05 Benign discovery tests<a class="headerlink" href="#c05-benign-discovery-tests" title="Permanent link">&para;</a></h3>
+<p>Status: recorded commands; execute separately.</p>
+<div class="highlight"><pre><span></span><code><span class="n">whoami</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">all</span>
+<span class="n">hostname</span><span class="p">.</span><span class="n">exe</span>
+<span class="n">ipconfig</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">all</span>
+<span class="n">net</span><span class="p">.</span><span class="n">exe</span> <span class="n">user</span>
+<span class="n">tasklist</span><span class="p">.</span><span class="n">exe</span>
+</code></pre></div>
+<p>Result: Splunk 43509 whoami, 43511 hostname, 43512 ipconfig, 43514 net, 43515 net1; latter parent net.exe. Tasklist 43513 appeared locally and in Wazuh but was unlocated in Splunk. Each tool's appearance was expected operator activity.</p>
+<h3 id="q01-wazuh-json-process-extraction-and-discovery-query">Q01 Wazuh JSON process extraction and discovery query<a class="headerlink" href="#q01-wazuh-json-process-extraction-and-discovery-query" title="Permanent link">&para;</a></h3>
+<p>Status: recorded extraction pattern; complete reusable query. The candidate list below matches the provided discovery screenshot. Use the applicable historical time picker for September 24 evidence, rather than expecting <code>-24h</code> to recover it on October 3.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515"
+| rex field=_raw "(?&lt;event_json&gt;\{\"win\":.*)$"
+| spath input=event_json path=win.system.eventID output=event_id
+| spath input=event_json path=win.system.computer output=endpoint
+| spath input=event_json path=win.system.eventRecordID output=record_id
+| spath input=event_json path=win.eventdata.subjectUserName output=account
+| spath input=event_json path=win.eventdata.newProcessName output=process
+| spath input=event_json path=win.eventdata.parentProcessName output=parent
+| spath input=event_json path=win.eventdata.commandLine output=command_line
+| where event_id="4688" AND endpoint="soc-vict-win10.sochomelab.local"
+| eval process_name=lower(replace(process,"^.*\\\\",""))
+| where in(process_name,"whoami.exe","hostname.exe","systeminfo.exe",
+    "ipconfig.exe","net.exe","net1.exe","nltest.exe","netstat.exe",
+    "tasklist.exe","quser.exe","qwinsta.exe","arp.exe","route.exe")
+| sort 0 _time
+| table _time endpoint record_id account process_name parent command_line
+</code></pre></div>
+<p>Result: seven visible discovery entries after two later tasklist tests. The regex assumes the embedded win JSON ends the message and is complete; it does not establish ingestion completeness. A broad numeric raw search can match unrelated sudo commands and must be confirmed using extracted record IDs.</p>
+<h3 id="c06-tasklist-delivery-re-test">C06 Tasklist delivery re-test<a class="headerlink" href="#c06-tasklist-delivery-re-test" title="Permanent link">&para;</a></h3>
+<p>Status: captured; run twice in original investigation.</p>
+<div class="highlight"><pre><span></span><code><span class="n">tasklist</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">fi</span> <span class="s2">"IMAGENAME eq powershell.exe"</span>
+</code></pre></div>
+<p>Result: Windows PowerShell PID 5488 visible; Splunk records 43538 at 20:47:28 and 43539 at 20:48:27. Those two events correspond to two runs.</p>
+<h3 id="q02-missing-event-pivot">Q02 Missing event pivot<a class="headerlink" href="#q02-missing-event-pivot" title="Permanent link">&para;</a></h3>
+<p>Status: reconstructed targeted procedure.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515" "43513"
+| table _time _raw
+</code></pre></div>
+<p>Result: original tasklist event not located; no cause proven. Raw-name and record-specific checks did not justify concluding truncation or UDP loss.</p>
+<h3 id="q03-higher-risk-tool-candidate-query">Q03 Higher risk tool candidate query<a class="headerlink" href="#q03-higher-risk-tool-candidate-query" title="Permanent link">&para;</a></h3>
+<p>Status: captured corrected 4688 query. An earlier version reused logon fields and omitted process_name, producing an invalid negative result; this is the corrected form.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515" earliest=-24h latest=now
+| rex field=_raw "(?&lt;event_json&gt;\{\"win\":.*)$"
+| spath input=event_json path=win.system.eventID output=event_id
+| spath input=event_json path=win.system.computer output=endpoint
+| spath input=event_json path=win.system.eventRecordID output=record_id
+| spath input=event_json path=win.eventdata.subjectUserName output=account
+| spath input=event_json path=win.eventdata.newProcessName output=process
+| spath input=event_json path=win.eventdata.parentProcessName output=parent
+| spath input=event_json path=win.eventdata.commandLine output=command_line
+| where event_id="4688" AND endpoint="soc-vict-win10.sochomelab.local"
+| eval process_name=lower(replace(process,"^.*\\\\",""))
+| where in(process_name,"ntdsutil.exe","vssadmin.exe","diskshadow.exe",
+    "reg.exe","netsh.exe","schtasks.exe","sc.exe","wmic.exe","wevtutil.exe")
+| sort 0 _time
+| table _time endpoint record_id account process_name parent command_line
+</code></pre></div>
+<p>Result: correct baseline initially zero, then two deliberate validation commands below. Tool-name-only hits require argument and parent review.</p>
+<h3 id="c07-portproxy-and-service-queries">C07 Portproxy and service queries<a class="headerlink" href="#c07-portproxy-and-service-queries" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="n">netsh</span><span class="p">.</span><span class="n">exe</span> <span class="n">interface</span> <span class="n">portproxy</span> <span class="n">show</span> <span class="n">all</span>
+<span class="n">sc</span><span class="p">.</span><span class="n">exe</span> <span class="n">query</span> <span class="n">WazuhSvc</span>
+</code></pre></div>
+<p>Result: portproxy returned to the prompt with no entries; service query reached Splunk. Records 43612 and 43613, seclabadmin, PowerShell parent, at September 24 21:10:45 and 21:11:14. The commands only queried state.</p>
+<h2 id="phase-3-session-correlation">Phase 3 Session correlation<a class="headerlink" href="#phase-3-session-correlation" title="Permanent link">&para;</a></h2>
+<h3 id="c08-original-local-session-lookup">C08 Original local session lookup<a class="headerlink" href="#c08-original-local-session-lookup" title="Permanent link">&para;</a></h3>
+<p>Status: captured procedure.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'Security'</span><span class="p">;</span> <span class="n">Id</span><span class="p">=</span><span class="n">4624</span><span class="p">}</span> <span class="n">-MaxEvents</span> <span class="n">2000</span> <span class="p">|</span>
+    <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+        <span class="nv">$event</span> <span class="p">=</span> <span class="nv">$_</span>
+        <span class="nv">$xml</span> <span class="p">=</span> <span class="no">[xml]</span><span class="nv">$event</span><span class="p">.</span><span class="n">ToXml</span><span class="p">()</span>
+        <span class="nv">$fields</span> <span class="p">=</span> <span class="p">@{}</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="nv">$item</span> <span class="k">in</span> <span class="nv">$xml</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">EventData</span><span class="p">.</span><span class="n">Data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$fields</span><span class="p">[</span><span class="nv">$item</span><span class="p">.</span><span class="n">Name</span><span class="p">]</span> <span class="p">=</span> <span class="nv">$item</span><span class="p">.</span><span class="n">InnerText</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetLogonId'</span><span class="p">]</span> <span class="o">-eq</span> <span class="s1">'0x7a169'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="no">[pscustomobject]</span><span class="p">@{</span>
+                <span class="n">TimeCreated</span> <span class="p">=</span> <span class="nv">$event</span><span class="p">.</span><span class="n">TimeCreated</span>
+                <span class="n">RecordId</span> <span class="p">=</span> <span class="nv">$event</span><span class="p">.</span><span class="n">RecordId</span>
+                <span class="n">Account</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetUserName'</span><span class="p">]</span>
+                <span class="n">Domain</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetDomainName'</span><span class="p">]</span>
+                <span class="n">LogonId</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetLogonId'</span><span class="p">]</span>
+                <span class="n">LogonType</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'LogonType'</span><span class="p">]</span>
+                <span class="n">SourceIP</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'IpAddress'</span><span class="p">]</span>
+                <span class="n">Workstation</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'WorkstationName'</span><span class="p">]</span>
+                <span class="n">AuthPackage</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'AuthenticationPackageName'</span><span class="p">]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: record 42807, September 24 19:26:15, local seclabadmin, type 2, 127.0.0.1, Negotiate.</p>
+<h3 id="c09-manager-record-lookup">C09 Manager record lookup<a class="headerlink" href="#c09-manager-record-lookup" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>grep<span class="w"> </span>-F<span class="w"> </span><span class="s1">'"eventRecordID":"42807"'</span><span class="w"> </span>/var/ossec/logs/alerts/alerts.json<span class="w"> </span><span class="p">|</span>
+<span class="w">    </span>grep<span class="w"> </span>-F<span class="w"> </span><span class="s1">'soc-vict-win10'</span>
+</code></pre></div>
+<p>Result: Wazuh alert exists, rule 60118 level 3, time 19:26:18.877−0600. User later confirmed receiver started after that activity.</p>
+<h3 id="q04-splunk-session-lookup">Q04 Splunk session lookup<a class="headerlink" href="#q04-splunk-session-lookup" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515"
+| rex field=_raw "(?&lt;event_json&gt;\{\"win\":.*)$"
+| spath input=event_json path=win.system.eventID output=event_id
+| spath input=event_json path=win.system.computer output=endpoint
+| spath input=event_json path=win.system.eventRecordID output=record_id
+| spath input=event_json path=win.eventdata.targetUserName output=account
+| spath input=event_json path=win.eventdata.targetLogonId output=logon_id
+| spath input=event_json path=win.eventdata.logonType output=logon_type
+| spath input=event_json path=win.eventdata.ipAddress output=source_ip
+| where event_id="4624" AND endpoint="soc-vict-win10.sochomelab.local"
+    AND lower(logon_id)="0x7a169"
+| table _time endpoint record_id account logon_id logon_type source_ip
+</code></pre></div>
+<p>Result: zero for original session. Broad rule 60118 search without session restriction found four other type 2 records, not the original session.</p>
+<h3 id="q05-raw-record-and-rule-availability-checks">Q05 Raw record and rule availability checks<a class="headerlink" href="#q05-raw-record-and-rule-availability-checks" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515" "60118"
+| where like(_raw,"%42807%")
+| eval raw_characters=len(_raw)
+| table _time host raw_characters _raw
+</code></pre></div>
+<p>Result: zero.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515" "60118"
+| stats count earliest(_time) AS first_seen latest(_time) AS last_seen
+| convert ctime(first_seen) ctime(last_seen)
+</code></pre></div>
+<p>Result: four received events. The integrity export <code>1790305081_56.csv</code> retained record IDs, raw lengths and final fragments. Exact query that generated those final fragments is not preserved.</p>
+<h3 id="q06-network-and-rdp-logon-query">Q06 Network and RDP logon query<a class="headerlink" href="#q06-network-and-rdp-logon-query" title="Permanent link">&para;</a></h3>
+<p>Status: captured, based on Q04 extraction with domain added and session restriction removed.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5515"
+| rex field=_raw "(?&lt;event_json&gt;\{\"win\":.*)$"
+| spath input=event_json path=win.system.eventID output=event_id
+| spath input=event_json path=win.system.computer output=endpoint
+| spath input=event_json path=win.system.eventRecordID output=record_id
+| spath input=event_json path=win.eventdata.targetUserName output=account
+| spath input=event_json path=win.eventdata.targetDomainName output=account_domain
+| spath input=event_json path=win.eventdata.targetLogonId output=logon_id
+| spath input=event_json path=win.eventdata.logonType output=logon_type
+| spath input=event_json path=win.eventdata.ipAddress output=source_ip
+| where event_id="4624" AND endpoint="soc-vict-win10.sochomelab.local"
+    AND in(logon_type,"3","10")
+| sort 0 _time
+| table _time endpoint record_id account_domain account logon_id logon_type source_ip
+</code></pre></div>
+<p>Result: zero in Splunk. Direct local check below returned one anonymous network logon.</p>
+<h3 id="c10-local-network-and-rdp-logons">C10 Local network and RDP logons<a class="headerlink" href="#c10-local-network-and-rdp-logons" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$since</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddHours</span><span class="p">(-</span><span class="n">24</span><span class="p">)</span>
+<span class="nv">$remoteLogons</span> <span class="p">=</span> <span class="p">@(</span>
+    <span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'Security'</span><span class="p">;</span> <span class="n">Id</span><span class="p">=</span><span class="n">4624</span><span class="p">;</span> <span class="n">StartTime</span><span class="p">=</span><span class="nv">$since</span><span class="p">}</span> <span class="n">-ErrorAction</span> <span class="n">Stop</span> <span class="p">|</span>
+        <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+            <span class="nv">$event</span> <span class="p">=</span> <span class="nv">$_</span>
+            <span class="nv">$xml</span> <span class="p">=</span> <span class="no">[xml]</span><span class="nv">$event</span><span class="p">.</span><span class="n">ToXml</span><span class="p">()</span>
+            <span class="nv">$fields</span> <span class="p">=</span> <span class="p">@{}</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="nv">$item</span> <span class="k">in</span> <span class="nv">$xml</span><span class="p">.</span><span class="n">Event</span><span class="p">.</span><span class="n">EventData</span><span class="p">.</span><span class="n">Data</span><span class="p">)</span> <span class="p">{</span> <span class="nv">$fields</span><span class="p">[</span><span class="nv">$item</span><span class="p">.</span><span class="n">Name</span><span class="p">]</span> <span class="p">=</span> <span class="nv">$item</span><span class="p">.</span><span class="n">InnerText</span> <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$fields</span><span class="p">[</span><span class="s1">'LogonType'</span><span class="p">]</span> <span class="n">-in</span> <span class="p">@(</span><span class="s1">'3'</span><span class="p">,</span><span class="s1">'10'</span><span class="p">))</span> <span class="p">{</span>
+                <span class="no">[pscustomobject]</span><span class="p">@{</span>
+                    <span class="n">Time</span> <span class="p">=</span> <span class="nv">$event</span><span class="p">.</span><span class="n">TimeCreated</span>
+                    <span class="n">RecordId</span> <span class="p">=</span> <span class="nv">$event</span><span class="p">.</span><span class="n">RecordId</span>
+                    <span class="n">Account</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetUserName'</span><span class="p">]</span>
+                    <span class="n">Domain</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetDomainName'</span><span class="p">]</span>
+                    <span class="n">LogonId</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'TargetLogonId'</span><span class="p">]</span>
+                    <span class="n">LogonType</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'LogonType'</span><span class="p">]</span>
+                    <span class="n">SourceIP</span> <span class="p">=</span> <span class="nv">$fields</span><span class="p">[</span><span class="s1">'IpAddress'</span><span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+<span class="p">)</span>
+<span class="nv">$remoteLogons</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">Time</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+<span class="s2">"Matching network/RDP logons: </span><span class="p">$(</span><span class="nv">$remoteLogons</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span><span class="s2">"</span>
+</code></pre></div>
+<p>Result: one record 42761, ANONYMOUS LOGON type 3, no source IP. No type 10 returned in that local window.</p>
+<h3 id="c11-inspect-anonymous-record-and-bounded-session-context">C11 Inspect anonymous record and bounded session context<a class="headerlink" href="#c11-inspect-anonymous-record-and-bounded-session-context" title="Permanent link">&para;</a></h3>
+<p>Status: exact record query captured; bounded correlation procedure reconstructed.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="n">Security</span> <span class="n">-FilterXPath</span> <span class="s1">'*[System[(EventID=4624) and (EventRecordID=42761)]]'</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">RecordId</span><span class="p">,</span> <span class="n">Message</span>
+</code></pre></div>
+<p>Result: session 0x2b3bc, NT AUTHORITY, source/workstation/process absent, NTLM V1 label. Equivalent session-context procedure:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$sessionEvent</span> <span class="p">=</span> <span class="nb">Get-WinEvent</span> <span class="n">-LogName</span> <span class="n">Security</span> <span class="n">-FilterXPath</span> <span class="s1">'*[System[(EventID=4624) and (EventRecordID=42761)]]'</span>
+<span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span><span class="p">=</span><span class="s1">'Security'</span>
+    <span class="n">StartTime</span><span class="p">=</span><span class="nv">$sessionEvent</span><span class="p">.</span><span class="n">TimeCreated</span><span class="p">.</span><span class="n">AddSeconds</span><span class="p">(-</span><span class="n">5</span><span class="p">)</span>
+    <span class="n">EndTime</span><span class="p">=</span><span class="nv">$sessionEvent</span><span class="p">.</span><span class="n">TimeCreated</span><span class="p">.</span><span class="n">AddMinutes</span><span class="p">(</span><span class="n">10</span><span class="p">)</span>
+<span class="p">}</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ToXml</span><span class="p">()</span> <span class="o">-match</span> <span class="s1">'(?i)0x2b3bc'</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">RecordId</span><span class="p">,</span> <span class="n">Message</span>
+</code></pre></div>
+<p>Result reported: only original event. Initial process audit gap limits correlation.</p>
+<h2 id="phase-4-task-service-and-signature-inventory">Phase 4 Task service and signature inventory<a class="headerlink" href="#phase-4-task-service-and-signature-inventory" title="Permanent link">&para;</a></h2>
+<h3 id="c12-non-microsoft-scheduled-tasks">C12 Non-Microsoft scheduled tasks<a class="headerlink" href="#c12-non-microsoft-scheduled-tasks" title="Permanent link">&para;</a></h3>
+<p>Status: captured, with PowerShell <code>$_</code> syntax corrected from chat formatting.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-ScheduledTask</span> <span class="p">|</span>
+    <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">TaskPath</span> <span class="o">-notlike</span> <span class="s1">'\Microsoft\*'</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">TaskPath</span><span class="p">,</span> <span class="n">TaskName</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'RunAs'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">UserId</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'Actions'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Actions</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="s2">"</span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Execute</span><span class="p">)</span><span class="s2"> </span><span class="p">$(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Arguments</span><span class="p">)</span><span class="s2">"</span> <span class="p">})</span> <span class="n">-join</span> <span class="s1">'; '</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: 12 browser and OneDrive tasks; Security Admin account recognized. Initial duplicate paste formed <code>Format-ListGet-ScheduledTask</code> twice and failed; those runs did not enumerate tasks successfully. The later corrected run did.</p>
+<h3 id="c13-browser-file-signature-checks">C13 Browser file signature checks<a class="headerlink" href="#c13-browser-file-signature-checks" title="Permanent link">&para;</a></h3>
+<p>Status: captured corrected assignment pattern.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$files</span> <span class="p">=</span> <span class="p">@(</span>
+    <span class="s1">'C:\Program Files (x86)\BraveSoftware\Update\BraveUpdate.exe'</span>
+    <span class="s1">'C:\Program Files (x86)\Microsoft\EdgeUpdate\MicrosoftEdgeUpdate.exe'</span>
+    <span class="s1">'C:\Program Files (x86)\Mozilla Firefox\firefox.exe'</span>
+    <span class="s1">'C:\Program Files (x86)\Mozilla Firefox\default-browser-agent.exe'</span>
+<span class="p">)</span>
+<span class="nv">$results</span> <span class="p">=</span> <span class="k">foreach</span> <span class="p">(</span><span class="nv">$file</span> <span class="k">in</span> <span class="nv">$files</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$signature</span> <span class="p">=</span> <span class="nb">Get-AuthenticodeSignature</span> <span class="n">-LiteralPath</span> <span class="nv">$file</span>
+        <span class="no">[pscustomobject]</span><span class="p">@{</span><span class="n">File</span><span class="p">=</span><span class="nv">$file</span><span class="p">;</span> <span class="n">Status</span><span class="p">=</span><span class="nv">$signature</span><span class="p">.</span><span class="n">Status</span><span class="p">;</span> <span class="n">Signer</span><span class="p">=</span><span class="nv">$signature</span><span class="p">.</span><span class="n">SignerCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="no">[pscustomobject]</span><span class="p">@{</span><span class="n">File</span><span class="p">=</span><span class="nv">$file</span><span class="p">;</span> <span class="n">Status</span><span class="p">=</span><span class="s1">'File not found'</span><span class="p">;</span> <span class="n">Signer</span><span class="p">=</span><span class="s1">''</span><span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$results</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: four Valid signatures, Brave Software, Microsoft and Mozilla respectively. Initial <code>foreach</code> statement piped directly to Format-List produced an empty-pipe parser error; assignment before piping fixed it.</p>
+<h3 id="c14-profile-and-onedrive-signature-checks">C14 Profile and OneDrive signature checks<a class="headerlink" href="#c14-profile-and-onedrive-signature-checks" title="Permanent link">&para;</a></h3>
+<p>Status: reconstructed equivalent; reported outputs retained in screenshots.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-CimInstance</span> <span class="n">Win32_UserProfile</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">SID</span><span class="p">,</span> <span class="n">LocalPath</span><span class="p">,</span> <span class="n">Loaded</span><span class="p">,</span> <span class="n">Special</span> <span class="p">|</span> <span class="nb">Format-List</span>
+<span class="nv">$results</span> <span class="p">=</span> <span class="k">foreach</span> <span class="p">(</span><span class="nv">$profile</span> <span class="k">in</span> <span class="nb">Get-CimInstance</span> <span class="n">Win32_UserProfile</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$oneDrive</span> <span class="p">=</span> <span class="nb">Join-Path</span> <span class="nv">$profile</span><span class="p">.</span><span class="n">LocalPath</span> <span class="s1">'AppData\Local\Microsoft\OneDrive'</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$oneDrive</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nb">Get-ChildItem</span> <span class="n">-LiteralPath</span> <span class="nv">$oneDrive</span> <span class="n">-Filter</span> <span class="s1">'*.exe'</span> <span class="n">-Recurse</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+            <span class="nb">Where-Object</span> <span class="n">Name</span> <span class="n">-in</span> <span class="p">@(</span><span class="s1">'OneDriveStandaloneUpdater.exe'</span><span class="p">,</span><span class="s1">'OneDriveLauncher.exe'</span><span class="p">)</span> <span class="p">|</span>
+            <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+                <span class="nv">$signature</span> <span class="p">=</span> <span class="nb">Get-AuthenticodeSignature</span> <span class="n">-LiteralPath</span> <span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span>
+                <span class="no">[pscustomobject]</span><span class="p">@{</span><span class="n">Profile</span><span class="p">=</span><span class="nv">$profile</span><span class="p">.</span><span class="n">LocalPath</span><span class="p">;</span> <span class="n">File</span><span class="p">=</span><span class="nv">$_</span><span class="p">.</span><span class="n">FullName</span><span class="p">;</span> <span class="n">Status</span><span class="p">=</span><span class="nv">$signature</span><span class="p">.</span><span class="n">Status</span><span class="p">;</span> <span class="n">Signer</span><span class="p">=</span><span class="nv">$signature</span><span class="p">.</span><span class="n">SignerCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">}</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$results</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result recorded: seclabadmin and Security Admin updater files Valid; seclabadmin launcher Valid; SplunkForwarder service profile directory not present; no Administrator profile returned. The recursive equivalent can discover more versions than the original bounded check; it is not a verbatim historical inventory.</p>
+<h3 id="c15-microsoft-task-candidate-review">C15 Microsoft task candidate review<a class="headerlink" href="#c15-microsoft-task-candidate-review" title="Permanent link">&para;</a></h3>
+<p>Status: reconstructed inventory equivalent; exact historical results in chat.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$results</span> <span class="p">=</span> <span class="k">foreach</span> <span class="p">(</span><span class="nv">$task</span> <span class="k">in</span> <span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="n">TaskPath</span> <span class="o">-like</span> <span class="s1">'\Microsoft\*'</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$action</span> <span class="k">in</span> <span class="nv">$task</span><span class="p">.</span><span class="n">Actions</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$action</span><span class="p">.</span><span class="n">Execute</span> <span class="o">-match</span> <span class="s1">'(?i)(powershell|rundll32|cmd|wscript|cscript|mshta)\.exe$'</span><span class="p">)</span> <span class="p">{</span>
+            <span class="no">[pscustomobject]</span><span class="p">@{</span><span class="n">TaskPath</span><span class="p">=</span><span class="nv">$task</span><span class="p">.</span><span class="n">TaskPath</span><span class="p">;</span> <span class="n">TaskName</span><span class="p">=</span><span class="nv">$task</span><span class="p">.</span><span class="n">TaskName</span><span class="p">;</span> <span class="n">State</span><span class="p">=</span><span class="nv">$task</span><span class="p">.</span><span class="n">State</span><span class="p">;</span> <span class="n">RunAs</span><span class="p">=</span><span class="nv">$task</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">UserId</span><span class="p">;</span> <span class="n">Execute</span><span class="p">=</span><span class="nv">$action</span><span class="p">.</span><span class="n">Execute</span><span class="p">;</span> <span class="n">Arguments</span><span class="p">=</span><span class="nv">$action</span><span class="p">.</span><span class="n">Arguments</span><span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$results</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result recorded: Windows maintenance tasks, including SMB uninstall scripts, Pca tasks, StartupAppTask, repository cleanup and dsregcmd workplace tasks. The earlier broad expression accidentally matched dsregcmd by its suffix; the explicit executable expression here avoids that false candidate. Task arguments are in the technical narrative; full original inventory is in the session record.</p>
+<h3 id="c16-smb-maintenance-script-signature">C16 SMB maintenance script signature<a class="headerlink" href="#c16-smb-maintenance-script-signature" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$scriptPath</span> <span class="p">=</span> <span class="s2">"$env:windir\System32\WindowsPowerShell\v1.0\Modules\SmbShare\DisableUnusedSmb1.ps1"</span>
+<span class="nb">Get-AuthenticodeSignature</span> <span class="n">-LiteralPath</span> <span class="nv">$scriptPath</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'Signer'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SignerCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: Valid, Microsoft Windows. A valid file signature alone does not verify every task definition.</p>
+<h3 id="c17-nonstandard-path-service-inventory">C17 Nonstandard-path service inventory<a class="headerlink" href="#c17-nonstandard-path-service-inventory" title="Permanent link">&para;</a></h3>
+<p>Status: reconstructed equivalent of results-only supplied inventory.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-CimInstance</span> <span class="n">Win32_Service</span> <span class="p">|</span>
+    <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">PathName</span> <span class="o">-and</span> <span class="nv">$_</span><span class="p">.</span><span class="n">PathName</span> <span class="o">-notmatch</span> <span class="s1">'(?i)\\Windows\\(System32|SysWOW64)\\'</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">StartMode</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'RunAs'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">StartName</span><span class="p">}},</span>
+        <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'Path'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">PathName</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: browsers, Defender, SplunkForwarder, Wazuh, VMware, Update Health Tools and Windows Media Player. Running/stopped status was not interpreted as disabling by an actor.</p>
+<h3 id="c18-historical-service-installs">C18 Historical service installs<a class="headerlink" href="#c18-historical-service-installs" title="Permanent link">&para;</a></h3>
+<p>Status: captured, used at two different dates.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span><span class="n">LogName</span><span class="p">=</span><span class="s1">'System'</span><span class="p">;</span> <span class="n">Id</span><span class="p">=</span><span class="n">7045</span><span class="p">;</span> <span class="n">StartTime</span><span class="p">=(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(-</span><span class="n">7</span><span class="p">)}</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Sort-Object</span> <span class="n">TimeCreated</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">RecordId</span><span class="p">,</span> <span class="n">Message</span>
+</code></pre></div>
+<p>Earlier result: KslD record 3967, VMware records 4106 and 4115. Latest October 3 result: prompt returned with no entries. Suppressed errors limit assurance; no-results is not independent proof of channel readability. A later duplicate paste joined <code>MessageGet-WinEvent</code> and failed before the corrected one-line rerun.</p>
+<h3 id="c19-ksld-driver-validation">C19 KslD driver validation<a class="headerlink" href="#c19-ksld-driver-validation" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$driverPath</span> <span class="p">=</span> <span class="s2">"$env:windir\System32\drivers\wd\KslD.sys"</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">Test-Path</span> <span class="n">-LiteralPath</span> <span class="nv">$driverPath</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">Get-AuthenticodeSignature</span> <span class="n">-LiteralPath</span> <span class="nv">$driverPath</span> <span class="p">|</span>
+        <span class="nb">Select-Object</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'Signer'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SignerCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">}}</span> <span class="p">|</span>
+        <span class="nb">Format-List</span>
+    <span class="p">(</span><span class="nb">Get-Item</span> <span class="n">-LiteralPath</span> <span class="nv">$driverPath</span><span class="p">).</span><span class="n">VersionInfo</span> <span class="p">|</span>
+        <span class="nb">Select-Object</span> <span class="n">CompanyName</span><span class="p">,</span> <span class="n">FileDescription</span><span class="p">,</span> <span class="n">ProductName</span><span class="p">,</span> <span class="n">FileVersion</span> <span class="p">|</span>
+        <span class="nb">Format-List</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> <span class="s2">"File not present: $driverPath"</span> <span class="p">}</span>
+</code></pre></div>
+<p>Result: Valid Microsoft Windows; Microsoft Malware Protection, version 1.1.26080.64012. Operator recognized VMware installation timing.</p>
+<h2 id="phase-5-network-and-firewall-checks">Phase 5 Network and firewall checks<a class="headerlink" href="#phase-5-network-and-firewall-checks" title="Permanent link">&para;</a></h2>
+<h3 id="c20-live-connection-ownership">C20 Live connection ownership<a class="headerlink" href="#c20-live-connection-ownership" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$results</span> <span class="p">=</span> <span class="nb">Get-NetTCPConnection</span> <span class="n">-State</span> <span class="n">Established</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span>
+    <span class="nv">$connection</span> <span class="p">=</span> <span class="nv">$_</span>
+    <span class="nv">$owner</span> <span class="p">=</span> <span class="nb">Get-Process</span> <span class="n">-Id</span> <span class="nv">$connection</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span>
+    <span class="no">[pscustomobject]</span><span class="p">@{</span>
+        <span class="n">LocalAddress</span><span class="p">=</span><span class="nv">$connection</span><span class="p">.</span><span class="n">LocalAddress</span><span class="p">;</span> <span class="n">LocalPort</span><span class="p">=</span><span class="nv">$connection</span><span class="p">.</span><span class="n">LocalPort</span>
+        <span class="n">RemoteAddress</span><span class="p">=</span><span class="nv">$connection</span><span class="p">.</span><span class="n">RemoteAddress</span><span class="p">;</span> <span class="n">RemotePort</span><span class="p">=</span><span class="nv">$connection</span><span class="p">.</span><span class="n">RemotePort</span>
+        <span class="n">ProcessId</span><span class="p">=</span><span class="nv">$connection</span><span class="p">.</span><span class="n">OwningProcess</span><span class="p">;</span> <span class="n">ProcessName</span><span class="p">=</span><span class="nv">$owner</span><span class="p">.</span><span class="n">ProcessName</span><span class="p">;</span> <span class="n">ProcessPath</span><span class="p">=</span><span class="nv">$owner</span><span class="p">.</span><span class="n">Path</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="nv">$results</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">ProcessName</span><span class="p">,</span> <span class="n">RemoteAddress</span> <span class="p">|</span> <span class="nb">Format-List</span>
+<span class="nb">Get-CimInstance</span> <span class="n">Win32_Service</span> <span class="p">|</span> <span class="nb">Where-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ProcessId</span> <span class="n">-in</span> <span class="p">@(</span><span class="n">3300</span><span class="p">,</span><span class="n">3552</span><span class="p">)</span> <span class="p">}</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">DisplayName</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">ProcessId</span><span class="p">,</span> <span class="n">PathName</span> <span class="p">|</span> <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: Defender, Windows push notifications and Wazuh connections as detailed in report. Blank protected-process path did not alone imply suspiciousness; CIM resolved service paths.</p>
+<h3 id="q07-source-inventory">Q07 Source inventory<a class="headerlink" href="#q07-source-inventory" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main earliest=-24h latest=now NOT source="udp:5515"
+| stats count latest(_time) AS last_seen by host source sourcetype
+| convert ctime(last_seen)
+| sort - count
+</code></pre></div>
+<p>Result: 25 syslog entries from host 10.10.10.5, source udp:5140, latest September 24 21:09:51. CSV contained DHCP events, not victim traffic visibility. A separate address search returned no results; exact first address-search syntax not preserved.</p>
+<h3 id="c21-splunk-udp-input-configuration">C21 Splunk UDP input configuration<a class="headerlink" href="#c21-splunk-udp-input-configuration" title="Permanent link">&para;</a></h3>
+<p>Status: captured on Splunk server.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>/opt/splunk/bin/splunk<span class="w"> </span>btool<span class="w"> </span>inputs<span class="w"> </span>list<span class="w"> </span><span class="s1">'udp://5515'</span><span class="w"> </span>--debug
+</code></pre></div>
+<p>Result: launcher/local inputs.conf, index main, sourcetype syslog, connection_host ip, host soc-siem-splunk; rcvbuf 1572864 from default. This is UDP 5515 configuration, not the later TCP receiver configuration.</p>
+<h3 id="u01-pfsense-remote-logging-and-effective-rule-inspection">U01 pfSense remote logging and effective rule inspection<a class="headerlink" href="#u01-pfsense-remote-logging-and-effective-rule-inspection" title="Permanent link">&para;</a></h3>
+<p>Status: captured UI procedure and shell diagnostic.</p>
+<ol>
+<li>Inspect Status → System Logs → Settings: destinations 10.10.10.10:5514 and 10.10.10.14:5140; Firewall Events checked along with selected other categories.</li>
+<li>Inspect first Corporate allow rule: log checkbox initially unchecked; enable, save and apply; subsequently confirmed checked.</li>
+<li>Inspect Firewall logs and source/destination filters. Tests still absent from intended rule.</li>
+<li>Run in Diagnostics → Command Prompt → Execute Shell Command:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>pfctl<span class="w"> </span>-vvsr
+</code></pre></div>
+<p>Result: floating @94 tracker 1786962198 pass quick IPv4 any-to-any, before logged Corporate @97 tracker 1786792812. Floating had 5,855,163 packets and 5,189,784,475 bytes in the supplied snapshot; intended Corporate rule had zero packets/states. Effective counters identified the earlier match.</p>
+<h3 id="c22-fresh-connectivity-tests">C22 Fresh connectivity tests<a class="headerlink" href="#c22-fresh-connectivity-tests" title="Permanent link">&para;</a></h3>
+<p>Status: captured Windows commands, destinations varied across tests.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-Date</span> <span class="n">-Format</span> <span class="n">o</span>
+<span class="nb">Test-NetConnection</span> <span class="n">-ComputerName</span> <span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">1</span> <span class="n">-Port</span> <span class="n">443</span> <span class="n">-InformationLevel</span> <span class="n">Detailed</span>
+<span class="nb">Test-NetConnection</span> <span class="n">-ComputerName</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-Port</span> <span class="n">443</span> <span class="n">-InformationLevel</span> <span class="n">Detailed</span>
+<span class="nb">Test-NetConnection</span> <span class="n">-ComputerName</span> <span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">1</span><span class="p">.</span><span class="n">1</span> <span class="n">-Port</span> <span class="n">80</span> <span class="n">-InformationLevel</span> <span class="n">Detailed</span>
+<span class="nb">Test-NetConnection</span> <span class="n">-ComputerName</span> <span class="n">1</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">0</span><span class="p">.</span><span class="n">1</span> <span class="n">-Port</span> <span class="n">80</span> <span class="n">-InformationLevel</span> <span class="n">Detailed</span>
+</code></pre></div>
+<p>Result: source 10.10.20.20, Ethernet0, next hop 10.10.20.5, TcpTestSucceeded True. These were connectivity probes, not exploitation. Run-specific timestamps and ports must be taken from evidence rather than attributing every destination event to a single command.</p>
+<h3 id="u02-effective-logging-and-timestamp-repair">U02 Effective logging and timestamp repair<a class="headerlink" href="#u02-effective-logging-and-timestamp-repair" title="Permanent link">&para;</a></h3>
+<p>Status: recorded procedure.</p>
+<ol>
+<li>Enable logging on the matching floating rule temporarily, save and apply.</li>
+<li>Generate fresh port 80 test and inspect local and Splunk logs.</li>
+<li>Change pfSense system timezone from MST to America/Denver.</li>
+<li>Check shell time and emit a labeled system logger message:</li>
+</ol>
+<div class="highlight"><pre><span></span><code>date<span class="w"> </span><span class="s1">'+%Y-%m-%d %H:%M:%S %Z %z'</span>
+logger<span class="w"> </span>-t<span class="w"> </span>SOC_TIME_TEST<span class="w"> </span><span class="s2">"SOC_TIME_TEST_AFTER_TZ_CHANGE"</span>
+</code></pre></div>
+<p>Result: system date 20:35:18 MDT−0600; SOC_TIME_TEST at 20:36:12 matched, but filterlog5400 remained one hour behind.</p>
+<h3 id="c23-attempted-filter-logger-restart">C23 Attempted filter logger restart<a class="headerlink" href="#c23-attempted-filter-logger-restart" title="Permanent link">&para;</a></h3>
+<p>Platform: pfSense Execute PHP Commands, not shell. Status: captured unsuccessful restart attempt.</p>
+<div class="highlight"><pre><span></span><code><span class="x">require_once("/etc/inc/filter.inc");</span>
+<span class="x">filter_pflog_start(true);</span>
+<span class="x">echo "Firewall logging restart requested.";</span>
+</code></pre></div>
+<p>Result: echo returned; PID remained 5400. Do not interpret echo as success. Verification command:</p>
+<div class="highlight"><pre><span></span><code>date<span class="w"> </span><span class="s1">'+%Y-%m-%d %H:%M:%S %Z %z'</span><span class="p">;</span><span class="w"> </span>pgrep<span class="w"> </span>-laf<span class="w"> </span>filterlog<span class="p">;</span><span class="w"> </span>cat<span class="w"> </span>/var/run/filterlog.pid
+</code></pre></div>
+<p>Result: October-independent September 25 20:53:45 MDT, running filterlog5400 and pidfile5400; shell command itself also matched pgrep, so use the actual filterlog process line.</p>
+<h3 id="q08-timestamp-searches">Q08 Timestamp searches<a class="headerlink" href="#q08-timestamp-searches" title="Permanent link">&para;</a></h3>
+<p>Status: captured sequential queries.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5140" earliest=-10m latest=now
+"filterlog" "10.10.20.20" "1.0.0.1"
+| sort 0 - _time
+| head 1
+| table _time _raw
+</code></pre></div>
+<p>A short-window run returned no results. The wider query returned three endpoint rows:</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5140" earliest=-24h latest=+2h
+"filterlog" "10.10.20.20" "1.0.0.1"
+| eval received_time=strftime(_indextime,"%Y-%m-%d %H:%M:%S %z")
+| sort 0 - _indextime
+| head 10
+| table received_time _time _raw
+</code></pre></div>
+<p>Results 20:32:04, 20:41:53 and 20:47:45 receipt/event time versus embedded 19:32:04, 19:41:53 and 19:47:45. The reason the shorter search missed the event was not conclusively established. After reboot, fresh event 20:57:48 had aligned fields and PID 52199.</p>
+<h3 id="u03-disable-broad-floating-rule">U03 Disable broad floating rule<a class="headerlink" href="#u03-disable-broad-floating-rule" title="Permanent link">&para;</a></h3>
+<p>Status: captured UI change.</p>
+<ol>
+<li>Confirm new management access via https://10.10.10.5; retain VM console.</li>
+<li>In Floating rule tracker1786962198, check Disable this rule, Save and Apply Changes.</li>
+<li>Confirm access in fresh management tab and run new port80 test.</li>
+<li>Leave existing states alone.</li>
+</ol>
+<p>Result: September 25 21:05:42 Corporate pass to 1.0.0.1:80 from source port54926, matching temporary internet access tracker1786792812. Screenshot of full seventh row corroborates. Config backup was recommended before this change; the conversation does not independently confirm backup completion. Full segmentation not completed.</p>
+<h3 id="q09-firewall-hunt-export">Q09 Firewall hunt export<a class="headerlink" href="#q09-firewall-hunt-export" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main source="udp:5140" earliest=-30m latest=now
+"filterlog" "10.10.20.20"
+| sort 0 _time
+| table _time _raw
+</code></pre></div>
+<p>Result: 7,846 rows in 1790392172_310.csv. Most were repeated SYNs to 10.10.10.14:9997. Counts are log records, not connections. Parser used the IPv4 format observed in all rows; other formats require separate parsing.</p>
+<h2 id="phase-6-direct-forwarder-diagnosis">Phase 6 Direct forwarder diagnosis<a class="headerlink" href="#phase-6-direct-forwarder-diagnosis" title="Permanent link">&para;</a></h2>
+<h3 id="c24-splunk-connection-ownership">C24 Splunk connection ownership<a class="headerlink" href="#c24-splunk-connection-ownership" title="Permanent link">&para;</a></h3>
+<p>Status: captured victim query.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-NetTCPConnection</span> <span class="n">-RemoteAddress</span> <span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">14</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">LocalPort</span><span class="p">,</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">OwningProcess</span><span class="p">,</span>
+        <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'ProcessName'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={(</span><span class="nb">Get-Process</span> <span class="n">-Id</span> <span class="nv">$_</span><span class="p">.</span><span class="n">OwningProcess</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">).</span><span class="n">ProcessName</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+<p>Result: splunkd3596, 9997 SynSent, 8089 Established. Current owner attribution is not independent proof of every earlier packet owner.</p>
+<h3 id="c25-receiver-checks">C25 Receiver checks<a class="headerlink" href="#c25-receiver-checks" title="Permanent link">&para;</a></h3>
+<p>Platform: Splunk Linux server. Status: captured.</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>ss<span class="w"> </span>-lntp<span class="w"> </span><span class="s1">'sport = :9997'</span>
+sudo<span class="w"> </span>/opt/splunk/bin/splunk<span class="w"> </span>btool<span class="w"> </span>inputs<span class="w"> </span>list<span class="w"> </span><span class="s1">'splunktcp://9997'</span><span class="w"> </span>--debug
+</code></pre></div>
+<p>Result before remediation: headings only for ss, no receiver stanza for btool; no listener and no effective receiver configuration observed. Btool repeated twice in screenshot, both empty.</p>
+<h3 id="u04-enable-receiver-and-verify-transport">U04 Enable receiver and verify transport<a class="headerlink" href="#u04-enable-receiver-and-verify-transport" title="Permanent link">&para;</a></h3>
+<p>Status: captured procedure, October 3 follow-up.</p>
+<ol>
+<li>Splunk Web → Settings → Forwarding and receiving → Receive data → Configure receiving → New Receiving Port.</li>
+<li>Enter9997 and save.</li>
+<li>Re-run server ss from C25.</li>
+</ol>
+<p>Result: 0.0.0.0:9997 LISTEN owned by splunkd PID 1942. Victim verification:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-NetTCPConnection</span> <span class="n">-RemoteAddress</span> <span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">14</span> <span class="n">-RemotePort</span> <span class="n">9997</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Format-Table</span> <span class="n">LocalPort</span><span class="p">,</span> <span class="n">RemoteAddress</span><span class="p">,</span> <span class="n">RemotePort</span><span class="p">,</span> <span class="n">State</span><span class="p">,</span> <span class="n">OwningProcess</span> <span class="n">-AutoSize</span>
+</code></pre></div>
+<p>Result: source51200 Established3596, two older TimeWait rows; ingestion not assumed until Q10/Q11.</p>
+<h3 id="q10-direct-source-inventory">Q10 Direct source inventory<a class="headerlink" href="#q10-direct-source-inventory" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=* earliest=-15m latest=now NOT source="udp:5515" NOT source="udp:5140"
+| stats count latest(_time) AS last_seen by index host source sourcetype
+| convert ctime(last_seen)
+| sort - count
+</code></pre></div>
+<p>Result: 98 entries: CPU 34, Network 34, AvailableMemory 17, Application 6, System 5, FreeDisk 2. Security absent in that snapshot; this alone did not prove disabled collection.</p>
+<h3 id="c26-effective-security-collection-configuration">C26 Effective Security collection configuration<a class="headerlink" href="#c26-effective-security-collection-configuration" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="p">&amp;</span> <span class="s1">'C:\Program Files\SplunkUniversalForwarder\bin\splunk.exe'</span> <span class="n">btool</span> <span class="n">inputs</span> <span class="n">list</span> <span class="s1">'WinEventLog://Security'</span> <span class="p">-</span><span class="n">-debug</span>
+</code></pre></div>
+<p>Result: app-local stanza, disabled0, current_only0, start_fromoldest, checkpointInterval5, interval60, index=default, hostdecideOnStartup. Configuration is not proof that every historic event backfilled.</p>
+<h3 id="q11-broader-security-availability-query">Q11 Broader Security availability query<a class="headerlink" href="#q11-broader-security-availability-query" title="Permanent link">&para;</a></h3>
+<p>Status: captured, time picker Last24hours.</p>
+<div class="highlight"><pre><span></span><code>index=* OR index=_*
+| search host="soc-vict-win10" source="WinEventLog:Security"
+| stats count latest(_time) AS last_seen by index host source sourcetype
+| convert ctime(last_seen)
+</code></pre></div>
+<p>Result: 845 events in main, latest October 3 02:15:59.067. Earlier assistant internal-index explanation for index=default was incorrect; main destination confirmed. Wider period and continued ingestion both changed between snapshots; cause of first empty Security inventory not isolated.</p>
+<h3 id="q12-security-event-coverage">Q12 Security event coverage<a class="headerlink" href="#q12-security-event-coverage" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+earliest=-24h latest=now
+| stats count latest(_time) AS last_seen by EventCode
+| convert ctime(last_seen)
+| sort - count
+</code></pre></div>
+<p>Result: 4688=620;5379=196;4798=29;4624=15;4672=14;4799=9;5382=4;4634=2;4616=1;4648=1;5038=1. These event totals are a source snapshot, not all fully investigated categories.</p>
+<h3 id="q13-raw-process-export">Q13 Raw process export<a class="headerlink" href="#q13-raw-process-export" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+EventCode=4688 earliest=-24h latest=now
+| sort 0 _time
+| table _time _raw
+</code></pre></div>
+<p>Result: 626 rows in 1791015702_411.csv, all command lines populated. Six additional events relative to Q12 reflect later snapshot, not duplicate finding. Derived complete extraction attached.</p>
+<h2 id="phase-7-defender-code-integrity">Phase 7 Defender Code Integrity<a class="headerlink" href="#phase-7-defender-code-integrity" title="Permanent link">&para;</a></h2>
+<h3 id="q14-integrity-candidate-export">Q14 Integrity candidate export<a class="headerlink" href="#q14-integrity-candidate-export" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+EventCode=5038 earliest=-24h latest=now
+| sort 0 _time
+| table _time _raw
+</code></pre></div>
+<p>Result: one event 47412, DefenderSessionHelper.exe, October 3 01:58:47.320.</p>
+<h3 id="c27-current-defender-file-signature">C27 Current Defender file signature<a class="headerlink" href="#c27-current-defender-file-signature" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$file</span> <span class="p">=</span> <span class="s1">'C:\ProgramData\Microsoft\Windows Defender\Platform\4.18.26080.4-0\DefenderSessionHelper.exe'</span>
+<span class="nb">Get-AuthenticodeSignature</span> <span class="n">-LiteralPath</span> <span class="nv">$file</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">Path</span><span class="p">,</span> <span class="n">Status</span><span class="p">,</span> <span class="n">StatusMessage</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s1">'Signer'</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">SignerCertificate</span><span class="p">.</span><span class="n">Subject</span><span class="p">}}</span> <span class="p">|</span>
+    <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: Valid, Signature verified, Microsoft Windows. Current signature validity does not explain historic validation context by itself.</p>
+<h3 id="c28-nearby-code-integrity-events">C28 Nearby Code Integrity events<a class="headerlink" href="#c28-nearby-code-integrity-events" title="Permanent link">&para;</a></h3>
+<p>Status: captured corrected run.</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$start</span> <span class="p">=</span> <span class="nb">Get-Date</span> <span class="s1">'2026-10-03 01:56:00'</span>
+<span class="nv">$end</span> <span class="p">=</span> <span class="nb">Get-Date</span> <span class="s1">'2026-10-03 02:01:00'</span>
+<span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span><span class="p">=</span><span class="s1">'Microsoft-Windows-CodeIntegrity/Operational'</span>
+    <span class="n">StartTime</span><span class="p">=</span><span class="nv">$start</span>
+    <span class="n">EndTime</span><span class="p">=</span><span class="nv">$end</span>
+<span class="p">}</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Sort-Object</span> <span class="n">TimeCreated</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">Message</span>
+</code></pre></div>
+<p>Result: 3004 and 3089 at 01:58:47. A merged paste appended <code>$start = Get-Date</code> to Format-List and failed; corrected second execution returned evidence.</p>
+<h3 id="c29-signature-xml-and-correlation-xml">C29 Signature XML and correlation XML<a class="headerlink" href="#c29-signature-xml-and-correlation-xml" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span><span class="p">=</span><span class="s1">'Microsoft-Windows-CodeIntegrity/Operational'</span>
+    <span class="n">Id</span><span class="p">=</span><span class="n">3089</span>
+    <span class="n">StartTime</span><span class="p">=</span><span class="nv">$start</span>
+    <span class="n">EndTime</span><span class="p">=</span><span class="nv">$end</span>
+<span class="p">}</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ToXml</span><span class="p">()</span> <span class="p">}</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span><span class="p">=</span><span class="s1">'Microsoft-Windows-CodeIntegrity/Operational'</span>
+    <span class="n">Id</span><span class="p">=</span><span class="n">3004</span>
+    <span class="n">StartTime</span><span class="p">=</span><span class="nb">Get-Date</span> <span class="s1">'2026-10-03 01:56:00'</span>
+    <span class="n">EndTime</span><span class="p">=</span><span class="nb">Get-Date</span> <span class="s1">'2026-10-03 02:01:00'</span>
+<span class="p">}</span> <span class="p">|</span> <span class="k">ForEach</span><span class="n">-Object</span> <span class="p">{</span> <span class="nv">$_</span><span class="p">.</span><span class="n">ToXml</span><span class="p">()</span> <span class="p">}</span>
+</code></pre></div>
+<p>Result: matching ActivityID c6bc20a0-4c8c-0000-0730-bfc68c4cdd01; requester MsMpEng, RequestedSigningLevel 7;3089 publisher Microsoft Windows, ValidatedSigningLevel 12, VerificationError 12. Classified as PPL signing mismatch, root cause unresolved. Chat-supplied XML preserved separately, labeled as transcribed evidence.</p>
+<h2 id="phase-8-logons-and-persistence-audit-coverage">Phase 8 Logons and persistence audit coverage<a class="headerlink" href="#phase-8-logons-and-persistence-audit-coverage" title="Permanent link">&para;</a></h2>
+<h3 id="q15-local-logon-and-explicit-credential-export">Q15 Local logon and explicit credential export<a class="headerlink" href="#q15-local-logon-and-explicit-credential-export" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+(EventCode=4624 OR EventCode=4648)
+earliest=-24h latest=now
+| sort 0 _time
+| table _time EventCode _raw
+</code></pre></div>
+<p>Result: 19 records;16 type 5 SYSTEM; 2 linked type 2 seclabadmin; 1 localhost 4648. Operator confirmed 02:04 local sign-in. No type 3/10 in export.</p>
+<h3 id="q16-security-persistence-and-clearing-search">Q16 Security persistence and clearing search<a class="headerlink" href="#q16-security-persistence-and-clearing-search" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+(EventCode=4697 OR EventCode=4698 OR EventCode=4702 OR EventCode=1102)
+earliest=-24h latest=now
+| sort 0 _time
+| table _time EventCode _raw
+</code></pre></div>
+<p>Result: no results. Subsequent audit policy showed missing service/task coverage. Log-clear coverage not independently validated by those two audit checks. Negative result cannot be promoted to blanket persistence assurance.</p>
+<h3 id="c30-audit-policy-checks-and-change">C30 Audit policy checks and change<a class="headerlink" href="#c30-audit-policy-checks-and-change" title="Permanent link">&para;</a></h3>
+<p>Status: captured. Initial checks both No Auditing; repeated old screenshot was not proof of applied settings.</p>
+<div class="highlight"><pre><span></span><code><span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Security System Extension"</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Other Object Access Events"</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="nb">set </span><span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Security System Extension"</span> <span class="p">/</span><span class="n">success</span><span class="p">:</span><span class="n">enable</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="nb">set </span><span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Other Object Access Events"</span> <span class="p">/</span><span class="n">success</span><span class="p">:</span><span class="n">enable</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Security System Extension"</span>
+<span class="n">auditpol</span> <span class="p">/</span><span class="n">get</span> <span class="p">/</span><span class="n">subcategory</span><span class="p">:</span><span class="s2">"Other Object Access Events"</span>
+</code></pre></div>
+<p>Result: final screenshot both Success. No task/service event validation or policy-refresh persistence test completed.</p>
+<h3 id="c31-task-history-availability">C31 Task history availability<a class="headerlink" href="#c31-task-history-availability" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-ListLog</span> <span class="s1">'Microsoft-Windows-TaskScheduler/Operational'</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">LogName</span><span class="p">,</span> <span class="n">IsEnabled</span><span class="p">,</span> <span class="n">RecordCount</span><span class="p">,</span> <span class="n">LastWriteTime</span>
+</code></pre></div>
+<p>Result: enabled True, 17,448 records, last write October 3 02:37:19.</p>
+<h3 id="c32-seven-day-task-change-export">C32 Seven day task change export<a class="headerlink" href="#c32-seven-day-task-change-export" title="Permanent link">&para;</a></h3>
+<p>Status: captured.</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span><span class="p">=</span><span class="s1">'Microsoft-Windows-TaskScheduler/Operational'</span>
+    <span class="n">Id</span><span class="p">=</span><span class="n">106</span><span class="p">,</span><span class="n">140</span><span class="p">,</span><span class="n">141</span>
+    <span class="n">StartTime</span><span class="p">=(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(-</span><span class="n">7</span><span class="p">)</span>
+<span class="p">}</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Sort-Object</span> <span class="n">TimeCreated</span> <span class="p">|</span>
+    <span class="nb">Format-List</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">RecordId</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span>
+    <span class="nb">Out-File</span> <span class="n">-LiteralPath</span> <span class="s2">"$env:USERPROFILE\Desktop\TaskScheduler-Hunt.txt"</span> <span class="n">-Encoding</span> <span class="n">utf8</span> <span class="n">-Width</span> <span class="n">4096</span>
+</code></pre></div>
+<p>Result: file supplied from host Downloads; 212 events, 210 updates and 1 deletion/1 registration for the same OneDrive task. No unexplained task names. Task messages lack action definitions; task-path familiarity is not verification of actions.</p>
+<h2 id="unexecuted-follow-up-validation-and-detection-queries">Unexecuted follow-up validation and detection queries<a class="headerlink" href="#unexecuted-follow-up-validation-and-detection-queries" title="Permanent link">&para;</a></h2>
+<p>These procedures are proposed next work, not evidence that was performed. Execute only after reviewing current lab state. Use a uniquely named temporary task so existing tasks are not changed. A service installation test is not included because it is unnecessary for a first task-audit validation.</p>
+<h3 id="p01-harmless-scheduled-task-audit-test">P01 Harmless scheduled task audit test<a class="headerlink" href="#p01-harmless-scheduled-task-audit-test" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nv">$taskName</span> <span class="p">=</span> <span class="s1">'SOC-Hunt-AuditValidation-20261003'</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">Get-ScheduledTask</span> <span class="n">-TaskName</span> <span class="nv">$taskName</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="s1">'Validation task already exists; choose a different name before proceeding.'</span>
+<span class="p">}</span>
+<span class="nv">$action</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskAction</span> <span class="n">-Execute</span> <span class="s2">"$env:windir\System32\cmd.exe"</span> <span class="n">-Argument</span> <span class="s1">'/c exit 0'</span>
+<span class="nv">$trigger</span> <span class="p">=</span> <span class="nb">New-ScheduledTaskTrigger</span> <span class="n">-Once</span> <span class="n">-At</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddDays</span><span class="p">(</span><span class="n">1</span><span class="p">)</span>
+<span class="nb">Register-ScheduledTask</span> <span class="n">-TaskName</span> <span class="nv">$taskName</span> <span class="n">-Action</span> <span class="nv">$action</span> <span class="n">-Trigger</span> <span class="nv">$trigger</span> <span class="n">-Description</span> <span class="s1">'Temporary SOC audit validation task'</span> <span class="p">|</span> <span class="nb">Out-Null</span>
+<span class="nb">Unregister-ScheduledTask</span> <span class="n">-TaskName</span> <span class="nv">$taskName</span> <span class="n">-Confirm</span><span class="p">:</span><span class="nv">$false</span>
+</code></pre></div>
+<p>Expected, not yet observed: local 4698 creation and 4699 deletion, task Operational history, then direct Splunk Security receipt. Task is not intentionally run. Search:</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+(EventCode=4698 OR EventCode=4699) earliest=-15m latest=now
+"SOC-Hunt-AuditValidation-20261003"
+| table _time EventCode _raw
+</code></pre></div>
+<h3 id="p02-security-sensitive-behavior-triage">P02 Security sensitive behavior triage<a class="headerlink" href="#p02-security-sensitive-behavior-triage" title="Permanent link">&para;</a></h3>
+<p>Proposed raw-search triage; not a production analytic and not validated against baseline. Review full command arguments and parents, including known Wazuh configuration assessments.</p>
+<div class="highlight"><pre><span></span><code>index=main host="soc-vict-win10" source="WinEventLog:Security"
+EventCode=4688 earliest=-24h latest=now
+("ntdsutil" OR "vssadmin" OR "diskshadow" OR "comsvcs.dll"
+ OR "procdump" OR "portproxy" OR "wevtutil" OR "schtasks")
+| sort 0 _time
+| table _time _raw
+</code></pre></div>
+<p>Expected false candidates include maintenance wevtutil manifests and benign portproxy show queries. Do not alert on names without distinguishing query/configuration/dump/clear operations.</p>
+<h3 id="p03-historical-fixed-windows">P03 Historical fixed windows<a class="headerlink" href="#p03-historical-fixed-windows" title="Permanent link">&para;</a></h3>
+<p>To repeat the original October 3 process review later, set the Splunk custom time picker to October 3 01:54:00–02:21:00 in the display timezone and remove rolling earliest/latest. For the firewall review, use September 25 20:39:00–21:10:00 and retain timestamp qualifications. Record user timezone, query execution time, ingestion lag and export filename in future case logs.</p>
+<h2 id="failed-attempts-and-corrections-register">Failed attempts and corrections register<a class="headerlink" href="#failed-attempts-and-corrections-register" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Attempt</th>
+<th>Observed failure or analytic issue</th>
+<th>Correction and reporting consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Task inventory pasted twice</td>
+<td>Format-ListGet-ScheduledTask not recognized</td>
+<td>Paste once with newline; failed run excluded from evidence counts</td>
+</tr>
+<tr>
+<td>foreach piped directly</td>
+<td>Empty pipe element parser error</td>
+<td>Assign results then pipe</td>
+</tr>
+<tr>
+<td>Logon query reused for process names</td>
+<td>process_name not extracted</td>
+<td>Complete4688 query before interpreting zero</td>
+</tr>
+<tr>
+<td>Record number searched broadly</td>
+<td>Unrelated sudo raw matches possible</td>
+<td>Confirm event record, endpoint and eventID</td>
+</tr>
+<tr>
+<td>Logger PHP echo</td>
+<td>Said restart requested but PID 5400 remained</td>
+<td>Inspect actual process; reboot then fresh-event validation</td>
+</tr>
+<tr>
+<td>CSV1790390530_296</td>
+<td>Same earlier event exported</td>
+<td>Generate fresh connection rather than reusing old result</td>
+</tr>
+<tr>
+<td>Short firewall search</td>
+<td>No results while broader/local evidence existed</td>
+<td>Expand time and compare <code>_indextime</code>; cause not isolated</td>
+</tr>
+<tr>
+<td>index=default interpretation</td>
+<td>Internal-index suggestion unsupported</td>
+<td>mainSecurity destination established by evidence</td>
+</tr>
+<tr>
+<td>Code Integrity multiline paste</td>
+<td>Message$start merged into Format-List</td>
+<td>Corrected independent execution produced3004/3089</td>
+</tr>
+<tr>
+<td>System7045 duplicate paste</td>
+<td>MessageGet-WinEvent; parameterbinding error</td>
+<td>Single-line rerun; then no entries reported</td>
+</tr>
+<tr>
+<td>User sent old audit screenshot</td>
+<td>StillNoAuditing, /set not shown</td>
+<td>New screenshot verifiedSuccess for both</td>
+</tr>
+</tbody>
+</table>
+<p><strong>TLP:CLEAR</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>

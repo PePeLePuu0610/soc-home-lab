@@ -1,0 +1,1133 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A free, open-source SOC home lab — Waterfall-planned, built end to end on a single host.">
+      
+      
+      
+        <link rel="canonical" href="https://PePeLePuu0610.github.io/soc-home-lab/soc-001-command-evidence-2026-10-21/">
+      
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+    
+    
+      
+        <title>SOC-001 command and evidence log — October 21, 2026 - Home SOC Lab</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.8c3ca2c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#soc-001-command-and-evidence-log-october-21-2026" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Home SOC Lab" class="md-header__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Home SOC Lab
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              SOC-001 command and evidence log — October 21, 2026
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Home SOC Lab" class="md-nav__button md-logo" aria-label="Home SOC Lab" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Home SOC Lab
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/PePeLePuu0610/soc-home-lab" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    PePeLePuu0610/soc-home-lab
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-1-requirements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 1 - Requirements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-2-design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 2 - Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-3-implementation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 3 - Implementation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-elk-stack/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - ELK Stack
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-splunk-enterprise/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - Splunk Enterprise
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-openvas/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Build Guide - OpenVAS
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../build-shuffle/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Shuffle Deployment and Response Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../elk-ingestion-plan/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ELK Ingestion Plan
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../configure-log-forwarding/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Configure Log Forwarding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integration-validation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Integration and Validation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Threat Hunt Case Study
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Threat Hunt Case Study
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/executive-summary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Executive Summary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/technical-report/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Technical Report
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/command-query-log/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Commands and Queries
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../hunts/volt-typhoon-informed-2026/evidence-register/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Evidence Register
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-4-testing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 4 - Testing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-5-deployment/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 5 - Deployment
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase-6-maintenance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase 6 - Maintenance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="soc-001-command-and-evidence-log-october-21-2026">SOC-001 command and evidence log — October 21, 2026<a class="headerlink" href="#soc-001-command-and-evidence-log-october-21-2026" title="Permanent link">&para;</a></h1>
+<p>This is the detailed companion to <a href="../soc-001-activities-2026-10-21/">today's activity log</a>. Commands below were supplied during this session; outcomes distinguish observed output from steps whose exact execution output was not supplied. Run commands individually unless a shell block is explicitly intended. Passwords are entered only at prompts. No live command is executed by reading this record.</p>
+<h2 id="1-restart-and-pfsense-to-elk-troubleshooting">1. Restart and pfSense-to-ELK troubleshooting<a class="headerlink" href="#1-restart-and-pfsense-to-elk-troubleshooting" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Command / query</th>
+<th>Why</th>
+<th>Observed outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pfSense</td>
+<td><code>logger -t SOC-VALIDATION "SOC001-RESTART-20261021-01"</code></td>
+<td>Generate unique benign system event</td>
+<td>Local log shows 06:08:24; initially absent from ELK</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td>Same command with suffix <code>-02</code></td>
+<td>Repeat local event test</td>
+<td>Local log shows 06:16:19; initially absent from ELK</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>grep -F 'SOC001-RESTART-20261021' /var/log/system.log</code></td>
+<td>Verify source event generation</td>
+<td>Both early markers present; source logging initially worked</td>
+</tr>
+<tr>
+<td>Both hosts</td>
+<td><code>date</code></td>
+<td>Inspect clock/timezone context</td>
+<td>Both displayed MDT; captures at different times do not establish drift</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td><code>sudo systemctl status logstash --no-pager -l</code></td>
+<td>Confirm receiver process available</td>
+<td>Active/running, PID 1283</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td><code>sudo ss -lunp 'sport = :5514'</code></td>
+<td>Check UDP listener</td>
+<td>Java PID 1283 listening on 0.0.0.0:5514</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td><code>sudo timeout 30 tcpdump -ni any -nn -A -c 5 'udp dst port 5514 and src host 10.10.10.5'</code></td>
+<td>Observe incoming pfSense syslog</td>
+<td>Zero captured packets</td>
+</tr>
+<tr>
+<td>ELK</td>
+<td><code>sudo timeout 30 tcpdump -ni any -nn -A -c 10 'udp dst port 5514'</code></td>
+<td>Remove source-address assumption</td>
+<td>Zero captured packets</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>grep -Rn '@' /var/etc/syslog.d</code></td>
+<td>Check generated remote destinations</td>
+<td>ELK 10.10.10.10:5514 configured; no new destination change made</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>route -n get 10.10.10.10</code></td>
+<td>Identify outbound interface</td>
+<td>Direct management network via em1</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>tcpdump -ni em1 -nn -A -c 5 'udp and dst host 10.10.10.10 and dst port 5514'</code></td>
+<td>Check transmission from firewall</td>
+<td>Zero captured; stopped with Ctrl+C. Filter receive counter does not prove forwarded syslog</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>grep -F 'SOC001-RESTART-20261021-05' /var/log/system.log</code></td>
+<td>Verify latest marker locally</td>
+<td>No match</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>pgrep -laf syslogd</code></td>
+<td>Check actual daemon processes</td>
+<td>No output at failure; GUI subsequently red</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>tail -n 30 /var/log/system.log</code></td>
+<td>Inspect recent activity</td>
+<td>Displayed records stopped around 06:17:20</td>
+</tr>
+<tr>
+<td>pfSense GUI</td>
+<td>Start syslogd from Services</td>
+<td>Recover stopped logger</td>
+<td>Joey restarted; green afterward. Root cause remains open</td>
+</tr>
+<tr>
+<td>pfSense</td>
+<td><code>logger -t SOC-VALIDATION "SOC001-RESTART-20261021-06"</code></td>
+<td>Validate recovery with fresh marker</td>
+<td>Reached ELK at displayed 06:40:41.315</td>
+</tr>
+<tr>
+<td>Kibana pfsense view</td>
+<td><code>message: "SOC001-RESTART-20261021-06"</code></td>
+<td>Match recovery marker</td>
+<td>One document, host.ip 10.10.10.5</td>
+</tr>
+<tr>
+<td>Kibana Wazuh Alerts view</td>
+<td><code>agent.id: "001" OR agent.id: "002"</code></td>
+<td>Verify endpoint forwarding to separate ELK</td>
+<td>Export 984 rows, victim 694/DC 290; latest displayed 06:44:04/06:44:15</td>
+</tr>
+</tbody>
+</table>
+<p>Markers -03 through -05 were also proposed during capture tests; exact local records were not supplied for each. Avoid inferring that every proposed marker was generated during its capture window. Initially two commands pasted together made grep interpret <code>date</code> as a filename; corrected by executing them separately.</p>
+<p>Gateway inspection: WAN Static IPv4 10.10.40.5/24, default WAN_STATIC 10.10.40.2; duplicate WAN_DHCP used same gateway and monitor. No gateway deletion/change was made. The directly connected ELK route does not use WAN.</p>
+<h2 id="2-victim-wmi-readiness-and-applied-firewall-change">2. Victim WMI readiness and applied firewall change<a class="headerlink" href="#2-victim-wmi-readiness-and-applied-firewall-change" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Where</th>
+<th>Command</th>
+<th>Why / result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Victim administrator PowerShell</td>
+<td><code>Get-Service Winmgmt, RemoteRegistry | Select-Object Name, Status, StartType</code></td>
+<td>Supplied individual outputs: Winmgmt Running/Automatic, RemoteRegistry Running/Manual</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><code>Start-Service -Name RemoteRegistry</code></td>
+<td>Start manual service for authenticated checks; Running confirmed</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><code>Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version, BuildNumber</code></td>
+<td>Local CIM/WMI health: Windows 10 Pro for Workstations 10.0.19045 / 19045</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><code>Get-NetConnectionProfile | Select-Object InterfaceAlias, NetworkCategory</code></td>
+<td>Ethernet0 DomainAuthenticated</td>
+</tr>
+<tr>
+<td>OpenVAS host</td>
+<td><code>nc -vz -w 3 10.10.20.20 135</code></td>
+<td>RPC endpoint mapper TCP reachable; not proof of WMI or dynamic RPC access</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><code>Get-NetFirewallRule -PolicyStore ActiveStore -Name 'WMI*' | Select-Object Name, Enabled, Profile, Direction, Action</code></td>
+<td>All inspected built-in WMI rules disabled</td>
+</tr>
+<tr>
+<td>Victim</td>
+<td><code>Get-NetFirewallRule -PolicyStore ActiveStore -Name 'WMI*' | Get-NetFirewallAddressFilter | Select-Object InstanceID, RemoteAddress</code></td>
+<td>Domain variants Any; other profile variants LocalSubnet; disabled rules do not permit traffic</td>
+</tr>
+</tbody>
+</table>
+<p>Applied scoped change (confirmed enabled; Joey approved retaining it):</p>
+<div class="highlight"><pre><span></span><code><span class="nb">New-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">'SOC-OpenVAS-WMI-In'</span> <span class="n">-DisplayName</span> <span class="s1">'SOC OpenVAS WMI inbound'</span> <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="n">-Action</span> <span class="n">Allow</span> <span class="n">-Protocol</span> <span class="n">TCP</span> <span class="n">-Program</span> <span class="s2">"$env:SystemRoot\System32\svchost.exe"</span> <span class="n">-Service</span> <span class="n">Winmgmt</span> <span class="n">-RemoteAddress</span> <span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">10</span><span class="p">.</span><span class="n">12</span> <span class="n">-Profile</span> <span class="n">Domain</span>
+<span class="nb">Get-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">'SOC-OpenVAS-WMI-In'</span> <span class="p">|</span> <span class="nb">Select-Object</span> <span class="n">Name</span><span class="p">,</span> <span class="n">Enabled</span><span class="p">,</span> <span class="n">Profile</span><span class="p">,</span> <span class="n">Direction</span><span class="p">,</span> <span class="n">Action</span>
+</code></pre></div>
+<p>Why: allow scanner-only inbound WMI service traffic on the authenticated Domain profile. The local persistent rule survives normal reboots; effective policy still requires verification. Defender and DCOM hardening remain enabled.</p>
+<p>Rollback <strong>documented, not executed</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Disable-NetFirewallRule</span> <span class="n">-Name</span> <span class="s1">'SOC-OpenVAS-WMI-In'</span>
+</code></pre></div>
+<p>See <a href="../build-windows-endpoint-scan-readiness/#october-21-accepted-wmi-baseline">endpoint build guide</a> for pre-scan checks and re-enable procedure.</p>
+<h2 id="3-scanner-clients-and-dcom-diagnosis">3. Scanner clients and DCOM diagnosis<a class="headerlink" href="#3-scanner-clients-and-dcom-diagnosis" title="Permanent link">&para;</a></h2>
+<p>All container commands use <code>sudo docker compose -f /home/seclabadmin/greenbone-ce/compose.yaml</code>. <code>exec ospd-openvas</code> opens a process in the existing scanner container. Omit <code>-T</code> for a password-prompting interactive test; use <code>exec -T</code> for noninteractive output.</p>
+<table>
+<thead>
+<tr>
+<th>Command after Compose prefix</th>
+<th>Why</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>exec -T ospd-openvas sh -c 'command -v wmic; command -v impacket-wmiquery; command -v wmiquery.py'</code></td>
+<td>Locate existing tools without installation</td>
+<td>/usr/local/bin/wmic and /usr/local/bin/wmiquery.py found; host equivalents absent</td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas /usr/local/bin/wmiquery.py -h</code></td>
+<td>Read actual syntax</td>
+<td>Impacket 0.13.1 help supplied</td>
+</tr>
+<tr>
+<td><code>exec ospd-openvas /usr/local/bin/wmiquery.py 'SOCHOMELAB/secadmin@10.10.20.20'</code></td>
+<td>Read-only remote WMI through Impacket</td>
+<td>Password prompt, WQL shell; query below returned build 19045; exit with <code>exit</code></td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas find /var/lib/openvas/plugins -type f -name 'gb_wmi_access.nasl' -exec sed -n '1,220p' {} \;</code></td>
+<td>Inspect installed producer of WMI status key</td>
+<td>OID 108205 sets flag only after native wmi_connect succeeds</td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas sh -c 'grep -iE "nasl_wmi_connect|WMI Connect|wmi_connect" /var/log/openvas/openvas.log | tail -n 30'</code></td>
+<td>Correlate scanner failures</td>
+<td>Native failure at 13:53:04 UTC during retest; later 16:46:44 report unreviewed</td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas /usr/local/bin/wmic --help</code></td>
+<td>Inspect native client options</td>
+<td>Password prompt supported; avoid passwords in arguments</td>
+</tr>
+<tr>
+<td><code>exec ospd-openvas /usr/local/bin/wmic -U 'SOCHOMELAB/secadmin' //10.10.20.20 'SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem'</code></td>
+<td>Test native WMI independently</td>
+<td>Access denied; repeated</td>
+</tr>
+<tr>
+<td>Same native command with <code>--option='client signing=required'</code></td>
+<td>Diagnostic attempt at signing</td>
+<td>Same error; not a DCOM activation fix. Do not treat as operating workaround</td>
+</tr>
+<tr>
+<td><code>images</code></td>
+<td>Inventory deployed images without pulling</td>
+<td>Scanner f045254d796b; ospd-openvas db44c0dbdc63 in supplied inventory</td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas /usr/local/bin/wmic --version</code></td>
+<td>Inspect native banner</td>
+<td>4.0.0tp4-SVN-build-UNKNOWN; not reliable packaged release identification</td>
+</tr>
+<tr>
+<td><code>exec -T ospd-openvas sh -c 'openvas --version; dpkg-query -W "*openvas*" "*smb*" 2&gt;/dev/null'</code></td>
+<td>Inspect scanner/package provenance</td>
+<td>OpenVAS 23.50.20 / gvm-libs 23.9.2; no package rows</td>
+</tr>
+</tbody>
+</table>
+<p>Impacket WQL query:</p>
+<div class="highlight"><pre><span></span><code><span class="k">SELECT</span><span class="w"> </span><span class="n">Caption</span><span class="p">,</span><span class="w"> </span><span class="k">Version</span><span class="p">,</span><span class="w"> </span><span class="n">BuildNumber</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Win32_OperatingSystem</span>
+</code></pre></div>
+<p>Victim event check (read-only):</p>
+<div class="highlight"><pre><span></span><code><span class="nb">Get-WinEvent</span> <span class="n">-FilterHashtable</span> <span class="p">@{</span>
+    <span class="n">LogName</span> <span class="p">=</span> <span class="s1">'System'</span>
+    <span class="n">ProviderName</span> <span class="p">=</span> <span class="s1">'Microsoft-Windows-DistributedCOM'</span>
+    <span class="n">Id</span> <span class="p">=</span> <span class="n">10036</span>
+    <span class="n">StartTime</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Date</span><span class="p">).</span><span class="n">AddMinutes</span><span class="p">(-</span><span class="n">15</span><span class="p">)</span>
+<span class="p">}</span> <span class="n">-ErrorAction</span> <span class="n">SilentlyContinue</span> <span class="p">|</span>
+    <span class="nb">Select-Object</span> <span class="n">TimeCreated</span><span class="p">,</span> <span class="n">Id</span><span class="p">,</span> <span class="n">Message</span> <span class="p">|</span>
+    <span class="nb">Format-List</span>
+</code></pre></div>
+<p>Result: two displayed 12:08 events named scanner 10.10.10.12/domain account and required RPC_C_AUTHN_LEVEL_PKT_INTEGRITY. Evidence supports native-client activation authentication mismatch, not blanket lack of account permission.</p>
+<p><strong>Successful explicit native binding test:</strong></p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>docker<span class="w"> </span>compose<span class="w"> </span>-f<span class="w"> </span>/home/seclabadmin/greenbone-ce/compose.yaml<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ospd-openvas<span class="w"> </span>/usr/local/bin/wmic<span class="w"> </span>-U<span class="w"> </span><span class="s1">'SOCHOMELAB/secadmin'</span><span class="w"> </span><span class="s1">'//10.10.20.20[sign,seal]'</span><span class="w"> </span><span class="s1">'SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem'</span>
+</code></pre></div>
+<p>Result supplied as text: Windows 10 Pro for Workstations / 19045 / 10.0.19045. This alters only this connection. Saved Greenbone behavior remains unresolved. No vendor NASL file was edited and no Windows security feature was weakened.</p>
+<h2 id="4-targeted-greenbone-retest-and-export-controls">4. Targeted Greenbone retest and export controls<a class="headerlink" href="#4-targeted-greenbone-retest-and-export-controls" title="Permanent link">&para;</a></h2>
+<p>GUI procedure: clone Base, retain its three tests, add Windows 96199 (WMI file shares), 108539 (SMB success), 108442 (LSC consolidation). Name SOC-001 — Victim SMB-WMI validation. Verify auto_enable_dependencies=Yes and safe_checks=Yes. Use new victim-only task with existing Domain Credentials; no schedule. Six explicitly selected NVTs can run additional dependencies.</p>
+<p>Report export filter: <code>min_qod=0 levels=chmlg rows=1000 apply_overrides=0</code>. CSV/XML matched 14 IDs. SMB/registry passed and WMI file shares returned ADMIN$, C$, IPC$; consolidation remained FALSE. A Notus error was embedded in a Log result although the XML error list was empty. This targeted scan is not a vulnerability-clearance scan.</p>
+<h2 id="5-openvas-host-patching-and-feed-maintenance">5. OpenVAS host patching and feed maintenance<a class="headerlink" href="#5-openvas-host-patching-and-feed-maintenance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Where / command</th>
+<th>Why</th>
+<th>Outcome / caution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenVAS <code>apt list --upgradable</code></td>
+<td>Inventory pending packages</td>
+<td>Included Docker/containerd/Compose/Filebeat and Ubuntu components</td>
+</tr>
+<tr>
+<td>Compose prefix + <code>stop</code></td>
+<td>Graceful stack stop before snapshot/host work</td>
+<td>Instructed before powered-off snapshot; exact stop output not retained</td>
+</tr>
+<tr>
+<td><code>sudo shutdown -h now</code></td>
+<td>Clean VM shutdown</td>
+<td>Operator confirmed snapshot complete afterward</td>
+</tr>
+<tr>
+<td>VMware snapshot</td>
+<td>Recovery point before upgrades</td>
+<td>SOC-001 — Pre-OpenVAS host updates — 2026-10-21, completion reported, metadata not independently read</td>
+</tr>
+<tr>
+<td><code>sudo apt update</code></td>
+<td>Refresh package metadata, not install</td>
+<td>Instructed before supplied simulation</td>
+</tr>
+<tr>
+<td><code>sudo apt-get -s upgrade</code></td>
+<td>Preview transaction without installing</td>
+<td>61 upgrades, zero new/removals, seven phased packages deferred</td>
+</tr>
+<tr>
+<td><code>sudo apt-get upgrade</code></td>
+<td>Install reviewed host upgrades</td>
+<td>Installation log supplied; Docker, containerd, Compose and Filebeat configured</td>
+</tr>
+<tr>
+<td><code>sudo dpkg --audit</code></td>
+<td>Detect incomplete package configuration</td>
+<td>Clear output</td>
+</tr>
+<tr>
+<td><code>sudo apt-get check</code></td>
+<td>Verify dependencies</td>
+<td>No error in supplied output</td>
+</tr>
+<tr>
+<td><code>if [ -f /var/run/reboot-required ]; then cat /var/run/reboot-required; else echo "No reboot-required flag"; fi</code></td>
+<td>Check restart requirement</td>
+<td>System restart required</td>
+</tr>
+<tr>
+<td><code>sudo reboot</code></td>
+<td>Complete maintenance restart</td>
+<td>Post-reboot checks supplied</td>
+</tr>
+<tr>
+<td><code>systemctl is-active docker containerd</code></td>
+<td>Verify runtime services</td>
+<td>Both active</td>
+</tr>
+<tr>
+<td>Compose prefix + <code>ps -a</code></td>
+<td>Inspect containers and historical exits</td>
+<td>gvmd/pg-gvm healthy, main runtime services up. Historical exit 137 is not proof of current OOM</td>
+</tr>
+</tbody>
+</table>
+<p>SSSD AppArmor complain-mode warning in installation log remains a separate follow-up, not a fatal package error. No autoremove, volume deletion or full stack image upgrade was authorized by this procedure.</p>
+<p>Exact feed-only pull/up commands and log checks, with explanation and acceptance gates, are in <a href="../phase-6-maintenance/#openvas-feed-only-maintenance">maintenance procedure</a>. All four categories subsequently Current; existing reports/custom config accessible. Host updates and feed downloads are separate operations.</p>
+<h2 id="6-evidence-locator">6. Evidence locator<a class="headerlink" href="#6-evidence-locator" title="Permanent link">&para;</a></h2>
+<p>Raw evidence is not uploaded to public Git. Selected screenshots are archived outside the repository under <code>E:\PePesLab-SOC 2.0\Evidence\SOC-001\2026-10-21</code>. Filenames below refer to that private archive; the manifest there preserves original paths and SHA256 values. This register indexes only relevant examples, not every screenshot from the conversation. Text-only successful tests are labeled as such above.</p>
+<table>
+<thead>
+<tr>
+<th>Private screenshot</th>
+<th>What it supports</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>01-syslog-process-absent.png</code></td>
+<td>No syslogd process at failure</td>
+</tr>
+<tr>
+<td><code>02-syslog-recovery-marker.png</code></td>
+<td>Fresh marker -06 arrived in ELK</td>
+</tr>
+<tr>
+<td><code>03-victim-local-wmi-domain.png</code></td>
+<td>Local CIM and DomainAuthenticated profile</td>
+</tr>
+<tr>
+<td><code>04-wmi-rule-applied.png</code></td>
+<td>Dedicated WMI rule created/enabled</td>
+</tr>
+<tr>
+<td><code>05-impacket-wmi-success.png</code></td>
+<td>Remote WQL OS query passed</td>
+</tr>
+<tr>
+<td><code>06-native-wmic-denied.png</code></td>
+<td>Native client access denied</td>
+</tr>
+<tr>
+<td><code>07-dcom-10036.png</code></td>
+<td>Activation integrity rejection; contains account SID, retain privately</td>
+</tr>
+<tr>
+<td><code>08-package-audit-reboot.png</code></td>
+<td>Clear package audit/dependencies, reboot required</td>
+</tr>
+<tr>
+<td><code>09-docker-active.png</code></td>
+<td>Docker/containerd active after reboot</td>
+</tr>
+<tr>
+<td><code>10-feeds-current.png</code></td>
+<td>All four feed categories Current</td>
+</tr>
+</tbody>
+</table>
+<p>Other originals: complete October 9 report exports with suffix (2), October 21 WMI retest CSV/XML, ELK Untitled Discover session (5).csv, and openvas-update-log.txt remain in Downloads. Activity log records report hashes. No password or raw credential file belongs in this register.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/windows/win32/wmisdk/connecting-to-wmi-remotely-starting-with-vista">Microsoft remote WMI setup</a></li>
+<li><a href="https://github.com/greenbone/openvas-scanner/blob/v23.50.20/nasl/nasl_wmi.c">Greenbone scanner WMI binding implementation</a></li>
+<li><a href="https://greenbone.github.io/docs/latest/22.4/container/workflows.html#performing-a-feed-synchronization">Greenbone feed workflow</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.top", "content.code.copy", "toc.integrate"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.525ec568.min.js"></script>
+      
+    
+  </body>
+</html>
