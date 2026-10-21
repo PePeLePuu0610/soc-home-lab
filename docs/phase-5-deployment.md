@@ -2,7 +2,9 @@
 
 **Goal:** Move from "under construction" to "operational lab I use regularly."
 
-1. Create VMware **snapshots** of every VM once it's in a known-good state — this lets you roll back instantly if an attack or misconfiguration breaks something (a real SOC equivalent of a backup).
+October 21 status: preparing deployment readiness while Phase 4 tests and regression gates remain open. Successful startup and GUI access do not establish full operational acceptance. See [latest activities and evidence](soc-001-activities-2026-10-21.md).
+
+1. Create VMware **snapshots** of every VM once it's in a known-good state for rollback. Snapshots do not replace independent backups; validate recovery separately.
 2. Write yourself a one-page "power-on order" cheat sheet (pfSense first, then victims, then whichever SIEM/tool pod you're using that session) based on Section 1.3's pod strategy. **Update:** Pod A (pfSense, Windows victim, Wazuh) is now configured in VMware Workstation to AutoStart with the host — one less manual step each session, though it's still worth confirming all three came up cleanly after a host reboot before relying on the lab being "just on."
 3. Document credentials and IPs somewhere safe (a local password manager, not a plain text file on the desktop).
 4. **Harden pfSense before considering the lab "live."** During Phase 3 you likely loosened outbound rules on one or more zones so VMs could patch/update. Before go-live, walk back through every zone and tighten:

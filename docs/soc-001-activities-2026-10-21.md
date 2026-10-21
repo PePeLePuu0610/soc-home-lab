@@ -63,6 +63,16 @@ Ten selected screenshots were copied from temporary clipboard paths into the pri
 
 ### OneNote synchronization status
 
+**Later update: synchronization restored.** PMO-000 Restart Handoff received a dated reconciliation addendum and SOC 2.0 / 06 Daily Journal received SOC-001 — Activities, command evidence and restart — 2026-10-21. Both were re-read and verified. They summarize the troubleshooting/maintenance and link Git command/evidence records; raw screenshots remain in the private evidence archive. The authentication failure below is retained as history.
+
+### Latest host reboot and phase reconciliation
+
+Joey reports host reboot followed by successful startup/local logon for pfSense, Wazuh, ELK and victim, plus web GUI logons to pfSense/ELK/Wazuh; syslogd green, victim RemoteRegistry started. Fresh post-reboot endpoint and firewall delivery has not yet been validated. DC is not in the latest reported startup list; verify its power state and domain/DNS dependency before assuming it can remain off. Other VM current states unverified.
+
+The original six-phase repository plan remains the reference: 1 Requirements, 2 Design, 3 Implementation, 4 Testing/Verification, 5 Deployment/Go-Live, 6 Maintenance. Current work is operational-readiness preparation with open Phase 4 validation gates, not completed Phase 5 sign-off. Maintenance has occurred concurrently. Full attack-chain, segmentation regression and restore evidence remain incomplete; selected successful tests are not blanket acceptance.
+
+For every troubleshooting/verification step record: timestamp/timezone; objective or hypothesis; host; exact command or GUI change; purpose; expected result; observed result; pass/fail/partial classification; screenshot/export/hash; impact/rollback; next decision. Preserve failed attempts and superseded results with dates. Git is authoritative, OneNote holds working summaries and links, private evidence holds original screenshots and exports. Sanitize before publishing screenshots; never record passwords.
+
 October 8 notebook updates were previously verified. The October 21 handoff in PMO-000 was read successfully at session start. During the documentation closeout, OneNote reads repeatedly returned authentication requested/accepted without returning page data. Today's activities cannot yet be confirmed or synchronized to OneNote. Pending update: append a dated SOC-001 handoff to PMO-000 Reviews and Handoffs and add the activity/command-reference page in SOC 2.0 Daily Journal, preserving historical pages. Summarize telemetry recovery, native WMI sign/seal success versus pending scanner behavior, host/feed maintenance passed, remaining Linux patching/syslog stability issues, and link these Git records. No claim of notebook update is made until a write and read-back succeed.
 
 Raw files remain private in Downloads. Reviewed complete report exports have suffix (2). CSV SHA256: 48471D4AD3ED6EA2A13CDCF5929A33E9B5CC53FB78816DD15F7BBF3E173D5D42. XML SHA256: 31718D9BD8B9E65265992554A8DEF6D035CEF0A2841B033B99F3FEE81B72B121. XML anonymizes the victim as 127.0.0.1; CSV and matching result IDs identify 10.10.20.20. No passwords recorded.
