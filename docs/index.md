@@ -57,6 +57,8 @@ soc-home-lab/
 
 ## SOC operations and validation records
 
+- [October 21 activities](soc-001-activities-2026-10-21.md) and [commands with evidence](soc-001-command-evidence-2026-10-21.md)
+
 - [Post-reboot validation and evening handoff](post-reboot-validation-2026-10-08.md)
 - [Firewall policy and aliases](firewall-policy-and-aliases.md)
 - [Operations query register](operations-query-register.md)

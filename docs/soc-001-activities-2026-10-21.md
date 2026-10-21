@@ -1,5 +1,7 @@
 # SOC-001 activities — October 21, 2026
 
+Detailed commands, purpose, observed results, failed attempts and screenshot locators: [October 21 command and evidence log](soc-001-command-evidence-2026-10-21.md). This page summarizes outcomes; the companion log provides the operational audit trail.
+
 ## Accepted decision
 
 Joey approved keeping `SOC-OpenVAS-WMI-In` enabled as the victim's persistent scan-ready baseline. Source 10.10.10.12 only; Domain profile only; inbound TCP scoped to svchost.exe / Winmgmt. No routine rule toggle is required after reboot. Verify effective policy, DomainAuthenticated profile, and service readiness before each scan. RemoteRegistry remains Manual and must be started if stopped. Defender remains enabled.
@@ -56,5 +58,11 @@ Native wmic query with explicit target `//10.10.20.20[sign,seal]` then succeeded
 Joey confirmed no scans running before maintenance planning. The subsequently installed host transaction included Docker Engine/CLI/Compose/containerd, Filebeat 9.5.3 to 9.5.5, AppArmor, Netplan, Kerberos libraries and Ubuntu packages. OS package upgrades were separate from the later feed refresh. Other Linux VMs remain scheduled for separate maintenance turns under pod strategy.
 
 ## Evidence provenance
+
+Ten selected screenshots were copied from temporary clipboard paths into the private project evidence archive `E:\PePesLab-SOC 2.0\Evidence\SOC-001\2026-10-21`, with SHA256 manifest. The [command/evidence companion](soc-001-command-evidence-2026-10-21.md) maps each screenshot to its purpose.
+
+### OneNote synchronization status
+
+October 8 notebook updates were previously verified. The October 21 handoff in PMO-000 was read successfully at session start. During the documentation closeout, OneNote reads repeatedly returned authentication requested/accepted without returning page data. Today's activities cannot yet be confirmed or synchronized to OneNote. Pending update: append a dated SOC-001 handoff to PMO-000 Reviews and Handoffs and add the activity/command-reference page in SOC 2.0 Daily Journal, preserving historical pages. Summarize telemetry recovery, native WMI sign/seal success versus pending scanner behavior, host/feed maintenance passed, remaining Linux patching/syslog stability issues, and link these Git records. No claim of notebook update is made until a write and read-back succeed.
 
 Raw files remain private in Downloads. Reviewed complete report exports have suffix (2). CSV SHA256: 48471D4AD3ED6EA2A13CDCF5929A33E9B5CC53FB78816DD15F7BBF3E173D5D42. XML SHA256: 31718D9BD8B9E65265992554A8DEF6D035CEF0A2841B033B99F3FEE81B72B121. XML anonymizes the victim as 127.0.0.1; CSV and matching result IDs identify 10.10.20.20. No passwords recorded.

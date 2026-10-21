@@ -1,5 +1,7 @@
 # Operations command and query register
 
+For the October 21 restart, WMI diagnosis and maintenance commands with outcomes/evidence, use the [SOC-001 command and evidence log](soc-001-command-evidence-2026-10-21.md). The retrospective sections below retain their original scope.
+
 October 8, 2026 retrospective update. Recorded queries are distinguished from reconstructed examples. Use an appropriate time window and the correct data view. These searches do not change configuration.
 
 ## Wazuh dashboard — recorded
