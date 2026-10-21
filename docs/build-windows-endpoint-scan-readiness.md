@@ -77,7 +77,7 @@ smbclient '//10.10.20.20/ADMIN$' -U 'SOCHOMELAB\secadmin' -c 'ls'
 
 Password entered at the prompt. Supplied screenshot codex-clipboard-be07ce0f-0293-44dd-8110-bb4c6ccaccb7.png shows a Windows directory listing from ADMIN$. Result: direct remote SMB login and share read access passed. This does not prove the password saved in Greenbone is identical, nor validate remote registry/WMI execution or scanner LSC completeness. Exact capture time is unavailable; file modification timestamps in the listing are not test timestamps.
 
-Next confirm registry/LSC evidence through a bounded scanner validation. WMI-based checks may require additional scoped access and permissions; SMB share access does not validate them. No additional WMI/RPC rule is represented as applied by this guide.
+October 8 status was pending scanner verification; the October 21 evidence and applied WMI change below supersede that status.
 
 | Acceptance item | Current victim result |
 | --- | --- |
@@ -87,8 +87,8 @@ Next confirm registry/LSC evidence through a bounded scanner validation. WMI-bas
 | Scanner-only firewall rule created | Verified |
 | OpenVAS → victim TCP445 | Verified after change |
 | Remote SMB credential success | Verified via password-prompting smbclient; ADMIN$ listing succeeded |
-| Registry and WMI authenticated coverage | Pending |
-| Domain network classification | Private observed; investigation pending |
+| Registry and WMI authenticated coverage | SMB login and registry passed. October 21 targeted Greenbone WMI share enumeration passed, but consolidation remains FALSE. Direct Impacket and explicit native sign/seal queries passed; full scanner coverage remains open |
+| Domain network classification | DomainAuthenticated observed October 21; earlier Private observation retained as history |
 | Rollback executed | Not tested |
 
 ## Rollback
@@ -106,6 +106,31 @@ For future endpoints restore their recorded baseline, not this victim's setting 
 Validate restored rule/service states and intended network restrictions. TCP timeout alone is not sufficient rollback evidence because other allow rules could exist. Rollback affects authenticated-scan access; no rollback has been executed in this record.
 
 ## Maintenance
+
+### October 21 accepted WMI baseline
+
+Joey approved retaining `SOC-OpenVAS-WMI-In` enabled as the victim's scan-ready baseline. The local persistent firewall rule survives normal reboots; it does not need recreation or toggling for each scan. Group Policy or other configuration changes can affect effective enforcement, so verify the effective rule before scanning.
+
+Applied on victim 10.10.20.20:
+
+```powershell
+New-NetFirewallRule -Name 'SOC-OpenVAS-WMI-In' -DisplayName 'SOC OpenVAS WMI inbound' -Direction Inbound -Action Allow -Protocol TCP -Program "$env:SystemRoot\System32\svchost.exe" -Service Winmgmt -RemoteAddress 10.10.10.12 -Profile Domain
+```
+
+Scope: inbound TCP for svchost.exe / Winmgmt, only from scanner 10.10.10.12, only on the Domain profile. Do not broaden to Any source or other profiles by default. Built-in WMI rules were observed disabled; local WMI and TCP 135 worked before this addition.
+
+Validation: Impacket 0.13.1 wmiquery.py in ospd-openvas, using SOCHOMELAB/secadmin with a private password prompt, successfully executed `SELECT Caption, Version, BuildNumber FROM Win32_OperatingSystem`, returning Windows 10 Pro for Workstations / 10.0.19045 / 19045. This establishes this tool's remote WMI query, not a subsequent Greenbone WMI result.
+
+Pre-scan: confirm DomainAuthenticated network classification, Winmgmt running (Automatic observed), RemoteRegistry running (Manual retained), effective WMI and SMB scanner rules enabled, and scanner address unchanged. Start RemoteRegistry if stopped; do not change its startup type by assumption. Keep Defender and Windows Firewall enabled.
+
+Rollback, not executed:
+
+```powershell
+Disable-NetFirewallRule -Name 'SOC-OpenVAS-WMI-In'
+```
+
+Re-enable an intentionally disabled rule with `Enable-NetFirewallRule -Name 'SOC-OpenVAS-WMI-In'`; do not recreate it. For new Windows endpoints, record their own baseline and validate scope and domain dependencies before applying this pattern.
+
 Review source-IP changes, new endpoint approvals, profile changes and firewall policy drift. Record each new endpoint's baseline, exact change, validation and rollback. Reconcile final authenticated report coverage before declaring the build scan-ready.
 
 Sources: [Microsoft firewall rule reference](https://learn.microsoft.com/en-us/powershell/module/netsecurity/new-netfirewallrule) and [Greenbone Windows authenticated scan requirements](https://docs.greenbone.net/GSM-Manual/gos-24.10/en/scanning.html).

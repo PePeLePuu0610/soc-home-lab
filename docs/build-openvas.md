@@ -123,6 +123,8 @@ In VMware: **VM → Snapshot → Take Snapshot** → name it `OpenVAS working ba
 
 ## Troubleshooting
 
+For subsequent startups and updates, use the [lab startup checklist and feed-only maintenance procedure](phase-6-maintenance.md#lab-startup-checklist). Confirm feed freshness and completed imports before new scans; Ubuntu package updates do not refresh container feed data.
+
 - **`curl`/browser TLS error like "wrong version number" when hitting `:9392` over HTTPS:** port 9392 is a plain-HTTP redirector to port 443, not a TLS endpoint. Use `https://10.10.10.12` (no port, or explicit `:443`) instead — see 3.8.4's port-binding step above.
 - **Can't reach the UI at all, even though `docker compose ps` shows everything healthy:** almost certainly the default `127.0.0.1`-only port binding on the `nginx` service — see the fix in 3.8.4. This is the single most common blocker on this build, since every container can be perfectly healthy while the UI is still unreachable from outside the VM.
 - **UI loads but scan configs/feeds look empty or greyed out:** the feed sync from 3.8.4 likely hasn't finished yet. Check `docker compose -p greenbone-community-edition logs -f` for ongoing feed-update activity before assuming something's broken.
